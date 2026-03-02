@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>Noodmap Rob</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#071023;
+      --panel:#0c1834;
+      --glass:rgba(255,255,255,.06);
+      --border:rgba(255,255,255,.10);
+      --text:#eaf0ff;
+      --muted:#a9b7dd;
+
+      --aqua:#43e2cf;
+      --aqua2:rgba(67,226,207,.14);
+
+      --blue:#74a7ff;
+      --blue2:rgba(116,167,255,.14);
+
+      --gold:#ffcc66;
+      --gold2:rgba(255,204,102,.14);
+
+      --violet:#b18cff;
+      --violet2:rgba(177,140,255,.14);
+
+      --red:#ff5a73;
+      --red2:rgba(255,90,115,.14);
+
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --r:22px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 650px at 20% -10%, rgba(116,167,255,.22) 0%, transparent 60%),
+        radial-gradient(900px 650px at 90% 10%, rgba(177,140,255,.18) 0%, transparent 60%),
+        radial-gradient(900px 650px at 60% 110%, rgba(67,226,207,.15) 0%, transparent 60%),
+        var(--bg);
+      -webkit-font-smoothing:antialiased;
+      padding:14px 12px 90px 12px;
+    }
+
+    .app{max-width:980px;margin:0 auto}
+
+    .topbar{
+      position:sticky;top:0;z-index:5;
+      background: linear-gradient(180deg, rgba(7,16,35,.92), rgba(7,16,35,.72));
+      backdrop-filter: blur(12px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      padding:10px 6px 10px 6px;
+      border-radius:18px;
+    }
+
+    .header{
+      display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+      padding:6px 6px 2px 6px;
+    }
+
+    .brand{display:flex;gap:12px;align-items:center;min-width:220px}
+    .brand h1{margin:0;font-size:1.25rem;letter-spacing:.2px;font-weight:900}
+
+    .chip{
+      display:inline-flex;align-items:center;gap:10px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      padding:10px 12px;border-radius:999px;
+      color:var(--text);font-weight:900;
+      box-shadow: 0 10px 26px rgba(0,0,0,.22);
+      white-space:nowrap;
+    }
+
+    .chip .dot{
+      width:10px;height:10px;border-radius:999px;background: var(--aqua);
+      box-shadow: 0 0 0 6px rgba(67,226,207,.14);
+    }
+
+    .tabs{
+      display:flex;gap:10px;flex-wrap:wrap;
+      padding:10px 6px 6px 6px;
+    }
+
+    .tab{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 14px;border-radius:16px;
+      font-weight:900;cursor:pointer;
+      user-select:none;-webkit-tap-highlight-color: transparent;
+    }
+
+    .tab.active{
+      border-color: rgba(116,167,255,.40);
+      background: rgba(116,167,255,.14);
+    }
+
+    .content{padding:12px 6px 0 6px}
+    .section{display:none}
+    .section.active{display:block}
+
+    .box{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .boxHead{
+      padding:14px 14px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+    }
+
+    .boxHead h2{margin:0;font-size:1.05rem;font-weight:900;letter-spacing:.2px}
+    .badge{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color:var(--muted);
+      border-radius:999px;
+      padding:7px 10px;
+      font-weight:900;
+      font-size:.82rem;
+      white-space:nowrap;
+    }
+
+    .boxBody{padding:14px}
+
+    .grid2{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
+    @media (max-width: 760px){.grid2{grid-template-columns:1fr}}
+
+    .field label{
+      display:block;color:var(--muted);font-weight:900;font-size:.9rem;margin:0 0 6px 0;
+    }
+    .field input, .field textarea, .field select{
+      width:100%;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:16px;
+      padding:12px 12px;
+      font-weight:900;
+      outline:none;
+      -webkit-appearance:none;
+    }
+    .field textarea{min-height:92px;resize:vertical;font-weight:800}
+
+    .btnRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color:var(--text);
+      padding:11px 14px;border-radius:16px;
+      font-weight:900;cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn.primary{
+      border-color: rgba(67,226,207,.45);
+      background: rgba(67,226,207,.14);
+      color: var(--aqua);
+    }
+    .btn.danger{
+      border-color: rgba(255,90,115,.45);
+      background: rgba(255,90,115,.14);
+      color: #ff90a1;
+    }
+
+    .list{display:flex;flex-direction:column;gap:10px}
+    .row{
+      display:flex;gap:10px;align-items:flex-start;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      border-radius:18px;
+      padding:12px 12px;
+    }
+    .ico{
+      width:40px;height:40px;border-radius:16px;
+      display:grid;place-items:center;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      flex:0 0 40px;
+      font-size:18px;
+    }
+    .rBody{flex:1;min-width:0}
+    .rTitle{margin:0 0 6px 0;font-weight:900;line-height:1.25}
+    .rMeta{margin:0;color:var(--muted);font-weight:800;font-size:.9rem;line-height:1.25;word-break:break-word}
+    .rActions{display:flex;gap:8px;align-items:center;flex:0 0 auto}
+    .mini{
+      width:42px;height:42px;border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      display:grid;place-items:center;
+      cursor:pointer;user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      font-weight:900;
+    }
+    a.link{
+      color:var(--text);
+      text-decoration:none;
+      border-bottom:1px solid rgba(255,255,255,.14);
+    }
+
+    .bottomBar{
+      position:fixed;left:0;right:0;bottom:0;z-index:6;
+      padding:10px 12px 12px 12px;
+      background: linear-gradient(180deg, rgba(7,16,35,0), rgba(7,16,35,.85) 30%, rgba(7,16,35,.95));
+      backdrop-filter: blur(12px);
+    }
+    .bottomInner{
+      max-width:980px;margin:0 auto;
+      display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      border-radius: 18px;
+      padding:10px 12px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.45);
+    }
+    .small{color:var(--muted);font-weight:800;font-size:.9rem}
+
+    .toast{
+      position:fixed;left:50%;bottom:90px;transform: translateX(-50%);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(12,24,52,.92);
+      padding:10px 12px;border-radius:16px;
+      box-shadow: var(--shadow);
+      opacity:0;pointer-events:none;
+      transition: opacity .2s ease;
+      font-weight:900;
+      max-width:92vw;text-align:center;
+      z-index:20;
+    }
+    .toast.show{opacity:1}
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="header">
+        <div class="brand">
+          <h1>Noodmap Rob</h1>
+        </div>
+        <div class="chip">
+          <span class="dot"></span>
+          <span id="dateText">...</span>
+        </div>
+      </div>
+
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-tab="overzicht">Overzicht</button>
+        <button class="tab" data-tab="crypto">Crypto</button>
+        <button class="tab" data-tab="wallets">Wallets</button>
+        <button class="tab" data-tab="banken">Banken</button>
+        <button class="tab" data-tab="documenten">Documenten</button>
+        <button class="tab" data-tab="notities">Notities</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <section class="section active" id="sec-overzicht">
+        <div class="box">
+          <div class="boxHead">
+            <h2>Belangrijk</h2>
+            <span class="badge">Geen seed phrases, geen private keys</span>
+          </div>
+          <div class="boxBody">
+            <div class="grid2">
+              <div class="field">
+                <label>Naam</label>
+                <input id="myName" type="text" placeholder="Rob Borghouts" />
+              </div>
+              <div class="field">
+                <label>Contact Lizet</label>
+                <input id="lizetPhone" type="text" placeholder="06..." />
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:12px;">
+              <label>Wat Lizet moet weten</label>
+              <textarea id="overviewText" placeholder="Waar ligt de Ledger, hoe inloggen werkt, welke exchanges je gebruikt, waar back-ups liggen. Zet hier geen seed."></textarea>
+            </div>
+
+            <div class="btnRow">
+              <button class="btn primary" id="saveOverview">Opslaan</button>
+              <button class="btn" id="exportAll">Export alles</button>
+            </div>
+
+            <div class="small" style="margin-top:10px;">Alles staat alleen op dit toestel. Als je dit via GitHub Pages gebruikt, staat de inhoud niet op GitHub maar in jouw browser opslag.</div>
+          </div>
+        </div>
+      </section>
+     <section class="section" id="sec-crypto">
+        <div class="box">
+          <div class="boxHead">
+            <h2>Crypto websites</h2>
+            <span class="badge" id="countCrypto">0 links</span>
+          </div>
+          <div class="boxBody">
+            <div class="grid2">
+              <div class="field">
+                <label>Naam</label>
+                <input id="cryptoName" type="text" placeholder="Bijv. DevvExchange, CoinMarketCap" />
+              </div>
+              <div class="field">
+                <label>Link</label>
+                <input id="cryptoUrl" type="text" placeholder="https://..." />
+              </div>
+            </div>
+            <div class="field" style="margin-top:12px;">
+              <label>Notitie</label>
+              <input id="cryptoNote" type="text" placeholder="Bijv. inloggen met Google, 2FA via Authenticator" />
+            </div>
+
+            <div class="btnRow">
+              <button class="btn primary" id="addCrypto">Toevoegen</button>
+              <button class="btn" id="clearCryptoForm">Leegmaken</button>
+            </div>
+
+            <div style="height:12px"></div>
+            <div class="list" id="cryptoList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-wallets">
+        <div class="box">
+          <div class="boxHead">
+            <h2>Wallets</h2>
+            <span class="badge" id="countWallets">0 items</span>
+          </div>
+          <div class="boxBody">
+            <div class="grid2">
+              <div class="field">
+                <label>Naam</label>
+                <input id="walletName" type="text" placeholder="Bijv. Ledger Nano X, Ledger Stax, MetaMask" />
+              </div>
+              <div class="field">
+                <label>Waar ligt het</label>
+                <input id="walletWhere" type="text" placeholder="Bijv. kluis, lade bureau" />
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:12px;">
+              <label>Notitie</label>
+              <input id="walletNote" type="text" placeholder="Bijv. pincode staat in envelop, 2FA op iPhone" />
+            </div>
+
+            <div class="btnRow">
+              <button class="btn primary" id="addWallet">Toevoegen</button>
+              <button class="btn" id="clearWalletForm">Leegmaken</button>
+            </div>
+
+            <div style="height:12px"></div>
+            <div class="list" id="walletList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-banken">
+        <div class="box">
+          <div class="boxHead">
+            <h2>Banken en andere accounts</h2>
+            <span class="badge" id="countBanks">0 items</span>
+          </div>
+          <div class="boxBody">
+            <div class="grid2">
+              <div class="field">
+                <label>Naam</label>
+                <input id="bankName" type="text" placeholder="Bijv. ING, Rabobank, PayPal" />
+              </div>
+              <div class="field">
+                <label>Link</label>
+                <input id="bankUrl" type="text" placeholder="https://..." />
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:12px;">
+              <label>Notitie</label>
+              <input id="bankNote" type="text" placeholder="Bijv. inloggen via app, 2FA, pas in portemonnee" />
+            </div>
+
+            <div class="btnRow">
+              <button class="btn primary" id="addBank">Toevoegen</button>
+              <button class="btn" id="clearBankForm">Leegmaken</button>
+            </div>
+
+            <div style="height:12px"></div>
+            <div class="list" id="bankList"></div>
+          </div>
+        </div>
+      </section>
+     <section class="section" id="sec-documenten">
+        <div class="box">
+          <div class="boxHead">
+            <h2>Documenten en locaties</h2>
+            <span class="badge" id="countDocs">0 items</span>
+          </div>
+          <div class="boxBody">
+            <div class="grid2">
+              <div class="field">
+                <label>Wat</label>
+                <input id="docName" type="text" placeholder="Bijv. paspoorten, verzekeringsmap, testament" />
+              </div>
+              <div class="field">
+                <label>Waar</label>
+                <input id="docWhere" type="text" placeholder="Bijv. map kast, kluis, garagebox" />
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:12px;">
+              <label>Notitie</label>
+              <input id="docNote" type="text" placeholder="Bijv. sleutel ligt bij..." />
+            </div>
+
+            <div class="btnRow">
+              <button class="btn primary" id="addDoc">Toevoegen</button>
+              <button class="btn" id="clearDocForm">Leegmaken</button>
+            </div>
+
+            <div style="height:12px"></div>
+            <div class="list" id="docList"></div>
+
+            <div class="btnRow" style="margin-top:14px;">
+              <button class="btn" id="exportDocs">Export documenten</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-notities">
+        <div class="box">
+          <div class="boxHead">
+            <h2>Vrije notities</h2>
+            <span class="badge">Voor Lizet</span>
+          </div>
+          <div class="boxBody">
+            <div class="field">
+              <label>Notitie</label>
+              <textarea id="freeNotes" placeholder="Bijv. wie te bellen, wat te regelen, welke rekeningen, waar backups staan."></textarea>
+            </div>
+
+            <div class="btnRow">
+              <button class="btn primary" id="saveNotes">Opslaan</button>
+              <button class="btn" id="exportNotes">Export notities</button>
+              <button class="btn danger" id="wipeAll">Alles wissen</button>
+            </div>
+
+            <div class="small" style="margin-top:10px;">Made by Rob Borghouts 2026</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="bottomBar">
+    <div class="bottomInner">
+      <div class="small" id="statusLine">Klaar.</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn" id="exportQuick">Snel export</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">...</div>
+
+  <script>
+    "use strict";
+
+    var LS = {
+      OVER: "noodmap_over_v1",
+      CRYPTO: "noodmap_crypto_v1",
+      WALLETS: "noodmap_wallets_v1",
+      BANKS: "noodmap_banks_v1",
+      DOCS: "noodmap_docs_v1",
+      NOTES: "noodmap_notes_v1"
+    };
+
+    function $(id){ return document.getElementById(id); }
+
+    function toast(msg){
+      var t = $("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(function(){ t.classList.remove("show"); }, 1700);
+    }
+
+    function safeParse(key, fallback){
+      try{
+        var v = localStorage.getItem(key);
+        if (!v) return fallback;
+        return JSON.parse(v);
+      }catch(e){ return fallback; }
+    }
+
+    function safeSave(key, obj){
+      try{ localStorage.setItem(key, JSON.stringify(obj)); }catch(e){}
+    }
+
+    function setDate(){
+      $("dateText").textContent = new Date().toLocaleDateString("nl-NL",{ weekday:"long", day:"numeric", month:"long", year:"numeric" });
+    }
+
+    function setStatus(s){
+      $("statusLine").textContent = s;
+    }
+
+    function esc(s){
+      return String(s||"").replace(/[&<>"']/g,function(m){
+        return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" })[m];
+      });
+    }
+
+    function cleanUrl(u){
+      u = String(u||"").trim();
+      if (!u) return "";
+      if (u.startsWith("http://") || u.startsWith("https://")) return u;
+      return "https://" + u;
+    }
+
+    function openUrl(u){
+      u = cleanUrl(u);
+      if (!u) return;
+      window.open(u, "_blank");
+    }
+
+    function setActiveTab(tab){
+      Array.from(document.querySelectorAll(".tab")).forEach(function(b){
+        b.classList.toggle("active", b.dataset.tab === tab);
+      });
+      Array.from(document.querySelectorAll(".section")).forEach(function(s){
+        s.classList.remove("active");
+      });
+      var sec = $("sec-"+tab);
+      if (sec) sec.classList.add("active");
+      window.scrollTo({ top: 0, behavior:"smooth" });
+    }
+
+    function bindTabs(){
+      $("tabs").querySelectorAll(".tab").forEach(function(b){
+        b.addEventListener("click", function(){
+          setActiveTab(b.dataset.tab);
+        });
+      });
+    }
+
+    function downloadText(filename, text){
+      try{
+        var blob = new Blob([text], { type:"text/plain;charset=utf-8" });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function(){
+          URL.revokeObjectURL(a.href);
+          a.remove();
+        }, 0);
+      }catch(e){
+        toast("Download lukt niet");
+      }
+    }
+
+    function renderList(list, targetId, kind){
+      var el = $(targetId);
+      if (!el) return;
+
+      if (!list.length){
+        el.innerHTML = '<div class="small">Nog niets toegevoegd.</div>';
+        return;
+      }
+
+      var html = "";
+      list.forEach(function(x){
+        var icon = "🔗";
+        var meta = "";
+        if (kind === "wallet"){ icon = "👛"; meta = "📍 " + (x.where||""); }
+        if (kind === "doc"){ icon = "📁"; meta = "📍 " + (x.where||""); }
+        if (kind === "bank"){ icon = "🏦"; meta = (x.url ? "🔗 " + x.url : ""); }
+        if (kind === "crypto"){ icon = "🪙"; meta = (x.url ? "🔗 " + x.url : ""); }
+
+        html += '<div class="row">';
+        html +=   '<div class="ico">'+icon+'</div>';
+        html +=   '<div class="rBody">';
+        html +=     '<div class="rTitle">'+esc(x.name||"")+'</div>';
+        html +=     '<div class="rMeta">'+esc(meta)+'</div>';
+        if (x.note){
+          html +=   '<div class="rMeta" style="margin-top:6px;">📝 '+esc(x.note)+'</div>';
+        }
+        html +=   '</div>';
+        html +=   '<div class="rActions">';
+        if (x.url){
+          html += '<div class="mini" title="Open" data-open="'+esc(x.url)+'">↗</div>';
+        } else {
+          html += '<div class="mini" style="opacity:.35;">↗</div>';
+        }
+        html +=     '<div class="mini" title="Verwijder" data-del="'+x.id+'">🗑️</div>';
+        html +=   '</div>';
+        html += '</div>';
+      });
+
+      el.innerHTML = html;
+
+      el.querySelectorAll(".mini[data-open]").forEach(function(b){
+        b.addEventListener("click", function(){
+          openUrl(b.getAttribute("data-open"));
+        });
+      });
+
+      el.querySelectorAll(".mini[data-del]").forEach(function(b){
+        b.addEventListener("click", function(){
+          var id = parseInt(b.getAttribute("data-del"),10);
+          removeItem(kind, id);
+        });
+      });
+    }
+   function loadAll(){
+      return {
+        over: safeParse(LS.OVER, { myName:"", lizetPhone:"", text:"" }),
+        crypto: safeParse(LS.CRYPTO, []),
+        wallets: safeParse(LS.WALLETS, []),
+        banks: safeParse(LS.BANKS, []),
+        docs: safeParse(LS.DOCS, []),
+        notes: safeParse(LS.NOTES, { text:"" })
+      };
+    }
+
+    function saveOver(){
+      var over = {
+        myName: $("myName").value || "",
+        lizetPhone: $("lizetPhone").value || "",
+        text: $("overviewText").value || ""
+      };
+      safeSave(LS.OVER, over);
+      toast("Overzicht opgeslagen");
+      setStatus("Overzicht opgeslagen");
+    }
+
+    function addItem(kind){
+      var data = loadAll();
+
+      if (kind === "crypto"){
+        var name = ($("cryptoName").value||"").trim();
+        var url = cleanUrl($("cryptoUrl").value||"");
+        var note = ($("cryptoNote").value||"").trim();
+        if (!name || !url){ toast("Vul naam en link in"); return; }
+        data.crypto.push({ id: Date.now(), name:name, url:url, note:note });
+        safeSave(LS.CRYPTO, data.crypto);
+        $("cryptoName").value=""; $("cryptoUrl").value=""; $("cryptoNote").value="";
+        toast("Toegevoegd");
+        renderAll();
+        return;
+      }
+
+      if (kind === "wallet"){
+        var wname = ($("walletName").value||"").trim();
+        var where = ($("walletWhere").value||"").trim();
+        var wnote = ($("walletNote").value||"").trim();
+        if (!wname || !where){ toast("Vul naam en waar in"); return; }
+        data.wallets.push({ id: Date.now(), name:wname, where:where, note:wnote });
+        safeSave(LS.WALLETS, data.wallets);
+        $("walletName").value=""; $("walletWhere").value=""; $("walletNote").value="";
+        toast("Toegevoegd");
+        renderAll();
+        return;
+      }
+
+      if (kind === "bank"){
+        var bname = ($("bankName").value||"").trim();
+        var burl = cleanUrl($("bankUrl").value||"");
+        var bnote = ($("bankNote").value||"").trim();
+        if (!bname || !burl){ toast("Vul naam en link in"); return; }
+        data.banks.push({ id: Date.now(), name:bname, url:burl, note:bnote });
+        safeSave(LS.BANKS, data.banks);
+        $("bankName").value=""; $("bankUrl").value=""; $("bankNote").value="";
+        toast("Toegevoegd");
+        renderAll();
+        return;
+      }
+
+      if (kind === "doc"){
+        var dname = ($("docName").value||"").trim();
+        var dwhere = ($("docWhere").value||"").trim();
+        var dnote = ($("docNote").value||"").trim();
+        if (!dname || !dwhere){ toast("Vul wat en waar in"); return; }
+        data.docs.push({ id: Date.now(), name:dname, where:dwhere, note:dnote });
+        safeSave(LS.DOCS, data.docs);
+        $("docName").value=""; $("docWhere").value=""; $("docNote").value="";
+        toast("Toegevoegd");
+        renderAll();
+        return;
+      }
+    }
+
+    function removeItem(kind, id){
+      var data = loadAll();
+      if (kind === "crypto"){ data.crypto = data.crypto.filter(function(x){ return x.id !== id; }); safeSave(LS.CRYPTO, data.crypto); }
+      if (kind === "wallet"){ data.wallets = data.wallets.filter(function(x){ return x.id !== id; }); safeSave(LS.WALLETS, data.wallets); }
+      if (kind === "bank"){ data.banks = data.banks.filter(function(x){ return x.id !== id; }); safeSave(LS.BANKS, data.banks); }
+      if (kind === "doc"){ data.docs = data.docs.filter(function(x){ return x.id !== id; }); safeSave(LS.DOCS, data.docs); }
+      toast("Verwijderd");
+      renderAll();
+    }
+
+    function renderAll(){
+      var data = loadAll();
+
+      $("myName").value = data.over.myName || "";
+      $("lizetPhone").value = data.over.lizetPhone || "";
+      $("overviewText").value = data.over.text || "";
+
+      $("freeNotes").value = data.notes.text || "";
+
+      $("countCrypto").textContent = data.crypto.length + " links";
+      $("countWallets").textContent = data.wallets.length + " items";
+      $("countBanks").textContent = data.banks.length + " items";
+      $("countDocs").textContent = data.docs.length + " items";
+
+      renderList(data.crypto, "cryptoList", "crypto");
+      renderList(data.wallets, "walletList", "wallet");
+      renderList(data.banks, "bankList", "bank");
+      renderList(data.docs, "docList", "doc");
+    }
+
+    function exportAll(){
+      var data = loadAll();
+      var out = [];
+      out.push("NOODMAP ROB");
+      out.push("Datum: " + new Date().toLocaleString("nl-NL"));
+      out.push("");
+      out.push("Naam: " + (data.over.myName||""));
+      out.push("Lizet: " + (data.over.lizetPhone||""));
+      out.push("");
+      out.push("Overzicht:");
+      out.push(data.over.text||"");
+      out.push("");
+      out.push("CRYPTO WEBSITES:");
+      data.crypto.forEach(function(x){
+        out.push("- " + (x.name||"") + " | " + (x.url||""));
+        if (x.note) out.push("  Notitie: " + x.note);
+      });
+      out.push("");
+      out.push("WALLETS:");
+      data.wallets.forEach(function(x){
+        out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
+        if (x.note) out.push("  Notitie: " + x.note);
+      });
+      out.push("");
+      out.push("BANKEN:");
+      data.banks.forEach(function(x){
+        out.push("- " + (x.name||"") + " | " + (x.url||""));
+        if (x.note) out.push("  Notitie: " + x.note);
+      });
+      out.push("");
+      out.push("DOCUMENTEN:");
+      data.docs.forEach(function(x){
+        out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
+        if (x.note) out.push("  Notitie: " + x.note);
+      });
+      out.push("");
+      out.push("NOTITIES:");
+      out.push(data.notes.text||"");
+      out.push("");
+      out.push("Let op: geen seed phrases of private keys hierin.");
+      downloadText("noodmap-rob.txt", out.join("\n"));
+      toast("Export gemaakt");
+      setStatus("Export gemaakt");
+    }
+
+    function bindButtons(){
+      $("saveOverview").addEventListener("click", saveOver);
+      $("exportAll").addEventListener("click", exportAll);
+      $("exportQuick").addEventListener("click", exportAll);
+
+      $("addCrypto").addEventListener("click", function(){ addItem("crypto"); });
+      $("clearCryptoForm").addEventListener("click", function(){
+        $("cryptoName").value=""; $("cryptoUrl").value=""; $("cryptoNote").value="";
+      });
+
+      $("addWallet").addEventListener("click", function(){ addItem("wallet"); });
+      $("clearWalletForm").addEventListener("click", function(){
+        $("walletName").value=""; $("walletWhere").value=""; $("walletNote").value="";
+      });
+
+      $("addBank").addEventListener("click", function(){ addItem("bank"); });
+      $("clearBankForm").addEventListener("click", function(){
+        $("bankName").value=""; $("bankUrl").value=""; $("bankNote").value="";
+      });
+
+      $("addDoc").addEventListener("click", function(){ addItem("doc"); });
+      $("clearDocForm").addEventListener("click", function(){
+        $("docName").value=""; $("docWhere").value=""; $("docNote").value="";
+      });
+
+      $("exportDocs").addEventListener("click", function(){
+        var data = loadAll();
+        var out = [];
+        out.push("DOCUMENTEN");
+        data.docs.forEach(function(x){
+          out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
+          if (x.note) out.push("  Notitie: " + x.note);
+        });
+        downloadText("documenten-rob.txt", out.join("\n"));
+        toast("Documenten export");
+      });
+
+      $("saveNotes").addEventListener("click", function(){
+        safeSave(LS.NOTES, { text: $("freeNotes").value || "" });
+        toast("Notities opgeslagen");
+        setStatus("Notities opgeslagen");
+      });
+
+      $("exportNotes").addEventListener("click", function(){
+        var data = loadAll();
+        downloadText("notities-rob.txt", data.notes.text || "");
+        toast("Notities export");
+      });
+
+      $("wipeAll").addEventListener("click", function(){
+        if (!confirm("Alles wissen?")) return;
+        Object.keys(LS).forEach(function(k){
+          try{ localStorage.removeItem(LS[k]); }catch(e){}
+        });
+        toast("Alles gewist");
+        setStatus("Alles gewist");
+        renderAll();
+      });
+    }
+
+    function init(){
+      setDate();
+      bindTabs();
+      bindButtons();
+      renderAll();
+      setStatus("Klaar, voeg je links toe.");
+    }
+
+    init();
+  </script>
+</body>
+</html>
