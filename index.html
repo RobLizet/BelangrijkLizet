@@ -13,8 +13,6 @@
   <style>
     :root{
       --bg:#071023;
-      --panel:#0c1834;
-      --glass:rgba(255,255,255,.06);
       --border:rgba(255,255,255,.10);
       --text:#eaf0ff;
       --muted:#a9b7dd;
@@ -22,18 +20,7 @@
       --aqua:#43e2cf;
       --aqua2:rgba(67,226,207,.14);
 
-      --blue:#74a7ff;
       --blue2:rgba(116,167,255,.14);
-
-      --gold:#ffcc66;
-      --gold2:rgba(255,204,102,.14);
-
-      --violet:#b18cff;
-      --violet2:rgba(177,140,255,.14);
-
-      --red:#ff5a73;
-      --red2:rgba(255,90,115,.14);
-
       --shadow: 0 18px 50px rgba(0,0,0,.45);
       --r:22px;
     }
@@ -103,7 +90,7 @@
 
     .tab.active{
       border-color: rgba(116,167,255,.40);
-      background: rgba(116,167,255,.14);
+      background: var(--blue2);
     }
 
     .content{padding:12px 6px 0 6px}
@@ -245,13 +232,8 @@
   <div class="app">
     <div class="topbar">
       <div class="header">
-        <div class="brand">
-          <h1>Noodmap Rob</h1>
-        </div>
-        <div class="chip">
-          <span class="dot"></span>
-          <span id="dateText">...</span>
-        </div>
+        <div class="brand"><h1>Noodmap Rob</h1></div>
+        <div class="chip"><span class="dot"></span><span id="dateText">...</span></div>
       </div>
 
       <div class="tabs" id="tabs">
@@ -277,6 +259,17 @@
               <input id="sharedId" type="text" placeholder="RB-LZ-2026" />
             </div>
             <div class="field">
+              <label>E mail</label>
+              <input id="loginEmail" type="email" placeholder="jij@..." />
+            </div>
+          </div>
+
+          <div class="grid2" style="margin-top:12px;">
+            <div class="field">
+              <label>Wachtwoord</label>
+              <input id="loginPass" type="password" placeholder="••••••••" />
+            </div>
+            <div class="field">
               <label>Actie</label>
               <div class="btnRow" style="margin-top:0;">
                 <button class="btn primary" id="btnLogin">Inloggen</button>
@@ -285,6 +278,7 @@
               </div>
             </div>
           </div>
+
           <div class="small" style="margin-top:10px;">Gebruik dezelfde gedeelde code op beide telefoons.</div>
         </div>
       </div>
@@ -317,7 +311,7 @@
               <button class="btn" id="exportAll">Export alles</button>
             </div>
 
-            <div class="small" style="margin-top:10px;">Data sync werkt pas na inloggen.</div>
+            <div class="small" style="margin-top:10px;">Sync werkt pas na inloggen en een gedeelde code.</div>
           </div>
         </div>
       </section>
@@ -417,10 +411,6 @@
             </div>
 
             <div style="height:12px"></div>
-            <div class="list" id="bankList"></div>
-          </div>
-        </div>
-      </section>
      <section class="section" id="sec-documenten">
         <div class="box">
           <div class="boxHead">
@@ -520,7 +510,7 @@
       t.textContent = msg;
       t.classList.add("show");
       clearTimeout(toast._t);
-      toast._t = setTimeout(function(){ t.classList.remove("show"); }, 1700);
+      toast._t = setTimeout(function(){ t.classList.remove("show"); }, 1900);
     }
 
     function setStatus(s){
@@ -668,20 +658,32 @@
     }
 
     function setAuthState(){
-      if (!STATE.user){
-        $("authState").textContent = "Niet ingelogd";
-        return;
-      }
-      $("authState").textContent = "Ingelogd";
+      $("authState").textContent = STATE.user ? "Ingelogd" : "Niet ingelogd";
     }
 
     async function signIn(){
-      const provider = new firebase.auth.GoogleAuthProvider();
-      await auth.signInWithRedirect(provider);
+      var email = ($("loginEmail").value || "").trim();
+      var pass = $("loginPass").value || "";
+      if (!email || !pass){
+        toast("Vul e mail en wachtwoord in");
+        return;
+      }
+      try{
+        await auth.signInWithEmailAndPassword(email, pass);
+      }catch(e){
+        toast("Login mislukt");
+        setStatus(e && e.message ? e.message : "Login mislukt");
+      }
     }
 
     async function signOutNow(){
-      await auth.signOut();
+      try{
+        await auth.signOut();
+        toast("Uitgelogd");
+        setStatus("Uitgelogd");
+      }catch(e){
+        toast("Uitloggen mislukt");
+      }
     }
 
     function sharedDocRef(){
@@ -701,22 +703,29 @@
         STATE.data = normalizeData(snap.data());
         renderAllFromState();
         setStatus("Sync bijgewerkt");
+      }, function(err){
+        toast("Sync fout");
+        setStatus(err && err.message ? err.message : "Sync fout");
       });
     }
 
     async function loadFromCloud(){
       var ref = sharedDocRef();
       if (!ref){ toast("Vul gedeelde code in"); return; }
-
-      var snap = await ref.get();
-      if (!snap.exists){
-        toast("Nog niks in cloud, opslaan maakt het aan");
-        return;
+      try{
+        var snap = await ref.get();
+        if (!snap.exists){
+          toast("Nog niks in cloud, opslaan maakt het aan");
+          return;
+        }
+        STATE.data = normalizeData(snap.data());
+        renderAllFromState();
+        toast("Geladen");
+        setStatus("Geladen");
+      }catch(e){
+        toast("Laden mislukt");
+        setStatus(e && e.message ? e.message : "Laden mislukt");
       }
-      STATE.data = normalizeData(snap.data());
-      renderAllFromState();
-      toast("Geladen");
-      setStatus("Geladen");
     }
 
     var saveTimer = null;
@@ -730,8 +739,13 @@
       var ref = sharedDocRef();
       if (!ref) return;
       if (!STATE.user) return;
-      await ref.set(STATE.data, { merge:true });
-      setStatus("Gesynchroniseerd");
+      try{
+        await ref.set(STATE.data, { merge:true });
+        setStatus("Gesynchroniseerd");
+      }catch(e){
+        toast("Opslaan mislukt");
+        setStatus(e && e.message ? e.message : "Opslaan mislukt");
+      }
     }
 
     function renderAllFromState(){
@@ -822,8 +836,8 @@
     }
 
     function bindButtons(){
-      $("btnLogin").addEventListener("click", async function(){ await signIn(); });
-      $("btnLogout").addEventListener("click", async function(){ await signOutNow(); });
+      $("btnLogin").addEventListener("click", signIn);
+      $("btnLogout").addEventListener("click", signOutNow);
 
       $("btnSyncNow").addEventListener("click", async function(){
         STATE.sharedId = getSharedId();
@@ -941,8 +955,6 @@
     }
 
     function initFirebase(){
-      auth.getRedirectResult().catch(function(){});
-
       auth.onAuthStateChanged(async function(user){
         STATE.user = user || null;
         setAuthState();
@@ -962,13 +974,29 @@
       });
     }
 
+    window.addEventListener("unhandledrejection", function(e){
+      try{
+        var msg = (e && e.reason && e.reason.message) ? e.reason.message : "Onbekende fout";
+        toast(msg);
+        setStatus(msg);
+      }catch(_){}
+    });
+
+    window.addEventListener("error", function(e){
+      try{
+        var msg2 = (e && e.message) ? e.message : "Onbekende fout";
+        toast(msg2);
+        setStatus(msg2);
+      }catch(_){}
+    });
+
     function init(){
       setDate();
       bindTabs();
       bindButtons();
       renderAllFromState();
       initFirebase();
-      setStatus("Klaar. Log in en zet dezelfde code op beide telefoons.");
+      setStatus("Klaar. Log in, zet gedeelde code, dan sync je met Lizet.");
     }
 
     init();
