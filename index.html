@@ -125,6 +125,7 @@
     }
 
     .boxHead h2{margin:0;font-size:1.05rem;font-weight:900;letter-spacing:.2px}
+
     .badge{
       border:1px solid var(--border);
       background: rgba(255,255,255,.03);
@@ -144,7 +145,7 @@
     .field label{
       display:block;color:var(--muted);font-weight:900;font-size:.9rem;margin:0 0 6px 0;
     }
-    .field input, .field textarea, .field select{
+    .field input, .field textarea{
       width:100%;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
@@ -206,11 +207,6 @@
       -webkit-tap-highlight-color: transparent;
       font-weight:900;
     }
-    a.link{
-      color:var(--text);
-      text-decoration:none;
-      border-bottom:1px solid rgba(255,255,255,.14);
-    }
 
     .bottomBar{
       position:fixed;left:0;right:0;bottom:0;z-index:6;
@@ -269,6 +265,30 @@
     </div>
 
     <div class="content">
+      <div class="box" style="margin-bottom:12px;">
+        <div class="boxHead">
+          <h2>Sync</h2>
+          <span class="badge" id="authState">Niet ingelogd</span>
+        </div>
+        <div class="boxBody">
+          <div class="grid2">
+            <div class="field">
+              <label>Gedeelde code</label>
+              <input id="sharedId" type="text" placeholder="RB-LZ-2026" />
+            </div>
+            <div class="field">
+              <label>Actie</label>
+              <div class="btnRow" style="margin-top:0;">
+                <button class="btn primary" id="btnLogin">Inloggen</button>
+                <button class="btn" id="btnLogout">Uitloggen</button>
+                <button class="btn" id="btnSyncNow">Nu laden</button>
+              </div>
+            </div>
+          </div>
+          <div class="small" style="margin-top:10px;">Gebruik dezelfde gedeelde code op beide telefoons.</div>
+        </div>
+      </div>
+
       <section class="section active" id="sec-overzicht">
         <div class="box">
           <div class="boxHead">
@@ -289,7 +309,7 @@
 
             <div class="field" style="margin-top:12px;">
               <label>Wat Lizet moet weten</label>
-              <textarea id="overviewText" placeholder="Waar ligt de Ledger, hoe inloggen werkt, welke exchanges je gebruikt, waar back-ups liggen. Zet hier geen seed."></textarea>
+              <textarea id="overviewText" placeholder="Waar ligt de Ledger, hoe inloggen werkt, welke exchanges je gebruikt. Zet hier geen seed."></textarea>
             </div>
 
             <div class="btnRow">
@@ -297,7 +317,7 @@
               <button class="btn" id="exportAll">Export alles</button>
             </div>
 
-            <div class="small" style="margin-top:10px;">Alles staat alleen op dit toestel. Als je dit via GitHub Pages gebruikt, staat de inhoud niet op GitHub maar in jouw browser opslag.</div>
+            <div class="small" style="margin-top:10px;">Data sync werkt pas na inloggen.</div>
           </div>
         </div>
       </section>
@@ -320,7 +340,7 @@
             </div>
             <div class="field" style="margin-top:12px;">
               <label>Notitie</label>
-              <input id="cryptoNote" type="text" placeholder="Bijv. inloggen met Google, 2FA via Authenticator" />
+              <input id="cryptoNote" type="text" placeholder="Bijv. 2FA via Authenticator op iPhone" />
             </div>
 
             <div class="btnRow">
@@ -354,7 +374,7 @@
 
             <div class="field" style="margin-top:12px;">
               <label>Notitie</label>
-              <input id="walletNote" type="text" placeholder="Bijv. pincode staat in envelop, 2FA op iPhone" />
+              <input id="walletNote" type="text" placeholder="Bijv. pincode staat in envelop" />
             </div>
 
             <div class="btnRow">
@@ -371,7 +391,7 @@
       <section class="section" id="sec-banken">
         <div class="box">
           <div class="boxHead">
-            <h2>Banken en andere accounts</h2>
+            <h2>Banken en accounts</h2>
             <span class="badge" id="countBanks">0 items</span>
           </div>
           <div class="boxBody">
@@ -388,7 +408,7 @@
 
             <div class="field" style="margin-top:12px;">
               <label>Notitie</label>
-              <input id="bankNote" type="text" placeholder="Bijv. inloggen via app, 2FA, pas in portemonnee" />
+              <input id="bankNote" type="text" placeholder="Bijv. inloggen via app, 2FA" />
             </div>
 
             <div class="btnRow">
@@ -427,14 +447,11 @@
             <div class="btnRow">
               <button class="btn primary" id="addDoc">Toevoegen</button>
               <button class="btn" id="clearDocForm">Leegmaken</button>
+              <button class="btn" id="exportDocs">Export documenten</button>
             </div>
 
             <div style="height:12px"></div>
             <div class="list" id="docList"></div>
-
-            <div class="btnRow" style="margin-top:14px;">
-              <button class="btn" id="exportDocs">Export documenten</button>
-            </div>
           </div>
         </div>
       </section>
@@ -448,7 +465,7 @@
           <div class="boxBody">
             <div class="field">
               <label>Notitie</label>
-              <textarea id="freeNotes" placeholder="Bijv. wie te bellen, wat te regelen, welke rekeningen, waar backups staan."></textarea>
+              <textarea id="freeNotes" placeholder="Bijv. wie te bellen, wat te regelen, waar backups liggen."></textarea>
             </div>
 
             <div class="btnRow">
@@ -475,17 +492,26 @@
 
   <div class="toast" id="toast">...</div>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
   <script>
     "use strict";
 
-    var LS = {
-      OVER: "noodmap_over_v1",
-      CRYPTO: "noodmap_crypto_v1",
-      WALLETS: "noodmap_wallets_v1",
-      BANKS: "noodmap_banks_v1",
-      DOCS: "noodmap_docs_v1",
-      NOTES: "noodmap_notes_v1"
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRu2zH8nc41L2ymmSXoIlmXk4JL-g4BzM",
+      authDomain: "noodplan-rob.firebaseapp.com",
+      databaseURL: "https://noodplan-rob-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "noodplan-rob",
+      storageBucket: "noodplan-rob.firebasestorage.app",
+      messagingSenderId: "528144890958",
+      appId: "1:528144890958:web:77738ddfdc698ed440571f"
     };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
     function $(id){ return document.getElementById(id); }
 
@@ -495,22 +521,6 @@
       t.classList.add("show");
       clearTimeout(toast._t);
       toast._t = setTimeout(function(){ t.classList.remove("show"); }, 1700);
-    }
-
-    function safeParse(key, fallback){
-      try{
-        var v = localStorage.getItem(key);
-        if (!v) return fallback;
-        return JSON.parse(v);
-      }catch(e){ return fallback; }
-    }
-
-    function safeSave(key, obj){
-      try{ localStorage.setItem(key, JSON.stringify(obj)); }catch(e){}
-    }
-
-    function setDate(){
-      $("dateText").textContent = new Date().toLocaleDateString("nl-NL",{ weekday:"long", day:"numeric", month:"long", year:"numeric" });
     }
 
     function setStatus(s){
@@ -536,6 +546,10 @@
       window.open(u, "_blank");
     }
 
+    function setDate(){
+      $("dateText").textContent = new Date().toLocaleDateString("nl-NL",{ weekday:"long", day:"numeric", month:"long", year:"numeric" });
+    }
+
     function setActiveTab(tab){
       Array.from(document.querySelectorAll(".tab")).forEach(function(b){
         b.classList.toggle("active", b.dataset.tab === tab);
@@ -557,20 +571,16 @@
     }
 
     function downloadText(filename, text){
-      try{
-        var blob = new Blob([text], { type:"text/plain;charset=utf-8" });
-        var a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(function(){
-          URL.revokeObjectURL(a.href);
-          a.remove();
-        }, 0);
-      }catch(e){
-        toast("Download lukt niet");
-      }
+      var blob = new Blob([text], { type:"text/plain;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function(){
+        URL.revokeObjectURL(a.href);
+        a.remove();
+      }, 0);
     }
 
     function renderList(list, targetId, kind){
@@ -626,102 +636,111 @@
         });
       });
     }
-   function loadAll(){
+  </script>
+ <script>
+    var STATE = {
+      sharedId: "",
+      user: null,
+      data: {
+        over: { myName:"", lizetPhone:"", text:"" },
+        crypto: [],
+        wallets: [],
+        banks: [],
+        docs: [],
+        notes: { text:"" }
+      }
+    };
+
+    function getSharedId(){
+      return ($("sharedId").value || "").trim();
+    }
+
+    function normalizeData(d){
+      d = d || {};
       return {
-        over: safeParse(LS.OVER, { myName:"", lizetPhone:"", text:"" }),
-        crypto: safeParse(LS.CRYPTO, []),
-        wallets: safeParse(LS.WALLETS, []),
-        banks: safeParse(LS.BANKS, []),
-        docs: safeParse(LS.DOCS, []),
-        notes: safeParse(LS.NOTES, { text:"" })
+        over: d.over || { myName:"", lizetPhone:"", text:"" },
+        crypto: Array.isArray(d.crypto) ? d.crypto : [],
+        wallets: Array.isArray(d.wallets) ? d.wallets : [],
+        banks: Array.isArray(d.banks) ? d.banks : [],
+        docs: Array.isArray(d.docs) ? d.docs : [],
+        notes: d.notes || { text:"" }
       };
     }
 
-    function saveOver(){
-      var over = {
-        myName: $("myName").value || "",
-        lizetPhone: $("lizetPhone").value || "",
-        text: $("overviewText").value || ""
-      };
-      safeSave(LS.OVER, over);
-      toast("Overzicht opgeslagen");
-      setStatus("Overzicht opgeslagen");
+    function setAuthState(){
+      if (!STATE.user){
+        $("authState").textContent = "Niet ingelogd";
+        return;
+      }
+      $("authState").textContent = "Ingelogd";
     }
 
-    function addItem(kind){
-      var data = loadAll();
-
-      if (kind === "crypto"){
-        var name = ($("cryptoName").value||"").trim();
-        var url = cleanUrl($("cryptoUrl").value||"");
-        var note = ($("cryptoNote").value||"").trim();
-        if (!name || !url){ toast("Vul naam en link in"); return; }
-        data.crypto.push({ id: Date.now(), name:name, url:url, note:note });
-        safeSave(LS.CRYPTO, data.crypto);
-        $("cryptoName").value=""; $("cryptoUrl").value=""; $("cryptoNote").value="";
-        toast("Toegevoegd");
-        renderAll();
-        return;
-      }
-
-      if (kind === "wallet"){
-        var wname = ($("walletName").value||"").trim();
-        var where = ($("walletWhere").value||"").trim();
-        var wnote = ($("walletNote").value||"").trim();
-        if (!wname || !where){ toast("Vul naam en waar in"); return; }
-        data.wallets.push({ id: Date.now(), name:wname, where:where, note:wnote });
-        safeSave(LS.WALLETS, data.wallets);
-        $("walletName").value=""; $("walletWhere").value=""; $("walletNote").value="";
-        toast("Toegevoegd");
-        renderAll();
-        return;
-      }
-
-      if (kind === "bank"){
-        var bname = ($("bankName").value||"").trim();
-        var burl = cleanUrl($("bankUrl").value||"");
-        var bnote = ($("bankNote").value||"").trim();
-        if (!bname || !burl){ toast("Vul naam en link in"); return; }
-        data.banks.push({ id: Date.now(), name:bname, url:burl, note:bnote });
-        safeSave(LS.BANKS, data.banks);
-        $("bankName").value=""; $("bankUrl").value=""; $("bankNote").value="";
-        toast("Toegevoegd");
-        renderAll();
-        return;
-      }
-
-      if (kind === "doc"){
-        var dname = ($("docName").value||"").trim();
-        var dwhere = ($("docWhere").value||"").trim();
-        var dnote = ($("docNote").value||"").trim();
-        if (!dname || !dwhere){ toast("Vul wat en waar in"); return; }
-        data.docs.push({ id: Date.now(), name:dname, where:dwhere, note:dnote });
-        safeSave(LS.DOCS, data.docs);
-        $("docName").value=""; $("docWhere").value=""; $("docNote").value="";
-        toast("Toegevoegd");
-        renderAll();
-        return;
-      }
+    async function signIn(){
+      const provider = new firebase.auth.GoogleAuthProvider();
+      await auth.signInWithRedirect(provider);
     }
 
-    function removeItem(kind, id){
-      var data = loadAll();
-      if (kind === "crypto"){ data.crypto = data.crypto.filter(function(x){ return x.id !== id; }); safeSave(LS.CRYPTO, data.crypto); }
-      if (kind === "wallet"){ data.wallets = data.wallets.filter(function(x){ return x.id !== id; }); safeSave(LS.WALLETS, data.wallets); }
-      if (kind === "bank"){ data.banks = data.banks.filter(function(x){ return x.id !== id; }); safeSave(LS.BANKS, data.banks); }
-      if (kind === "doc"){ data.docs = data.docs.filter(function(x){ return x.id !== id; }); safeSave(LS.DOCS, data.docs); }
-      toast("Verwijderd");
-      renderAll();
+    async function signOutNow(){
+      await auth.signOut();
     }
 
-    function renderAll(){
-      var data = loadAll();
+    function sharedDocRef(){
+      if (!STATE.sharedId) return null;
+      return db.collection("shared").doc(STATE.sharedId);
+    }
+
+    var unsub = null;
+
+    async function startRealtime(){
+      if (unsub) { unsub(); unsub = null; }
+      var ref = sharedDocRef();
+      if (!ref) return;
+
+      unsub = ref.onSnapshot(function(snap){
+        if (!snap.exists) return;
+        STATE.data = normalizeData(snap.data());
+        renderAllFromState();
+        setStatus("Sync bijgewerkt");
+      });
+    }
+
+    async function loadFromCloud(){
+      var ref = sharedDocRef();
+      if (!ref){ toast("Vul gedeelde code in"); return; }
+
+      var snap = await ref.get();
+      if (!snap.exists){
+        toast("Nog niks in cloud, opslaan maakt het aan");
+        return;
+      }
+      STATE.data = normalizeData(snap.data());
+      renderAllFromState();
+      toast("Geladen");
+      setStatus("Geladen");
+    }
+
+    var saveTimer = null;
+
+    function scheduleSave(){
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveToCloud, 450);
+    }
+
+    async function saveToCloud(){
+      var ref = sharedDocRef();
+      if (!ref) return;
+      if (!STATE.user) return;
+      await ref.set(STATE.data, { merge:true });
+      setStatus("Gesynchroniseerd");
+    }
+
+    function renderAllFromState(){
+      var data = STATE.data;
 
       $("myName").value = data.over.myName || "";
       $("lizetPhone").value = data.over.lizetPhone || "";
       $("overviewText").value = data.over.text || "";
-
-      $("freeNotes").value = data.notes.text || "";
+      $("freeNotes").value = (data.notes && data.notes.text) ? data.notes.text : "";
 
       $("countCrypto").textContent = data.crypto.length + " links";
       $("countWallets").textContent = data.wallets.length + " items";
@@ -734,44 +753,67 @@
       renderList(data.docs, "docList", "doc");
     }
 
+    function nextId(){
+      return Date.now();
+    }
+
+    function addItemToState(kind, obj){
+      if (kind === "crypto") STATE.data.crypto.push(obj);
+      if (kind === "wallet") STATE.data.wallets.push(obj);
+      if (kind === "bank") STATE.data.banks.push(obj);
+      if (kind === "doc") STATE.data.docs.push(obj);
+      renderAllFromState();
+      scheduleSave();
+    }
+
+    function removeItem(kind, id){
+      if (kind === "crypto") STATE.data.crypto = STATE.data.crypto.filter(function(x){ return x.id !== id; });
+      if (kind === "wallet") STATE.data.wallets = STATE.data.wallets.filter(function(x){ return x.id !== id; });
+      if (kind === "bank") STATE.data.banks = STATE.data.banks.filter(function(x){ return x.id !== id; });
+      if (kind === "doc") STATE.data.docs = STATE.data.docs.filter(function(x){ return x.id !== id; });
+      toast("Verwijderd");
+      renderAllFromState();
+      scheduleSave();
+    }
+
     function exportAll(){
-      var data = loadAll();
+      var d = STATE.data;
       var out = [];
       out.push("NOODMAP ROB");
       out.push("Datum: " + new Date().toLocaleString("nl-NL"));
       out.push("");
-      out.push("Naam: " + (data.over.myName||""));
-      out.push("Lizet: " + (data.over.lizetPhone||""));
+      out.push("Naam: " + (d.over.myName||""));
+      out.push("Lizet: " + (d.over.lizetPhone||""));
       out.push("");
       out.push("Overzicht:");
-      out.push(data.over.text||"");
+      out.push(d.over.text||"");
       out.push("");
       out.push("CRYPTO WEBSITES:");
-      data.crypto.forEach(function(x){
+      d.crypto.forEach(function(x){
         out.push("- " + (x.name||"") + " | " + (x.url||""));
         if (x.note) out.push("  Notitie: " + x.note);
       });
       out.push("");
       out.push("WALLETS:");
-      data.wallets.forEach(function(x){
+      d.wallets.forEach(function(x){
         out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
         if (x.note) out.push("  Notitie: " + x.note);
       });
       out.push("");
       out.push("BANKEN:");
-      data.banks.forEach(function(x){
+      d.banks.forEach(function(x){
         out.push("- " + (x.name||"") + " | " + (x.url||""));
         if (x.note) out.push("  Notitie: " + x.note);
       });
       out.push("");
       out.push("DOCUMENTEN:");
-      data.docs.forEach(function(x){
+      d.docs.forEach(function(x){
         out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
         if (x.note) out.push("  Notitie: " + x.note);
       });
       out.push("");
       out.push("NOTITIES:");
-      out.push(data.notes.text||"");
+      out.push(d.notes.text||"");
       out.push("");
       out.push("Let op: geen seed phrases of private keys hierin.");
       downloadText("noodmap-rob.txt", out.join("\n"));
@@ -780,35 +822,96 @@
     }
 
     function bindButtons(){
-      $("saveOverview").addEventListener("click", saveOver);
+      $("btnLogin").addEventListener("click", async function(){ await signIn(); });
+      $("btnLogout").addEventListener("click", async function(){ await signOutNow(); });
+
+      $("btnSyncNow").addEventListener("click", async function(){
+        STATE.sharedId = getSharedId();
+        await loadFromCloud();
+        await startRealtime();
+      });
+
+      $("sharedId").addEventListener("change", async function(){
+        STATE.sharedId = getSharedId();
+        await startRealtime();
+        scheduleSave();
+      });
+
+      $("saveOverview").addEventListener("click", function(){
+        STATE.data.over = {
+          myName: $("myName").value || "",
+          lizetPhone: $("lizetPhone").value || "",
+          text: $("overviewText").value || ""
+        };
+        toast("Overzicht opgeslagen");
+        renderAllFromState();
+        scheduleSave();
+      });
+
       $("exportAll").addEventListener("click", exportAll);
       $("exportQuick").addEventListener("click", exportAll);
 
-      $("addCrypto").addEventListener("click", function(){ addItem("crypto"); });
+      $("addCrypto").addEventListener("click", function(){
+        var name = ($("cryptoName").value||"").trim();
+        var url = cleanUrl($("cryptoUrl").value||"");
+        var note = ($("cryptoNote").value||"").trim();
+        if (!name || !url){ toast("Vul naam en link in"); return; }
+        addItemToState("crypto", { id: nextId(), name:name, url:url, note:note });
+        $("cryptoName").value=""; $("cryptoUrl").value=""; $("cryptoNote").value="";
+        toast("Toegevoegd");
+      });
+
       $("clearCryptoForm").addEventListener("click", function(){
         $("cryptoName").value=""; $("cryptoUrl").value=""; $("cryptoNote").value="";
       });
 
-      $("addWallet").addEventListener("click", function(){ addItem("wallet"); });
+      $("addWallet").addEventListener("click", function(){
+        var name = ($("walletName").value||"").trim();
+        var where = ($("walletWhere").value||"").trim();
+        var note = ($("walletNote").value||"").trim();
+        if (!name || !where){ toast("Vul naam en waar in"); return; }
+        addItemToState("wallet", { id: nextId(), name:name, where:where, note:note });
+        $("walletName").value=""; $("walletWhere").value=""; $("walletNote").value="";
+        toast("Toegevoegd");
+      });
+
       $("clearWalletForm").addEventListener("click", function(){
         $("walletName").value=""; $("walletWhere").value=""; $("walletNote").value="";
       });
 
-      $("addBank").addEventListener("click", function(){ addItem("bank"); });
+      $("addBank").addEventListener("click", function(){
+        var name = ($("bankName").value||"").trim();
+        var url = cleanUrl($("bankUrl").value||"");
+        var note = ($("bankNote").value||"").trim();
+        if (!name || !url){ toast("Vul naam en link in"); return; }
+        addItemToState("bank", { id: nextId(), name:name, url:url, note:note });
+        $("bankName").value=""; $("bankUrl").value=""; $("bankNote").value="";
+        toast("Toegevoegd");
+      });
+
       $("clearBankForm").addEventListener("click", function(){
         $("bankName").value=""; $("bankUrl").value=""; $("bankNote").value="";
       });
 
-      $("addDoc").addEventListener("click", function(){ addItem("doc"); });
+      $("addDoc").addEventListener("click", function(){
+        var name = ($("docName").value||"").trim();
+        var where = ($("docWhere").value||"").trim();
+        var note = ($("docNote").value||"").trim();
+        if (!name || !where){ toast("Vul wat en waar in"); return; }
+        addItemToState("doc", { id: nextId(), name:name, where:where, note:note });
+        $("docName").value=""; $("docWhere").value=""; $("docNote").value="";
+        toast("Toegevoegd");
+      });
+
       $("clearDocForm").addEventListener("click", function(){
         $("docName").value=""; $("docWhere").value=""; $("docNote").value="";
       });
 
       $("exportDocs").addEventListener("click", function(){
-        var data = loadAll();
+        var d = STATE.data;
         var out = [];
         out.push("DOCUMENTEN");
-        data.docs.forEach(function(x){
+        d.docs.forEach(function(x){
           out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
           if (x.note) out.push("  Notitie: " + x.note);
         });
@@ -817,25 +920,45 @@
       });
 
       $("saveNotes").addEventListener("click", function(){
-        safeSave(LS.NOTES, { text: $("freeNotes").value || "" });
+        STATE.data.notes = { text: $("freeNotes").value || "" };
         toast("Notities opgeslagen");
-        setStatus("Notities opgeslagen");
+        renderAllFromState();
+        scheduleSave();
       });
 
       $("exportNotes").addEventListener("click", function(){
-        var data = loadAll();
-        downloadText("notities-rob.txt", data.notes.text || "");
+        downloadText("notities-rob.txt", STATE.data.notes.text || "");
         toast("Notities export");
       });
 
       $("wipeAll").addEventListener("click", function(){
         if (!confirm("Alles wissen?")) return;
-        Object.keys(LS).forEach(function(k){
-          try{ localStorage.removeItem(LS[k]); }catch(e){}
-        });
+        STATE.data = normalizeData({});
+        renderAllFromState();
+        scheduleSave();
         toast("Alles gewist");
-        setStatus("Alles gewist");
-        renderAll();
+      });
+    }
+
+    function initFirebase(){
+      auth.getRedirectResult().catch(function(){});
+
+      auth.onAuthStateChanged(async function(user){
+        STATE.user = user || null;
+        setAuthState();
+
+        if (!STATE.user){
+          if (unsub) { unsub(); unsub = null; }
+          setStatus("Log in om te syncen");
+          return;
+        }
+
+        setStatus("Ingelogd, kies gedeelde code");
+        STATE.sharedId = getSharedId();
+        if (STATE.sharedId){
+          await startRealtime();
+          await loadFromCloud();
+        }
       });
     }
 
@@ -843,11 +966,13 @@
       setDate();
       bindTabs();
       bindButtons();
-      renderAll();
-      setStatus("Klaar, voeg je links toe.");
+      renderAllFromState();
+      initFirebase();
+      setStatus("Klaar. Log in en zet dezelfde code op beide telefoons.");
     }
 
     init();
   </script>
 </body>
 </html>
+
