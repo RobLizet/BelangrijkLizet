@@ -6,22 +6,20 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <title>Noodmap Rob</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700;900&display=swap" rel="stylesheet" />
-
   <style>
     :root{
       --bg:#071023;
+      --panel:rgba(255,255,255,.06);
+      --panel2:rgba(7,16,35,.55);
       --border:rgba(255,255,255,.10);
       --text:#eaf0ff;
       --muted:#a9b7dd;
       --aqua:#43e2cf;
-      --blue2:rgba(116,167,255,.14);
-      --shadow: 0 18px 50px rgba(0,0,0,.45);
-      --r:22px;
+      --shadow:0 18px 50px rgba(0,0,0,.45);
+      --r:20px;
     }
-
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -36,785 +34,477 @@
       -webkit-font-smoothing:antialiased;
       padding:14px 12px 110px 12px;
     }
-
     .app{max-width:980px;margin:0 auto}
-
     .topbar{
       position:sticky;top:0;z-index:5;
       background: linear-gradient(180deg, rgba(7,16,35,.92), rgba(7,16,35,.72));
       backdrop-filter: blur(12px);
-      border-bottom:1px solid rgba(255,255,255,.06);
-      padding:10px 6px 10px 6px;
+      border:1px solid rgba(255,255,255,.06);
+      padding:10px 10px 8px 10px;
       border-radius:18px;
     }
-
-    .header{
-      display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;
-      padding:6px 6px 2px 6px;
-    }
-
-    .brand{display:flex;gap:12px;align-items:center;min-width:220px}
-    .brand h1{margin:0;font-size:1.25rem;letter-spacing:.2px;font-weight:900}
-
-    .chip{
-      display:inline-flex;align-items:center;gap:10px;
+    .header{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .brand{display:flex;gap:10px;align-items:center}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:999px;
       border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      padding:10px 12px;border-radius:999px;
-      color:var(--text);font-weight:900;
-      box-shadow: 0 10px 26px rgba(0,0,0,.22);
-      white-space:nowrap;
-    }
-
-    .chip .dot{
-      width:10px;height:10px;border-radius:999px;background: var(--aqua);
-      box-shadow: 0 0 0 6px rgba(67,226,207,.14);
-    }
-
-    .tabs{
-      display:flex;gap:10px;flex-wrap:wrap;
-      padding:10px 6px 6px 6px;
-    }
-
-    .tab{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
+      background: rgba(116,167,255,.10);
       color:var(--text);
-      padding:10px 14px;border-radius:16px;
-      font-weight:900;cursor:pointer;
-      user-select:none;-webkit-tap-highlight-color: transparent;
+      font-weight:900;font-size:.86rem;
     }
-
-    .tab.active{
-      border-color: rgba(116,167,255,.40);
-      background: var(--blue2);
+    .brand h1{margin:0;font-size:1.15rem;font-weight:900;letter-spacing:.2px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color:var(--muted);
+      font-size:.86rem;
+      user-select:none;
     }
-
-    .content{padding:12px 6px 190px 6px}
-
-    .section{display:none}
-    .section.active{display:block}
-
-    .box{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
+    .dot{width:10px;height:10px;border-radius:99px;background:rgba(67,226,207,.9);box-shadow:0 0 0 4px rgba(67,226,207,.12)}
+    .dot.off{background:rgba(255,120,120,.95);box-shadow:0 0 0 4px rgba(255,120,120,.12)}
+    .kbd{
+      display:inline-block;
+      padding:2px 8px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.24);
+      font-weight:900;font-size:.82rem;color:var(--text);
+    }
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .tabBtn{
+      appearance:none;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .tabBtn.active{
+      background: linear-gradient(135deg, rgba(67,226,207,.22), rgba(116,167,255,.18));
+      border-color: rgba(67,226,207,.35);
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+    .grid{display:grid;gap:14px;grid-template-columns:1fr;margin-top:12px}
+    @media(min-width:900px){ .grid{grid-template-columns:1.1fr .9fr} .span2{grid-column:1/-1} }
+    .card{
+      border:1px solid var(--border);
+      background: var(--panel);
       border-radius: var(--r);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-
-    .boxHead{
-      padding:14px 14px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+    .cardHeader{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:14px 14px 12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(116,167,255,.12), rgba(255,255,255,.02));
     }
-
-    .boxHead h2{margin:0;font-size:1.05rem;font-weight:900;letter-spacing:.2px}
-
-    .badge{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      color:var(--muted);
-      border-radius:999px;
-      padding:7px 10px;
-      font-weight:900;
-      font-size:.82rem;
-      white-space:nowrap;
-    }
-
-    .boxBody{padding:14px}
-
-    .grid2{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
-    @media (max-width: 760px){.grid2{grid-template-columns:1fr}}
-
-    .field label{
-      display:block;color:var(--muted);font-weight:900;font-size:.9rem;margin:0 0 6px 0;
-    }
-    .field input, .field textarea, .field select{
+    .cardHeader h2{margin:0;font-size:1.02rem;font-weight:900}
+    .sub{color:var(--muted);font-size:.86rem}
+    .cardBody{padding:14px}
+    .row{display:grid;grid-template-columns:1fr;gap:10px}
+    @media(min-width:640px){ .row.cols2{grid-template-columns:1fr 1fr} }
+    label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
+    input,textarea,select{
       width:100%;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.12);
+      background: var(--panel2);
       color:var(--text);
+      border-radius:14px;
+      padding:12px 12px;
+      font-size:1rem;
+      outline:none;
+    }
+    textarea{min-height:110px;resize:vertical}
+    .btnBar{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.10);
+      color:var(--text);
+      padding:11px 12px;border-radius:14px;
+      font-weight:900;cursor:pointer;
+    }
+    .btn.primary{background: linear-gradient(135deg, rgba(67,226,207,.22), rgba(116,167,255,.22));border-color: rgba(67,226,207,.35)}
+    .btn.danger{background: rgba(255,120,120,.12);border-color: rgba(255,120,120,.28)}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .item{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(7,16,35,.45);
       border-radius:16px;
       padding:12px 12px;
-      font-weight:900;
-      outline:none;
-      -webkit-appearance:none;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
     }
-    .field textarea{min-height:92px;resize:vertical;font-weight:800}
-
-    .btnRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .btn{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
+    .item h3{margin:0;font-size:1rem;font-weight:900}
+    .item p{margin:4px 0 0 0;color:var(--muted);font-size:.92rem;line-height:1.25rem}
+    .small{font-size:.86rem;color:var(--muted)}
+    .actions{display:flex;gap:8px;align-items:flex-start}
+    .iconBtn{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
       color:var(--text);
-      padding:11px 14px;border-radius:16px;
-      font-weight:900;cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
+      padding:8px 10px;border-radius:12px;
+      cursor:pointer;font-weight:900;
     }
-    .btn.primary{
-      border-color: rgba(67,226,207,.45);
-      background: rgba(67,226,207,.14);
-      color: var(--aqua);
-    }
-    .btn.danger{
-      border-color: rgba(255,90,115,.45);
-      background: rgba(255,90,115,.14);
-      color: #ff90a1;
-    }
-
-    .list{display:flex;flex-direction:column;gap:10px}
-    .row{
-      display:flex;gap:10px;align-items:flex-start;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      border-radius:18px;
-      padding:12px 12px;
-    }
-    .ico{
-      width:40px;height:40px;border-radius:16px;
-      display:grid;place-items:center;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      flex:0 0 40px;
-      font-size:18px;
-    }
-    .rBody{flex:1;min-width:0}
-    .rTitle{margin:0 0 6px 0;font-weight:900;line-height:1.25}
-    .rMeta{margin:0;color:var(--muted);font-weight:800;font-size:.9rem;line-height:1.25;word-break:break-word}
-    .rActions{display:flex;gap:8px;align-items:center;flex:0 0 auto}
-    .mini{
-      width:42px;height:42px;border-radius:16px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      display:grid;place-items:center;
-      cursor:pointer;user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      font-weight:900;
-    }
-
-    .bottomBar{
-      position:fixed;left:0;right:0;bottom:0;z-index:6;
-      padding:10px 12px calc(12px + env(safe-area-inset-bottom)) 12px;
-      background: linear-gradient(180deg, rgba(7,16,35,0), rgba(7,16,35,.85) 30%, rgba(7,16,35,.95));
-      backdrop-filter: blur(12px);
-    }
-    .bottomInner{
-      max-width:980px;margin:0 auto;
-      display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.04);
-      border-radius: 18px;
-      padding:10px 12px;
-      box-shadow: 0 18px 50px rgba(0,0,0,.45);
-    }
-    .small{color:var(--muted);font-weight:800;font-size:.9rem}
-
-    .toast{
-      position:fixed;left:50%;bottom:100px;transform: translateX(-50%);
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(12,24,52,.92);
-      padding:10px 12px;border-radius:16px;
-      box-shadow: var(--shadow);
-      opacity:0;pointer-events:none;
-      transition: opacity .2s ease;
-      font-weight:900;
-      max-width:92vw;text-align:center;
-      z-index:20;
-    }
-    .toast.show{opacity:1}
-
+    .iconBtn.danger{border-color: rgba(255,120,120,.28); background: rgba(255,120,120,.10)}
     .hintBox{
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      border-radius:18px;
-      padding:12px;
-      margin-top:12px;
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(116,167,255,.06);
+      padding:12px;border-radius:16px;margin-top:12px;
     }
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background: rgba(0,0,0,.65);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--text);
+      padding:10px 12px;border-radius:14px;
+      box-shadow:0 12px 30px rgba(0,0,0,.40);
+      max-width:92vw;
+      display:none;z-index:99;
+    }
+    .footerNote{margin-top:14px;color:var(--muted);font-size:.82rem;text-align:center;opacity:.95}
   </style>
 </head>
-
 <body>
   <div class="app">
     <div class="topbar">
       <div class="header">
-        <div class="brand"><h1>Noodmap Rob</h1></div>
-        <div class="chip"><span class="dot"></span><span id="dateText">...</span></div>
+        <div class="brand">
+          <div class="pill">Noodmap</div>
+          <h1>Noodmap Rob</h1>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div class="chip" id="chipSync"><span class="dot off" id="dotSync"></span><span id="syncText">Niet ingelogd</span></div>
+          <div class="chip"><span class="kbd" id="sharedIdChip">Code</span></div>
+        </div>
       </div>
+ <div class="tabs">
+    <button class="tabBtn active" data-tab="tabHome">Start</button>
+    <button class="tabBtn" data-tab="tabOverview">Overzicht</button>
+    <button class="tabBtn" data-tab="tabDocs">Documenten</button>
+    <button class="tabBtn" data-tab="tabContacts">Contacten</button>
+    <button class="tabBtn" data-tab="tabNotes">Notities</button>
+    <button class="tabBtn" data-tab="tabAdd">Toevoegen</button>
+    <button class="tabBtn" data-tab="tabLogin">Login</button>
+    <button class="tabBtn" data-tab="tabBackup">Backup</button>
+  </div>
+</div>
 
-      <div class="tabs" id="tabs">
-        <button class="tab active" data-tab="login">Login</button>
-        <button class="tab" data-tab="toevoegen">Toevoegen</button>
-        <button class="tab" data-tab="overzicht">Overzicht</button>
-        <button class="tab" data-tab="crypto">Crypto sites</button>
-        <button class="tab" data-tab="cryptoapps">Crypto apps</button>
-        <button class="tab" data-tab="wallets">Wallets</button>
-        <button class="tab" data-tab="banken">Banken</button>
-        <button class="tab" data-tab="documenten">Documenten</button>
-        <button class="tab" data-tab="notities">Notities</button>
+<div class="grid">
+  <div class="card span2" id="tabHome">
+    <div class="cardHeader">
+      <div>
+        <h2>Start</h2>
+        <div class="sub">Snel overzicht en acties</div>
       </div>
+      <button class="btn" id="exportQuick">Export alles</button>
     </div>
-
-    <div class="content">
-
-      <section class="section active" id="sec-login">
-        <div class="box">
-          <div class="boxHead">
-            <h2>Login en sync</h2>
-            <span class="badge" id="authState">Niet ingelogd</span>
+    <div class="cardBody">
+      <div class="row cols2">
+        <div class="card" style="box-shadow:none;background:rgba(116,167,255,.06);border-color:rgba(255,255,255,.08)">
+          <div class="cardHeader">
+            <div>
+              <h2>Noodcontact</h2>
+              <div class="sub">Bel direct</div>
+            </div>
           </div>
-
-          <div class="boxBody">
-            <div class="grid2">
-              <div class="field">
-                <label>Gedeelde code</label>
-                <input id="sharedId" type="text" placeholder="RB-LZ-2026" />
+          <div class="cardBody">
+            <div class="row cols2">
+              <div>
+                <label>Lizet telefoon</label>
+                <input id="homeLizetPhone" placeholder="06..." inputmode="tel" />
               </div>
-
-              <div class="field">
-                <label>E mail</label>
-                <input id="loginEmail" type="email" placeholder="jij@..." />
+              <div>
+                <label>Mijn naam</label>
+                <input id="homeMyName" placeholder="Rob" />
               </div>
             </div>
-
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field">
-                <label>Wachtwoord</label>
-                <input id="loginPass" type="password" placeholder="••••••••" />
-              </div>
-
-              <div class="field">
-                <label>Actie</label>
-                <div class="btnRow" style="margin-top:0;">
-                  <button class="btn primary" id="btnLogin">Inloggen</button>
-                  <button class="btn" id="btnLogout">Uitloggen</button>
-                  <button class="btn" id="btnSyncNow">Nu laden</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="hintBox">
-              <div class="small">Alles wordt lokaal bewaard op je telefoon.</div>
-              <div class="small">Voor sync met Lizet, log in en gebruik dezelfde gedeelde code op beide telefoons.</div>
+            <div class="btnBar">
+              <button class="btn primary" id="btnCallLizet">Bel Lizet</button>
+              <button class="btn" id="btnSmsLizet">SMS Lizet</button>
             </div>
           </div>
         </div>
-      </section>
 
-      <section class="section" id="sec-toevoegen">
-        <div class="box">
-          <div class="boxHead">
-            <h2>Toevoegen</h2>
-            <span class="badge">Kies type, vul in</span>
+        <div class="card" style="box-shadow:none;background:rgba(67,226,207,.05);border-color:rgba(255,255,255,.08)">
+          <div class="cardHeader">
+            <div>
+              <h2>Noodtekst</h2>
+              <div class="sub">Opslaan en kopiëren</div>
+            </div>
           </div>
-
-          <div class="boxBody">
-            <div class="field">
-              <label>Wat wil je toevoegen</label>
-              <select id="addType">
-                <option value="crypto">Crypto website</option>
-                <option value="capp">Crypto app</option>
-                <option value="wallet">Wallet</option>
-                <option value="bank">Bank</option>
-                <option value="doc">Document</option>
-              </select>
-            </div>
-
-            <div id="addFields" style="margin-top:12px;"></div>
-
-            <div class="btnRow">
-              <button class="btn primary" id="btnAddNow">Toevoegen</button>
-              <button class="btn" id="btnAddClear">Leegmaken</button>
-            </div>
-
-            <div class="hintBox">
-              <div class="small">Bij Crypto apps kun je iOS link, Android link en Website link invullen.</div>
-              <div class="small">Lizet op Android opent dan de Android link of website.</div>
+          <div class="cardBody">
+            <label>Korte noodtekst</label>
+            <textarea id="homeEmergencyText" placeholder="Bijv. medicatie, allergieën, contactpersonen."></textarea>
+            <div class="btnBar">
+              <button class="btn primary" id="saveEmergency">Opslaan</button>
+              <button class="btn" id="copyEmergency">Kopieer</button>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section class="section" id="sec-overzicht">
-        <div class="box">
-          <div class="boxHead">
-            <h2>Belangrijk</h2>
-            <span class="badge">Geen seed phrases, geen private keys</span>
-          </div>
-          <div class="boxBody">
-            <div class="grid2">
-              <div class="field">
-                <label>Naam</label>
-                <input id="myName" type="text" placeholder="Rob Borghouts" />
-              </div>
-              <div class="field">
-                <label>Contact Lizet</label>
-                <input id="lizetPhone" type="text" placeholder="06..." />
-              </div>
-            </div>
+      <div class="hintBox">
+        <div class="small">Delen met Lizet.</div>
+        <div class="small">Jij logt in en drukt Nu opslaan.</div>
+        <div class="small">Lizet vult dezelfde code in en drukt Nu laden.</div>
+      </div>
 
-            <div class="field" style="margin-top:12px;">
-              <label>Wat Lizet moet weten</label>
-              <textarea id="overviewText" placeholder="Waar ligt de Ledger, hoe inloggen werkt, welke exchanges je gebruikt. Zet hier geen seed."></textarea>
-            </div>
-
-            <div class="btnRow">
-              <button class="btn primary" id="saveOverview">Opslaan</button>
-              <button class="btn" id="exportAll">Export alles</button>
-            </div>
-
-            <div class="small" style="margin-top:10px;">Made by Rob Borghouts 2026</div>
-          </div>
-        </div>
-      </section>
-     <section class="section" id="sec-crypto">
-        <div class="box">
-          <div class="boxHead">
-            <h2>Crypto websites</h2>
-            <span class="badge" id="countCrypto">0 links</span>
-          </div>
-          <div class="boxBody">
-            <div class="list" id="cryptoList"></div>
-            <div class="hintBox"><div class="small">Toevoegen doe je via tab Toevoegen.</div></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="sec-cryptoapps">
-        <div class="box">
-          <div class="boxHead">
-            <h2>Crypto apps</h2>
-            <span class="badge" id="countCApps">0 apps</span>
-          </div>
-          <div class="boxBody">
-            <div class="list" id="cappList"></div>
-            <div class="hintBox">
-              <div class="small">📲 probeert de app te openen, daarna store link, daarna website.</div>
-              <div class="small">↗ opent de beste link voor jouw toestel.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="sec-wallets">
-        <div class="box">
-          <div class="boxHead">
-            <h2>Wallets</h2>
-            <span class="badge" id="countWallets">0 items</span>
-          </div>
-          <div class="boxBody">
-            <div class="list" id="walletList"></div>
-            <div class="hintBox"><div class="small">Toevoegen doe je via tab Toevoegen.</div></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="sec-banken">
-        <div class="box">
-          <div class="boxHead">
-            <h2>Banken</h2>
-            <span class="badge" id="countBanks">0 items</span>
-          </div>
-          <div class="boxBody">
-            <div class="list" id="bankList"></div>
-            <div class="hintBox"><div class="small">Toevoegen doe je via tab Toevoegen.</div></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="sec-documenten">
-        <div class="box">
-          <div class="boxHead">
-            <h2>Documenten</h2>
-            <span class="badge" id="countDocs">0 items</span>
-          </div>
-          <div class="boxBody">
-            <div class="btnRow" style="margin-top:0;">
-              <button class="btn" id="exportDocs">Export documenten</button>
-            </div>
-            <div style="height:12px"></div>
-            <div class="list" id="docList"></div>
-            <div class="hintBox"><div class="small">Toevoegen doe je via tab Toevoegen.</div></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="sec-notities">
-        <div class="box">
-          <div class="boxHead">
-            <h2>Vrije notities</h2>
-            <span class="badge">Voor Lizet</span>
-          </div>
-          <div class="boxBody">
-            <div class="field">
-              <label>Notitie</label>
-              <textarea id="freeNotes" placeholder="Bijv. wie te bellen, wat te regelen, waar backups liggen."></textarea>
-            </div>
-
-            <div class="btnRow">
-              <button class="btn primary" id="saveNotes">Opslaan</button>
-              <button class="btn" id="exportNotes">Export notities</button>
-              <button class="btn danger" id="wipeAll">Alles wissen</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      <div class="footerNote">made by Rob Borghouts 2026</div>
     </div>
   </div>
 
-  <div class="bottomBar">
-    <div class="bottomInner">
-      <div class="small" id="statusLine">Klaar.</div>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button class="btn" id="exportQuick">Snel export</button>
+  <div class="card" id="tabOverview" style="display:none">
+    <div class="cardHeader">
+      <div>
+        <h2>Overzicht</h2>
+        <div class="sub">Belangrijkste info</div>
+      </div>
+    </div>
+    <div class="cardBody">
+      <div class="row cols2">
+        <div>
+          <label>Mijn naam</label>
+          <input id="myName" placeholder="Rob" />
+        </div>
+        <div>
+          <label>Lizet telefoon</label>
+          <input id="lizetPhone" placeholder="06..." inputmode="tel" />
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label>Overzicht tekst</label>
+        <textarea id="overviewText" placeholder="Diagnoses, medicatie, huisarts, belangrijke notities."></textarea>
+      </div>
+      <div class="btnBar">
+        <button class="btn primary" id="saveOverview">Opslaan</button>
+        <button class="btn" id="copyOverview">Kopieer</button>
       </div>
     </div>
   </div>
 
-  <div class="toast" id="toast">...</div>
+  <div class="card" id="tabDocs" style="display:none">
+    <div class="cardHeader">
+      <div>
+        <h2>Documenten</h2>
+        <div class="sub">Wat en waar</div>
+      </div>
+    </div>
+    <div class="cardBody">
+      <div class="list" id="docsList"></div>
+      <div class="btnBar">
+        <button class="btn" id="addDoc">Nieuw document</button>
+        <button class="btn" id="exportDocs">Export documenten</button>
+      </div>
+    </div>
+  </div>
+ <div class="card" id="tabNotes" style="display:none">
+    <div class="cardHeader">
+      <div>
+        <h2>Notities</h2>
+        <div class="sub">Vrije notities</div>
+      </div>
+    </div>
+    <div class="cardBody">
+      <label>Notities</label>
+      <textarea id="notesText" placeholder="Schrijf hier alles wat handig is."></textarea>
+      <div class="btnBar">
+        <button class="btn primary" id="saveNotes">Opslaan</button>
+        <button class="btn" id="copyNotes">Kopieer</button>
+      </div>
+    </div>
+  </div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <div class="card" id="tabAdd" style="display:none">
+    <div class="cardHeader">
+      <div>
+        <h2>Toevoegen</h2>
+        <div class="sub">Document of contact</div>
+      </div>
+    </div>
+    <div class="cardBody">
+      <div class="row cols2">
+        <div>
+          <label>Type</label>
+          <select id="addType">
+            <option value="doc">Document</option>
+            <option value="contact">Contact</option>
+          </select>
+        </div>
+        <div>
+          <label>Titel</label>
+          <input id="addTitle" placeholder="Bijv. Paspoort, Huisarts" />
+        </div>
+      </div>
 
-  <script>
-    "use strict";
+      <div class="row cols2" style="margin-top:10px">
+        <div>
+          <label>Waar</label>
+          <input id="addWhere" placeholder="Bijv. Kluis, lade, map" />
+        </div>
+        <div>
+          <label>Telefoon of extra</label>
+          <input id="addExtra" placeholder="Bijv. 06..., of extra tekst" />
+        </div>
+      </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDRu2zH8nc41L2ymmSXoIlmXk4JL-g4BzM",
-      authDomain: "noodplan-rob.firebaseapp.com",
-      databaseURL: "https://noodplan-rob-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "noodplan-rob",
-      storageBucket: "noodplan-rob.firebasestorage.app",
-      messagingSenderId: "528144890958",
-      appId: "1:528144890958:web:77738ddfdc698ed440571f"
+      <div style="margin-top:10px">
+        <label>Notitie</label>
+        <textarea id="addNote" placeholder="Extra info"></textarea>
+      </div>
+
+      <div class="btnBar">
+        <button class="btn primary" id="addSave">Opslaan</button>
+        <button class="btn danger" id="addClear">Leegmaken</button>
+      </div>
+
+      <div class="hintBox">
+        <div class="small">Bewerk modus, klik bij een item op Bewerk.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="tabLogin" style="display:none">
+    <div class="cardHeader">
+      <div>
+        <h2>Login en sync</h2>
+        <div class="sub">Zelfde gedeelde code op beide telefoons</div>
+      </div>
+    </div>
+    <div class="cardBody">
+      <div class="row cols2">
+        <div>
+          <label>Gedeelde code</label>
+          <input id="sharedId" placeholder="Bijv. rob-lizet-2026" />
+          <div class="small" style="margin-top:6px">Gebruik exact dezelfde code op beide telefoons.</div>
+        </div>
+        <div>
+          <label>Status</label>
+          <input id="syncStatus" disabled value="Niet ingelogd" />
+          <div class="small" style="margin-top:6px">Nu opslaan zet jouw data in de cloud.</div>
+        </div>
+      </div>
+
+      <div class="row cols2" style="margin-top:10px">
+        <div>
+          <label>E mail</label>
+          <input id="email" placeholder="jij@..." autocomplete="username" />
+        </div>
+        <div>
+          <label>Wachtwoord</label>
+          <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
+        </div>
+      </div>
+
+      <div class="btnBar">
+        <button class="btn primary" id="btnLogin">Inloggen</button>
+        <button class="btn" id="btnLogout">Uitloggen</button>
+        <button class="btn" id="btnUploadNow">Nu opslaan</button>
+        <button class="btn" id="btnSyncNow">Nu laden</button>
+      </div>
+
+      <div class="hintBox">
+        <div class="small">Flow.</div>
+        <div class="small">Jij, log in, druk Nu opslaan.</div>
+        <div class="small">Lizet, vul code in, druk Nu laden.</div>
+      </div>
+    </div>
+  </div>
+     <div class="hintBox">
+        <div class="small">Als Lizet leeg ziet na Nu laden.</div>
+        <div class="small">Jij hebt nog niet op Nu opslaan gedrukt, of jullie codes zijn anders.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+ </div>
+ <div class="toast" id="toast"></div>
+ <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+ <script>
+    function $(id){ return document.getElementById(id); }
+
+    var firebaseConfig = {
+      apiKey: "PASTE_YOUR_FIREBASE_API_KEY",
+      authDomain: "PASTE_YOUR_FIREBASE_AUTH_DOMAIN",
+      projectId: "PASTE_YOUR_FIREBASE_PROJECT_ID",
+      storageBucket: "PASTE_YOUR_FIREBASE_STORAGE_BUCKET",
+      messagingSenderId: "PASTE_YOUR_FIREBASE_MESSAGING_SENDER_ID",
+      appId: "PASTE_YOUR_FIREBASE_APP_ID"
     };
 
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    var auth = firebase.auth();
+    var db = firebase.firestore();
 
-    function $(id){ return document.getElementById(id); }
+    var STATE = {
+      user: null,
+      sharedId: "",
+      data: {
+        emergency: { text:"" },
+        over: { myName:"", lizetPhone:"", text:"" },
+        docs: [],
+        contacts: [],
+        notes: { text:"" }
+      },
+      saveTimer: null,
+      realtimeUnsub: null,
+      _toastTimer: null,
+      _editId: null,
+      _editKind: null
+    };
+
+    var LSKEY = "noodmap_rob_v3";
 
     function toast(msg){
       var t = $("toast");
       t.textContent = msg;
-      t.classList.add("show");
-      clearTimeout(toast._t);
-      toast._t = setTimeout(function(){ t.classList.remove("show"); }, 1900);
+      t.style.display = "block";
+      clearTimeout(STATE._toastTimer);
+      STATE._toastTimer = setTimeout(function(){ t.style.display="none"; }, 2200);
     }
 
-    function setStatus(s){ $("statusLine").textContent = s; }
-
-    function esc(s){
-      return String(s||"").replace(/[&<>"']/g,function(m){
-        return ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" })[m];
-      });
-    }
-
-    function cleanUrl(u){
-      u = String(u||"").trim();
-      if (!u) return "";
-      if (u.startsWith("http://") || u.startsWith("https://")) return u;
-      return "https://" + u;
-    }
-
-    function openUrl(u){
-      u = cleanUrl(u);
-      if (!u) return;
-      window.open(u, "_blank");
-    }
-
-    function getPlatform(){
-      var ua = navigator.userAgent || "";
-      if (/Android/i.test(ua)) return "android";
-      if (/iPhone|iPad|iPod/i.test(ua)) return "ios";
-      return "other";
-    }
-
-    function setDate(){
-      $("dateText").textContent = new Date().toLocaleDateString("nl-NL",{ weekday:"long", day:"numeric", month:"long", year:"numeric" });
-    }
-
-    function setActiveTab(tab){
-      Array.from(document.querySelectorAll(".tab")).forEach(function(b){
-        b.classList.toggle("active", b.dataset.tab === tab);
-      });
-      Array.from(document.querySelectorAll(".section")).forEach(function(s){
-        s.classList.remove("active");
-      });
-      var sec = $("sec-"+tab);
-      if (sec) sec.classList.add("active");
-      window.scrollTo({ top: 0, behavior:"smooth" });
-      if (tab === "toevoegen") refreshAddForm();
-    }
-
-    function bindTabs(){
-      $("tabs").querySelectorAll(".tab").forEach(function(b){
-        b.addEventListener("click", function(){
-          setActiveTab(b.dataset.tab);
-        });
-      });
-    }
-
-    function downloadText(filename, text){
-      var blob = new Blob([text], { type:"text/plain;charset=utf-8" });
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(function(){
-        URL.revokeObjectURL(a.href);
-        a.remove();
-      }, 0);
-    }
-
-    function bestUrlForApp(item){
-      var p = getPlatform();
-      var ios = item.iosUrl || "";
-      var andr = item.androidUrl || "";
-      var web = item.webUrl || "";
-
-      if (p === "ios") return ios || web || andr || "";
-      if (p === "android") return andr || web || ios || "";
-      return web || ios || andr || "";
-    }
-
-    function bestDeepForApp(item){
-      var p = getPlatform();
-      if (p === "ios") return item.iosDeep || item.deep || "";
-      if (p === "android") return item.androidDeep || item.deep || "";
-      return item.deep || "";
-    }
-
-    function tryOpenApp(deep, fallbackUrl, webUrl){
-      deep = String(deep||"").trim();
-      fallbackUrl = String(fallbackUrl||"").trim();
-      webUrl = String(webUrl||"").trim();
-
-      var fallback = fallbackUrl || webUrl || "";
-      if (!deep && !fallback){
-        toast("Geen links ingevuld");
-        return;
-      }
-
-      var didFallback = false;
-      var t = setTimeout(function(){
-        if (didFallback) return;
-        didFallback = true;
-        if (fallback) openUrl(fallback);
-      }, 900);
-
-      if (deep){
-        try{
-          window.location.href = deep;
-        }catch(e){
-          clearTimeout(t);
-          if (fallback) openUrl(fallback);
+    function setStatus(msg){
+      if ($("syncStatus")) $("syncStatus").value = msg;
+      if ($("syncText")) $("syncText").textContent = msg;
+      if ($("dotSync")){
+        if (msg && msg.toLowerCase().indexOf("gesynchron") >= 0){
+          $("dotSync").classList.remove("off");
+        }else{
+          $("dotSync").classList.add("off");
         }
-      } else {
-        clearTimeout(t);
-        if (fallback) openUrl(fallback);
       }
     }
 
-    function renderList(list, targetId, kind){
-      var el = $(targetId);
-      if (!el) return;
-
-      if (!list.length){
-        el.innerHTML = '<div class="small">Nog niets toegevoegd.</div>';
-        return;
-      }
-
-      var html = "";
-      list.forEach(function(x){
-        var icon = "🔗";
-        var meta = "";
-
-        if (kind === "wallet"){ icon = "👛"; meta = "📍 " + (x.where||""); }
-        if (kind === "doc"){ icon = "📁"; meta = "📍 " + (x.where||""); }
-        if (kind === "bank"){ icon = "🏦"; meta = (x.url ? "🔗 " + x.url : ""); }
-        if (kind === "crypto"){ icon = "🪙"; meta = (x.url ? "🔗 " + x.url : ""); }
-
-        if (kind === "capp"){
-          icon = "📱";
-          var best = bestUrlForApp(x);
-          meta = best ? ("↗ " + best) : "";
-        }
-
-        html += '<div class="row">';
-        html +=   '<div class="ico">'+icon+'</div>';
-        html +=   '<div class="rBody">';
-        html +=     '<div class="rTitle">'+esc(x.name||"")+'</div>';
-        if (meta) html += '<div class="rMeta">'+esc(meta)+'</div>';
-
-        if (kind === "capp"){
-          var extra = [];
-          if (x.login) extra.push("Login: " + x.login);
-          if (x.fa) extra.push("2FA: " + x.fa);
-          if (extra.length) html += '<div class="rMeta" style="margin-top:6px;">'+esc(extra.join(" | "))+'</div>';
-
-          var p = getPlatform();
-          var lines = [];
-          if (x.iosUrl) lines.push("iOS: " + x.iosUrl);
-          if (x.androidUrl) lines.push("Android: " + x.androidUrl);
-          if (x.webUrl) lines.push("Web: " + x.webUrl);
-          if (lines.length) html += '<div class="rMeta" style="margin-top:6px;">'+esc(lines.join(" | "))+'</div>';
-
-          var deep = bestDeepForApp(x);
-          if (deep) html += '<div class="rMeta" style="margin-top:6px;">Open link: '+esc(deep)+'</div>';
-        }
-
-        if (x.note){
-          html += '<div class="rMeta" style="margin-top:6px;">📝 '+esc(x.note)+'</div>';
-        }
-
-        html +=   '</div>';
-        html +=   '<div class="rActions">';
-
-        if (kind === "capp"){
-          html += '<div class="mini" title="Open app" data-openapp="'+esc(x.id)+'">📲</div>';
-          html += '<div class="mini" title="Open beste link" data-openbest="'+esc(x.id)+'">↗</div>';
-        } else {
-          if (x.url){
-            html += '<div class="mini" title="Open link" data-open="'+esc(x.url)+'">↗</div>';
-          } else {
-            html += '<div class="mini" style="opacity:.35;">↗</div>';
-          }
-        }
-
-        html +=     '<div class="mini" title="Verwijder" data-del="'+x.id+'" data-kind="'+kind+'">🗑️</div>';
-        html +=   '</div>';
-        html += '</div>';
-      });
-
-      el.innerHTML = html;
-
-      el.querySelectorAll(".mini[data-open]").forEach(function(b){
-        b.addEventListener("click", function(){
-          openUrl(b.getAttribute("data-open"));
-        });
-      });
-
-      el.querySelectorAll(".mini[data-openapp]").forEach(function(b){
-        b.addEventListener("click", function(){
-          var id = parseInt(b.getAttribute("data-openapp"),10);
-          openCryptoAppById(id, true);
-        });
-      });
-
-      el.querySelectorAll(".mini[data-openbest]").forEach(function(b){
-        b.addEventListener("click", function(){
-          var id = parseInt(b.getAttribute("data-openbest"),10);
-          openCryptoAppById(id, false);
-        });
-      });
-
-      el.querySelectorAll(".mini[data-del]").forEach(function(b){
-        b.addEventListener("click", function(){
-          var id = parseInt(b.getAttribute("data-del"),10);
-          var k = b.getAttribute("data-kind");
-          removeItem(k, id);
-        });
-      });
-    }
-  </script>
- <script>
-    var STATE = {
-      sharedId: "",
-      user: null,
-      data: {
-        over: { myName:"", lizetPhone:"", text:"" },
-        crypto: [],
-        cryptoApps: [],
-        wallets: [],
-        banks: [],
-        docs: [],
-        notes: { text:"" }
-      }
-    };
-
-    const LOCAL_KEY = "noodplan_rob_v3";
-
-    function getSharedId(){ return ($("sharedId").value || "").trim(); }
-
-    function normalizeData(d){
-      d = d || {};
-      return {
-        over: d.over || { myName:"", lizetPhone:"", text:"" },
-        crypto: Array.isArray(d.crypto) ? d.crypto : [],
-        cryptoApps: Array.isArray(d.cryptoApps) ? d.cryptoApps : [],
-        wallets: Array.isArray(d.wallets) ? d.wallets : [],
-        banks: Array.isArray(d.banks) ? d.banks : [],
-        docs: Array.isArray(d.docs) ? d.docs : [],
-        notes: d.notes || { text:"" }
-      };
-    }
-
-    function upgradeData(){
-      var a = STATE.data.cryptoApps || [];
-      a.forEach(function(x){
-        if (!x) return;
-        if (!x.webUrl && x.url) x.webUrl = x.url;
-        if (!x.iosUrl && x.url && /apps\.apple\.com|itunes\.apple\.com/i.test(x.url)) x.iosUrl = x.url;
-        if (!x.androidUrl && x.url && /play\.google\.com/i.test(x.url)) x.androidUrl = x.url;
-        if (!x.deep && x.iosDeep) x.deep = x.iosDeep;
-      });
+    function getSharedId(){
+      var v = ($("sharedId").value || "").trim();
+      if ($("sharedIdChip")) $("sharedIdChip").textContent = v ? v : "Code";
+      return v;
     }
 
     function saveLocal(){
-      try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(STATE.data)); }catch(e){}
+      try{ localStorage.setItem(LSKEY, JSON.stringify(STATE.data)); }catch(e){}
     }
 
     function loadLocal(){
       try{
-        var raw = localStorage.getItem(LOCAL_KEY);
+        var raw = localStorage.getItem(LSKEY);
         if (!raw) return;
-        STATE.data = normalizeData(JSON.parse(raw));
+        var obj = JSON.parse(raw);
+        if (obj) STATE.data = obj;
       }catch(e){}
-    }
-
-    function setAuthState(){ $("authState").textContent = STATE.user ? "Ingelogd" : "Niet ingelogd"; }
-
-    async function signIn(){
-      var email = ($("loginEmail").value || "").trim();
-      var pass = $("loginPass").value || "";
-      if (!email || !pass){ toast("Vul e mail en wachtwoord in"); return; }
-      try{ await auth.signInWithEmailAndPassword(email, pass); toast("Ingelogd"); }
-      catch(e){ toast("Login mislukt"); setStatus(e && e.message ? e.message : "Login mislukt"); }
-    }
-
-    async function signOutNow(){
-      try{ await auth.signOut(); toast("Uitgelogd"); setStatus("Uitgelogd"); }
-      catch(e){ toast("Uitloggen mislukt"); }
     }
 
     function sharedDocRef(){
       if (!STATE.sharedId) return null;
-      return db.collection("shared").doc(STATE.sharedId);
-    }
-
-    var unsub = null;
-
-    async function startRealtime(){
-      if (unsub) { unsub(); unsub = null; }
-      var ref = sharedDocRef();
-      if (!ref) return;
-
-      unsub = ref.onSnapshot(function(snap){
-        if (!snap.exists) return;
-        STATE.data = normalizeData(snap.data());
-        upgradeData();
-        saveLocal();
-        renderAllFromState();
-        setStatus("Sync bijgewerkt");
-      }, function(err){
-        toast("Sync fout");
-        setStatus(err && err.message ? err.message : "Sync fout");
-      });
+      return db.collection("noodmap_shared").doc(STATE.sharedId);
     }
 
     async function loadFromCloud(){
@@ -822,25 +512,37 @@
       if (!ref){ toast("Vul gedeelde code in"); return; }
       try{
         var snap = await ref.get();
-        if (!snap.exists){ toast("Nog niks in cloud, opslaan maakt het aan"); return; }
-        STATE.data = normalizeData(snap.data());
-        upgradeData();
+        if (!snap.exists){ setStatus("Nog geen cloud data"); toast("Nog niks in cloud"); return; }
+        var obj = snap.data();
+        if (!obj){ setStatus("Lege cloud data"); toast("Nog niks in cloud"); return; }
+        STATE.data = obj;
         saveLocal();
         renderAllFromState();
-        toast("Geladen");
-        setStatus("Geladen");
+        setStatus("Gesynchroniseerd");
+        toast("Data geladen");
       }catch(e){
-        toast("Laden mislukt");
         setStatus(e && e.message ? e.message : "Laden mislukt");
+        toast("Laden mislukt");
       }
     }
 
-    var saveTimer = null;
-
-    function scheduleSave(){
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(saveToCloud, 450);
-      saveLocal();
+    async function startRealtime(){
+      if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
+      var ref = sharedDocRef();
+      if (!ref) return;
+      try{
+        STATE.realtimeUnsub = ref.onSnapshot(function(snap){
+          if (!snap.exists) return;
+          var obj = snap.data();
+          if (!obj) return;
+          STATE.data = obj;
+          saveLocal();
+          renderAllFromState();
+          setStatus("Gesynchroniseerd");
+        });
+      }catch(e){
+        setStatus("Realtime uit");
+      }
     }
 
     async function saveToCloud(){
@@ -851,266 +553,329 @@
         await ref.set(STATE.data, { merge:true });
         setStatus("Gesynchroniseerd");
       }catch(e){
-        toast("Opslaan mislukt");
         setStatus(e && e.message ? e.message : "Opslaan mislukt");
+        toast("Opslaan mislukt");
       }
+    }
+
+    function scheduleSave(){
+      clearTimeout(STATE.saveTimer);
+      STATE.saveTimer = setTimeout(async function(){
+        saveLocal();
+        if (STATE.user) await saveToCloud();
+      }, 450);
+    }
+
+    function showTab(tabId){
+      var tabs = ["tabHome","tabOverview","tabDocs","tabContacts","tabNotes","tabAdd","tabLogin","tabBackup"];
+      tabs.forEach(function(id){
+        var el = document.getElementById(id);
+        if (el) el.style.display = (id === tabId) ? "" : "none";
+      });
+      document.querySelectorAll(".tabBtn").forEach(function(btn){
+        btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+      });
+    }
+
+    function uid(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+
+    function renderList(list, targetId, kind){
+      var box = $(targetId);
+      box.innerHTML = "";
+      if (!list.length){
+        var empty = document.createElement("div");
+        empty.className = "small";
+        empty.textContent = "Nog geen items";
+        box.appendChild(empty);
+        return;
+      }
+      list.forEach(function(x){
+        var wrap = document.createElement("div");
+        wrap.className = "item";
+
+        var left = document.createElement("div");
+        var h = document.createElement("h3");
+        h.textContent = x.name || "";
+        left.appendChild(h);
+
+        var p = document.createElement("p");
+        var line1 = [];
+        if (kind === "doc"){
+          if (x.where) line1.push("Waar, " + x.where);
+          if (x.extra) line1.push("Extra, " + x.extra);
+        }else{
+          if (x.phone) line1.push("Tel, " + x.phone);
+          if (x.where) line1.push("Waar, " + x.where);
+        }
+        p.textContent = line1.join(" , ");
+        left.appendChild(p);
+
+        if (x.note){
+          var n = document.createElement("div");
+          n.className = "small";
+          n.style.marginTop = "6px";
+          n.textContent = x.note;
+          left.appendChild(n);
+        }
+
+        var actions = document.createElement("div");
+        actions.className = "actions";
+
+        var edit = document.createElement("button");
+        edit.className = "iconBtn";
+        edit.textContent = "Bewerk";
+        edit.addEventListener("click", function(){
+          $("addType").value = (kind === "doc") ? "doc" : "contact";
+          $("addTitle").value = x.name || "";
+          $("addWhere").value = x.where || "";
+          $("addExtra").value = (kind === "doc") ? (x.extra||"") : (x.phone||"");
+          $("addNote").value = x.note || "";
+          STATE._editId = x.id;
+          STATE._editKind = kind;
+          showTab("tabAdd");
+          toast("Bewerk modus");
+        });
+        actions.appendChild(edit);
+
+        if (kind === "contact"){
+          var call = document.createElement("button");
+          call.className = "iconBtn";
+          call.textContent = "Bel";
+          call.addEventListener("click", function(){
+            if (!x.phone){ toast("Geen telefoon"); return; }
+            window.location.href = "tel:" + x.phone;
+          });
+          actions.appendChild(call);
+        }
+
+        var del = document.createElement("button");
+        del.className = "iconBtn danger";
+        del.textContent = "Verwijder";
+        del.addEventListener("click", function(){
+          if (!confirm("Verwijderen")) return;
+          if (kind === "doc"){
+            STATE.data.docs = (STATE.data.docs || []).filter(function(i){ return i.id !== x.id; });
+          }else{
+            STATE.data.contacts = (STATE.data.contacts || []).filter(function(i){ return i.id !== x.id; });
+          }
+          renderAllFromState();
+          scheduleSave();
+          toast("Verwijderd");
+        });
+        actions.appendChild(del);
+
+        wrap.appendChild(left);
+        wrap.appendChild(actions);
+        box.appendChild(wrap);
+      });
     }
 
     function renderAllFromState(){
-      var data = STATE.data;
+      var data = STATE.data || {};
+      $("homeEmergencyText").value = (data.emergency && data.emergency.text) ? data.emergency.text : "";
+      $("homeLizetPhone").value = (data.over && data.over.lizetPhone) ? data.over.lizetPhone : "";
+      $("homeMyName").value = (data.over && data.over.myName) ? data.over.myName : "";
 
-      $("myName").value = data.over.myName || "";
-      $("lizetPhone").value = data.over.lizetPhone || "";
-      $("overviewText").value = data.over.text || "";
-      $("freeNotes").value = (data.notes && data.notes.text) ? data.notes.text : "";
+      $("myName").value = (data.over && data.over.myName) ? data.over.myName : "";
+      $("lizetPhone").value = (data.over && data.over.lizetPhone) ? data.over.lizetPhone : "";
+      $("overviewText").value = (data.over && data.over.text) ? data.over.text : "";
 
-      $("countCrypto").textContent = data.crypto.length + " links";
-      $("countCApps").textContent = data.cryptoApps.length + " apps";
-      $("countWallets").textContent = data.wallets.length + " items";
-      $("countBanks").textContent = data.banks.length + " items";
-      $("countDocs").textContent = data.docs.length + " items";
+      $("notesText").value = (data.notes && data.notes.text) ? data.notes.text : "";
 
-      renderList(data.crypto, "cryptoList", "crypto");
-      renderList(data.cryptoApps, "cappList", "capp");
-      renderList(data.wallets, "walletList", "wallet");
-      renderList(data.banks, "bankList", "bank");
-      renderList(data.docs, "docList", "doc");
+      renderList(data.docs || [], "docsList", "doc");
+      renderList(data.contacts || [], "contactsList", "contact");
     }
 
-    function nextId(){ return Date.now(); }
-
-    function addItemToState(kind, obj){
-      if (kind === "crypto") STATE.data.crypto.push(obj);
-      if (kind === "capp") STATE.data.cryptoApps.push(obj);
-      if (kind === "wallet") STATE.data.wallets.push(obj);
-      if (kind === "bank") STATE.data.banks.push(obj);
-      if (kind === "doc") STATE.data.docs.push(obj);
-      renderAllFromState();
-      scheduleSave();
-    }
-
-    function removeItem(kind, id){
-      if (kind === "crypto") STATE.data.crypto = STATE.data.crypto.filter(function(x){ return x.id !== id; });
-      if (kind === "capp") STATE.data.cryptoApps = STATE.data.cryptoApps.filter(function(x){ return x.id !== id; });
-      if (kind === "wallet") STATE.data.wallets = STATE.data.wallets.filter(function(x){ return x.id !== id; });
-      if (kind === "bank") STATE.data.banks = STATE.data.banks.filter(function(x){ return x.id !== id; });
-      if (kind === "doc") STATE.data.docs = STATE.data.docs.filter(function(x){ return x.id !== id; });
-      toast("Verwijderd");
-      renderAllFromState();
-      scheduleSave();
-    }
-
-    function openCryptoAppById(id, tryAppFirst){
-      var item = (STATE.data.cryptoApps || []).find(function(x){ return x.id === id; });
-      if (!item){ toast("App niet gevonden"); return; }
-
-      var deep = bestDeepForApp(item);
-      var best = bestUrlForApp(item);
-
-      if (tryAppFirst){
-        tryOpenApp(deep, best, item.webUrl || "");
-      } else {
-        if (best) openUrl(best);
-        else if (item.webUrl) openUrl(item.webUrl);
-        else toast("Geen links ingevuld");
+    function copyToClipboard(text){
+      if (!navigator.clipboard){
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        return;
       }
+      navigator.clipboard.writeText(text);
+    }
+
+    function downloadText(filename, text){
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([text], {type:"text/plain"}));
+      a.download = filename;
+      a.click();
     }
 
     function exportAll(){
-      var d = STATE.data;
-      var out = [];
-      out.push("NOODMAP ROB");
-      out.push("Datum: " + new Date().toLocaleString("nl-NL"));
-      out.push("");
-      out.push("Naam: " + (d.over.myName||""));
-      out.push("Lizet: " + (d.over.lizetPhone||""));
-      out.push("");
-      out.push("Overzicht:");
-      out.push(d.over.text||"");
-      out.push("");
-      out.push("CRYPTO WEBSITES:");
-      d.crypto.forEach(function(x){
-        out.push("- " + (x.name||"") + " | " + (x.url||""));
-        if (x.note) out.push("  Notitie: " + x.note);
-      });
-      out.push("");
-      out.push("CRYPTO APPS:");
-      d.cryptoApps.forEach(function(x){
-        out.push("- " + (x.name||""));
-        if (x.iosUrl) out.push("  iOS: " + x.iosUrl);
-        if (x.androidUrl) out.push("  Android: " + x.androidUrl);
-        if (x.webUrl) out.push("  Web: " + x.webUrl);
-        if (x.deep || x.iosDeep || x.androidDeep) out.push("  Open: " + (x.iosDeep || x.androidDeep || x.deep || ""));
-        var extra = [];
-        if (x.login) extra.push("Login: " + x.login);
-        if (x.fa) extra.push("2FA: " + x.fa);
-        if (extra.length) out.push("  " + extra.join(" | "));
-        if (x.note) out.push("  Notitie: " + x.note);
-      });
-      out.push("");
-      out.push("WALLETS:");
-      d.wallets.forEach(function(x){
-        out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
-        if (x.note) out.push("  Notitie: " + x.note);
-      });
-      out.push("");
-      out.push("BANKEN:");
-      d.banks.forEach(function(x){
-        out.push("- " + (x.name||"") + " | " + (x.url||""));
-        if (x.note) out.push("  Notitie: " + x.note);
-      });
-      out.push("");
-      out.push("DOCUMENTEN:");
-      d.docs.forEach(function(x){
-        out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
-        if (x.note) out.push("  Notitie: " + x.note);
-      });
-      out.push("");
-      out.push("NOTITIES:");
-      out.push(d.notes.text||"");
-      out.push("");
-      out.push("Let op: geen seed phrases of private keys hierin.");
-      downloadText("noodmap-rob.txt", out.join("\n"));
-      toast("Export gemaakt");
-      setStatus("Export gemaakt");
-    }
-  </script>
- <script>
-    function addFieldsHtml(type){
-      if (type === "crypto"){
-        return ''
-        + '<div class="grid2">'
-        + '  <div class="field"><label>Naam</label><input id="add_name" type="text" placeholder="Bijv. DevvExchange, CoinMarketCap" /></div>'
-        + '  <div class="field"><label>Link</label><input id="add_url" type="text" placeholder="https://..." /></div>'
-        + '</div>'
-        + '<div class="field" style="margin-top:12px;"><label>Notitie</label><input id="add_note" type="text" placeholder="Bijv. 2FA via Authenticator op iPhone" /></div>';
-      }
-
-      if (type === "capp"){
-        return ''
-        + '<div class="field"><label>App naam</label><input id="add_name" type="text" placeholder="Bijv. Ledger Live, MetaMask, Binance" /></div>'
-        + '<div class="grid2" style="margin-top:12px;">'
-        + '  <div class="field"><label>iOS App Store link</label><input id="add_iosUrl" type="text" placeholder="https://apps.apple.com/..." /></div>'
-        + '  <div class="field"><label>Android Play Store link</label><input id="add_androidUrl" type="text" placeholder="https://play.google.com/..." /></div>'
-        + '</div>'
-        + '<div class="field" style="margin-top:12px;"><label>Website link</label><input id="add_webUrl" type="text" placeholder="https://..." /></div>'
-        + '<div class="grid2" style="margin-top:12px;">'
-        + '  <div class="field"><label>Open app link iOS</label><input id="add_iosDeep" type="text" placeholder="Bijv. metamask:// of ledgerlive://, leeg is ok" /></div>'
-        + '  <div class="field"><label>Open app link Android</label><input id="add_androidDeep" type="text" placeholder="Bijv. intent://..., leeg is ok" /></div>'
-        + '</div>'
-        + '<div class="grid2" style="margin-top:12px;">'
-        + '  <div class="field"><label>Login methode</label><input id="add_login" type="text" placeholder="Bijv. e mail, Apple ID, alleen apparaat" /></div>'
-        + '  <div class="field"><label>2FA of extra</label><input id="add_2fa" type="text" placeholder="Bijv. Authenticator, sms, geen" /></div>'
-        + '</div>'
-        + '<div class="field" style="margin-top:12px;"><label>Notitie</label><input id="add_note" type="text" placeholder="Bijv. welke account, waar de hardware wallet ligt" /></div>';
-      }
-
-      if (type === "wallet"){
-        return ''
-        + '<div class="grid2">'
-        + '  <div class="field"><label>Naam</label><input id="add_name" type="text" placeholder="Bijv. Ledger Nano X, Ledger Stax, MetaMask" /></div>'
-        + '  <div class="field"><label>Waar ligt het</label><input id="add_where" type="text" placeholder="Bijv. kluis, lade bureau" /></div>'
-        + '</div>'
-        + '<div class="field" style="margin-top:12px;"><label>Notitie</label><input id="add_note" type="text" placeholder="Bijv. pincode staat in envelop" /></div>';
-      }
-
-      if (type === "bank"){
-        return ''
-        + '<div class="grid2">'
-        + '  <div class="field"><label>Naam</label><input id="add_name" type="text" placeholder="Bijv. ING, Rabobank, PayPal" /></div>'
-        + '  <div class="field"><label>Link</label><input id="add_url" type="text" placeholder="https://..." /></div>'
-        + '</div>'
-        + '<div class="field" style="margin-top:12px;"><label>Notitie</label><input id="add_note" type="text" placeholder="Bijv. inloggen via app, 2FA" /></div>';
-      }
-
-      return ''
-      + '<div class="grid2">'
-      + '  <div class="field"><label>Wat</label><input id="add_name" type="text" placeholder="Bijv. paspoorten, verzekeringsmap, testament" /></div>'
-      + '  <div class="field"><label>Waar</label><input id="add_where" type="text" placeholder="Bijv. map kast, kluis, garagebox" /></div>'
-      + '</div>'
-      + '<div class="field" style="margin-top:12px;"><label>Notitie</label><input id="add_note" type="text" placeholder="Bijv. sleutel ligt bij..." /></div>';
+      try{
+        var blob = JSON.stringify(STATE.data, null, 2);
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([blob], {type:"application/json"}));
+        a.download = "noodmap-export.json";
+        a.click();
+        toast("Export gemaakt");
+      }catch(e){ toast("Export mislukt"); }
     }
 
-    function refreshAddForm(){
-      var t = $("addType").value;
-      $("addFields").innerHTML = addFieldsHtml(t);
+    async function signIn(){
+      var email = ($("email").value || "").trim();
+      var pass = ($("password").value || "");
+      if (!email || !pass){ toast("Vul e mail en wachtwoord in"); return; }
+      try{ await auth.signInWithEmailAndPassword(email, pass); }
+      catch(e){ setStatus(e && e.message ? e.message : "Login mislukt"); toast("Login mislukt"); }
     }
 
-    function clearAddForm(){ refreshAddForm(); }
+    async function signOutNow(){ try{ await auth.signOut(); }catch(e){} }
 
-    function addFromAddTab(){
-      var type = $("addType").value;
+    function bindTabs(){
+      document.querySelectorAll(".tabBtn").forEach(function(btn){
+        btn.addEventListener("click", function(){
+          showTab(btn.getAttribute("data-tab"));
+        });
+      });
+    }
 
-      var name = ($("add_name") ? $("add_name").value : "").trim();
-      var url = ($("add_url") ? cleanUrl($("add_url").value||"") : "");
-      var where = ($("add_where") ? ($("add_where").value||"").trim() : "");
-      var note = ($("add_note") ? ($("add_note").value||"").trim() : "");
+    function bindAll(){
+      $("btnCallLizet").addEventListener("click", function(){
+        var phone = ($("homeLizetPhone").value || "").trim();
+        if (!phone){ toast("Geen nummer"); return; }
+        window.location.href = "tel:" + phone;
+      });
 
-      if (type === "crypto"){
-        if (!name || !url){ toast("Vul naam en link in"); return; }
-        addItemToState("crypto", { id: nextId(), name:name, url:url, note:note });
-        toast("Toegevoegd");
-        setActiveTab("crypto");
-        return;
-      }
+      $("btnSmsLizet").addEventListener("click", function(){
+        var phone = ($("homeLizetPhone").value || "").trim();
+        if (!phone){ toast("Geen nummer"); return; }
+        window.location.href = "sms:" + phone;
+      });
 
-      if (type === "capp"){
-        if (!name){ toast("Vul app naam in"); return; }
+      $("saveEmergency").addEventListener("click", function(){
+        STATE.data.emergency = { text: $("homeEmergencyText").value || "" };
+        scheduleSave();
+        toast("Opgeslagen");
+      });
 
-        var iosUrl = cleanUrl(($("add_iosUrl") ? $("add_iosUrl").value : "") || "");
-        var androidUrl = cleanUrl(($("add_androidUrl") ? $("add_androidUrl").value : "") || "");
-        var webUrl = cleanUrl(($("add_webUrl") ? $("add_webUrl").value : "") || "");
-        var iosDeep = ($("add_iosDeep") ? ($("add_iosDeep").value||"").trim() : "");
-        var androidDeep = ($("add_androidDeep") ? ($("add_androidDeep").value||"").trim() : "");
-        var login = ($("add_login") ? ($("add_login").value||"").trim() : "");
-        var fa = ($("add_2fa") ? ($("add_2fa").value||"").trim() : "");
+      $("copyEmergency").addEventListener("click", function(){
+        copyToClipboard($("homeEmergencyText").value || "");
+        toast("Gekopieerd");
+      });
 
-        if (!iosUrl && !androidUrl && !webUrl && !iosDeep && !androidDeep){
-          toast("Vul minimaal 1 link in");
-          return;
+      $("saveOverview").addEventListener("click", function(){
+        STATE.data.over = {
+          myName: $("myName").value || "",
+          lizetPhone: $("lizetPhone").value || "",
+          text: $("overviewText").value || ""
+        };
+        renderAllFromState();
+        scheduleSave();
+        toast("Opgeslagen");
+      });
+
+      $("copyOverview").addEventListener("click", function(){
+        var out = [];
+        if ($("myName").value) out.push("Naam: " + $("myName").value);
+        if ($("lizetPhone").value) out.push("Lizet: " + $("lizetPhone").value);
+        if ($("overviewText").value) out.push("", $("overviewText").value);
+        copyToClipboard(out.join("\n"));
+        toast("Gekopieerd");
+      });
+
+      $("saveNotes").addEventListener("click", function(){
+        STATE.data.notes = { text: $("notesText").value || "" };
+        scheduleSave();
+        toast("Opgeslagen");
+      });
+
+      $("copyNotes").addEventListener("click", function(){
+        copyToClipboard($("notesText").value || "");
+        toast("Gekopieerd");
+      });
+
+      $("addClear").addEventListener("click", function(){
+        $("addTitle").value = "";
+        $("addWhere").value = "";
+        $("addExtra").value = "";
+        $("addNote").value = "";
+        STATE._editId = null;
+        STATE._editKind = null;
+        toast("Leeg");
+      });
+
+      $("addSave").addEventListener("click", function(){
+        var type = $("addType").value;
+        var title = ($("addTitle").value || "").trim();
+        if (!title){ toast("Titel is leeg"); return; }
+        var where = ($("addWhere").value || "").trim();
+        var extra = ($("addExtra").value || "").trim();
+        var note = ($("addNote").value || "").trim();
+
+        if (STATE._editId){
+          if (STATE._editKind === "doc"){
+            STATE.data.docs = (STATE.data.docs||[]).map(function(i){
+              if (i.id !== STATE._editId) return i;
+              return { id:i.id, name:title, where:where, extra:extra, note:note };
+            });
+          }else{
+            STATE.data.contacts = (STATE.data.contacts||[]).map(function(i){
+              if (i.id !== STATE._editId) return i;
+              return { id:i.id, name:title, where:where, phone:extra, note:note };
+            });
+          }
+          STATE._editId = null;
+          STATE._editKind = null;
+          toast("Aangepast");
+        }else{
+          if (type === "doc"){
+            (STATE.data.docs = STATE.data.docs || []).unshift({ id:uid(), name:title, where:where, extra:extra, note:note });
+            toast("Toegevoegd");
+          }else{
+            (STATE.data.contacts = STATE.data.contacts || []).unshift({ id:uid(), name:title, where:where, phone:extra, note:note });
+            toast("Toegevoegd");
+          }
         }
 
-        addItemToState("capp", {
-          id: nextId(),
-          name: name,
-          iosUrl: iosUrl,
-          androidUrl: androidUrl,
-          webUrl: webUrl,
-          iosDeep: iosDeep,
-          androidDeep: androidDeep,
-          login: login,
-          fa: fa,
-          note: note
+        $("addTitle").value = "";
+        $("addWhere").value = "";
+        $("addExtra").value = "";
+        $("addNote").value = "";
+
+        renderAllFromState();
+        scheduleSave();
+        showTab(type === "doc" ? "tabDocs" : "tabContacts");
+      });
+
+      $("addDoc").addEventListener("click", function(){
+        $("addType").value = "doc";
+        STATE._editId = null;
+        STATE._editKind = null;
+        showTab("tabAdd");
+      });
+
+      $("addContact").addEventListener("click", function(){
+        $("addType").value = "contact";
+        STATE._editId = null;
+        STATE._editKind = null;
+        showTab("tabAdd");
+      });
+
+      $("exportDocs").addEventListener("click", function(){
+        var out = ["DOCUMENTEN"];
+        (STATE.data.docs||[]).forEach(function(x){
+          out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
+          if (x.extra) out.push("  Extra: " + x.extra);
+          if (x.note) out.push("  Notitie: " + x.note);
         });
+        downloadText("documenten-tekst.txt", out.join("\n"));
+      });
 
-        toast("Toegevoegd");
-        setActiveTab("cryptoapps");
-        return;
-      }
+      $("exportContacts").addEventListener("click", function(){
+        var out = ["CONTACTEN"];
+        (STATE.data.contacts||[]).forEach(function(x){
+          out.push("- " + (x.name||"") + " | Tel: " + (x.phone||"") + " | Waar: " + (x.where||""));
+          if (x.note) out.push("  Notitie: " + x.note);
+        });
+        downloadText("contacten-tekst.txt", out.join("\n"));
+      });
 
-      if (type === "wallet"){
-        if (!name || !where){ toast("Vul naam en waar in"); return; }
-        addItemToState("wallet", { id: nextId(), name:name, where:where, note:note });
-        toast("Toegevoegd");
-        setActiveTab("wallets");
-        return;
-      }
-
-      if (type === "bank"){
-        if (!name || !url){ toast("Vul naam en link in"); return; }
-        addItemToState("bank", { id: nextId(), name:name, url:url, note:note });
-        toast("Toegevoegd");
-        setActiveTab("banken");
-        return;
-      }
-
-      if (!name || !where){ toast("Vul wat en waar in"); return; }
-      addItemToState("doc", { id: nextId(), name:name, where:where, note:note });
-      toast("Toegevoegd");
-      setActiveTab("documenten");
-    }
-
-    function bindButtons(){
       $("btnLogin").addEventListener("click", signIn);
       $("btnLogout").addEventListener("click", signOutNow);
 
@@ -1120,112 +885,71 @@
         await startRealtime();
       });
 
-      $("sharedId").addEventListener("change", async function(){
+      $("btnUploadNow").addEventListener("click", async function(){
         STATE.sharedId = getSharedId();
-        await startRealtime();
-        scheduleSave();
+        if (!STATE.sharedId){ toast("Vul gedeelde code in"); return; }
+        if (!STATE.user){ toast("Log eerst in"); return; }
+        await saveToCloud();
+        toast("Naar cloud gezet");
       });
 
-      $("saveOverview").addEventListener("click", function(){
-        STATE.data.over = {
-          myName: $("myName").value || "",
-          lizetPhone: $("lizetPhone").value || "",
-          text: $("overviewText").value || ""
-        };
-        toast("Overzicht opgeslagen");
-        renderAllFromState();
-        scheduleSave();
-      });
-
+      $("btnExport").addEventListener("click", exportAll);
       $("exportAll").addEventListener("click", exportAll);
       $("exportQuick").addEventListener("click", exportAll);
 
-      $("exportDocs").addEventListener("click", function(){
-        var d = STATE.data;
-        var out = [];
-        out.push("DOCUMENTEN");
-        d.docs.forEach(function(x){
-          out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
-          if (x.note) out.push("  Notitie: " + x.note);
-        });
-        downloadText("documenten-rob.txt", out.join("\n"));
-        toast("Documenten export");
+      $("btnImport").addEventListener("click", function(){
+        var f = $("importFile").files && $("importFile").files[0];
+        if (!f){ toast("Kies een bestand"); return; }
+        var reader = new FileReader();
+        reader.onload = function(){
+          try{
+            var obj = JSON.parse(reader.result);
+            if (!obj){ toast("Ongeldig"); return; }
+            STATE.data = obj;
+            saveLocal();
+            renderAllFromState();
+            scheduleSave();
+            toast("Geïmporteerd");
+          }catch(e){ toast("Import mislukt"); }
+        };
+        reader.readAsText(f);
       });
 
-      $("saveNotes").addEventListener("click", function(){
-        STATE.data.notes = { text: $("freeNotes").value || "" };
-        toast("Notities opgeslagen");
-        renderAllFromState();
-        scheduleSave();
-      });
-
-      $("exportNotes").addEventListener("click", function(){
-        downloadText("notities-rob.txt", STATE.data.notes.text || "");
-        toast("Notities export");
-      });
-
-      $("wipeAll").addEventListener("click", function(){
-        if (!confirm("Alles wissen?")) return;
-        STATE.data = normalizeData({});
+      $("btnReset").addEventListener("click", function(){
+        if (!confirm("Alles wissen")) return;
+        STATE.data = { emergency:{text:""}, over:{myName:"",lizetPhone:"",text:""}, docs:[], contacts:[], notes:{text:""} };
+        saveLocal();
         renderAllFromState();
         scheduleSave();
         toast("Alles gewist");
       });
 
-      $("addType").addEventListener("change", refreshAddForm);
-      $("btnAddNow").addEventListener("click", addFromAddTab);
-      $("btnAddClear").addEventListener("click", clearAddForm);
+      $("sharedId").addEventListener("input", function(){
+        if ($("sharedIdChip")) $("sharedIdChip").textContent = ($("sharedId").value || "").trim() || "Code";
+      });
     }
 
-    function initFirebase(){
-      auth.onAuthStateChanged(async function(user){
-        STATE.user = user || null;
-        setAuthState();
+    function init(){
+      loadLocal();
+      renderAllFromState();
+      bindTabs();
+      bindAll();
 
-        if (!STATE.user){
-          if (unsub) { unsub(); unsub = null; }
-          setStatus("Niet ingelogd. Lokaal opslaan werkt. Voor sync met Lizet, log in en gebruik gedeelde code.");
-          return;
-        }
+      if ($("sharedId")) STATE.sharedId = getSharedId();
 
-        setStatus("Ingelogd. Zet gedeelde code en druk Nu laden.");
-        STATE.sharedId = getSharedId();
-        if (STATE.sharedId){
-          await startRealtime();
-          await loadFromCloud();
+      auth.onAuthStateChanged(async function(u){
+        STATE.user = u || null;
+        if (STATE.user){
+          setStatus("Ingelogd");
+          if (STATE.sharedId) await startRealtime();
+        }else{
+          setStatus("Niet ingelogd");
+          if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
         }
       });
     }
 
-    window.addEventListener("unhandledrejection", function(e){
-      try{
-        var msg = (e && e.reason && e.reason.message) ? e.reason.message : "Onbekende fout";
-        toast(msg);
-        setStatus(msg);
-      }catch(_){}
-    });
-
-    window.addEventListener("error", function(e){
-      try{
-        var msg2 = (e && e.message) ? e.message : "Onbekende fout";
-        toast(msg2);
-        setStatus(msg2);
-      }catch(_){}
-    });
-
-    function init(){
-      setDate();
-      bindTabs();
-      bindButtons();
-      loadLocal();
-      upgradeData();
-      renderAllFromState();
-      refreshAddForm();
-      initFirebase();
-      setStatus("Klaar. Voeg items toe via Toevoegen. Crypto apps ondersteunen iOS, Android en Web links.");
-    }
-
-    init();
+    window.addEventListener("load", init);
   </script>
 </body>
 </html>
