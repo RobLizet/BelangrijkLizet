@@ -6,7 +6,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="mobile-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>Noodmap Rob</title>
 
  <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -35,8 +35,24 @@
         radial-gradient(900px 650px at 60% 110%, rgba(67,226,207,.15) 0%, transparent 60%),
         var(--bg);
       -webkit-font-smoothing:antialiased;
-      padding:14px 12px 110px 12px;
+      padding:14px 12px 120px 12px;
     }
+
+    body.light{
+      --bg:#f3f6ff;
+      --panel:rgba(0,0,0,.06);
+      --panel2:rgba(255,255,255,.86);
+      --border:rgba(0,0,0,.12);
+      --text:#0a1225;
+      --muted:#3b4a6b;
+      --shadow:0 18px 50px rgba(0,0,0,.18);
+      background:
+        radial-gradient(900px 650px at 20% -10%, rgba(60,120,255,.14) 0%, transparent 60%),
+        radial-gradient(900px 650px at 90% 10%, rgba(140,90,255,.12) 0%, transparent 60%),
+        radial-gradient(900px 650px at 60% 110%, rgba(0,170,150,.10) 0%, transparent 60%),
+        var(--bg);
+    }
+
     .app{max-width:980px;margin:0 auto}
     .topbar{
       position:sticky;top:0;z-index:5;
@@ -46,6 +62,11 @@
       padding:10px 10px 8px 10px;
       border-radius:18px;
     }
+    body.light .topbar{
+      background: linear-gradient(180deg, rgba(243,246,255,.92), rgba(243,246,255,.72));
+      border-color: rgba(0,0,0,.08);
+    }
+
     .header{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
     .brand{display:flex;gap:10px;align-items:center}
     .pill{
@@ -58,6 +79,7 @@
       user-select:none;
     }
     .brand h1{margin:0;font-size:1.15rem;font-weight:900;letter-spacing:.2px}
+
     .chip{
       display:inline-flex;align-items:center;gap:8px;
       padding:8px 10px;border-radius:999px;
@@ -80,6 +102,19 @@
       background: rgba(0,0,0,.24);
       font-weight:900;font-size:.82rem;color:var(--text);
     }
+    body.light .kbd{background: rgba(255,255,255,.70);border-color: rgba(0,0,0,.12)}
+
+    .alertRed{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid rgba(255,120,120,.35);
+      background:rgba(255,120,120,.10);
+      color:#ffd1d1;
+      font-weight:900;
+    }
+    body.light .alertRed{color:#7b1f1f;background:rgba(255,120,120,.14)}
+
     .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
     .tabBtn{
       appearance:none;
@@ -96,8 +131,10 @@
       border-color: rgba(67,226,207,.35);
       box-shadow:0 10px 30px rgba(0,0,0,.25);
     }
+
     .grid{display:grid;gap:14px;grid-template-columns:1fr;margin-top:12px}
     @media(min-width:900px){ .grid{grid-template-columns:1.1fr .9fr} .span2{grid-column:1/-1} }
+
     .card{
       border:1px solid var(--border);
       background: var(--panel);
@@ -111,11 +148,14 @@
       border-bottom:1px solid rgba(255,255,255,.08);
       background: linear-gradient(180deg, rgba(116,167,255,.12), rgba(255,255,255,.02));
     }
+    body.light .cardHeader{border-bottom-color: rgba(0,0,0,.10);background: linear-gradient(180deg, rgba(60,120,255,.10), rgba(255,255,255,.55))}
     .cardHeader h2{margin:0;font-size:1.02rem;font-weight:900}
     .sub{color:var(--muted);font-size:.86rem}
     .cardBody{padding:14px}
+
     .row{display:grid;grid-template-columns:1fr;gap:10px}
     @media(min-width:640px){ .row.cols2{grid-template-columns:1fr 1fr} }
+
     label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
     input,textarea,select{
       width:100%;
@@ -127,7 +167,9 @@
       font-size:1rem;
       outline:none;
     }
+    body.light input, body.light textarea, body.light select{border-color: rgba(0,0,0,.14)}
     textarea{min-height:110px;resize:vertical}
+
     .btnBar{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
     .btn{
       border:1px solid rgba(255,255,255,.12);
@@ -138,6 +180,7 @@
     }
     .btn.primary{background: linear-gradient(135deg, rgba(67,226,207,.22), rgba(116,167,255,.22));border-color: rgba(67,226,207,.35)}
     .btn.danger{background: rgba(255,120,120,.12);border-color: rgba(255,120,120,.28)}
+
     .list{display:flex;flex-direction:column;gap:10px}
     .item{
       border:1px solid rgba(255,255,255,.10);
@@ -148,10 +191,11 @@
       grid-template-columns:1fr auto;
       gap:10px;
     }
+    body.light .item{background: rgba(255,255,255,.70);border-color: rgba(0,0,0,.10)}
     .item h3{margin:0;font-size:1rem;font-weight:900}
     .item p{margin:4px 0 0 0;color:var(--muted);font-size:.92rem;line-height:1.25rem}
     .small{font-size:.86rem;color:var(--muted)}
-    .actions{display:flex;gap:8px;align-items:flex-start}
+    .actions{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap}
     .iconBtn{
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.08);
@@ -159,12 +203,16 @@
       padding:8px 10px;border-radius:12px;
       cursor:pointer;font-weight:900;
     }
+    body.light .iconBtn{border-color: rgba(0,0,0,.12)}
     .iconBtn.danger{border-color: rgba(255,120,120,.28); background: rgba(255,120,120,.10)}
+
     .hintBox{
       border:1px dashed rgba(255,255,255,.18);
       background: rgba(116,167,255,.06);
       padding:12px;border-radius:16px;margin-top:12px;
     }
+    body.light .hintBox{border-color: rgba(0,0,0,.14);background: rgba(60,120,255,.08)}
+
     .toast{
       position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
       background: rgba(0,0,0,.65);
@@ -175,10 +223,13 @@
       max-width:92vw;
       display:none;z-index:99;
     }
+    body.light .toast{background: rgba(10,18,37,.85)}
+
     .footerNote{margin-top:14px;color:var(--muted);font-size:.82rem;text-align:center;opacity:.95}
   </style>
 
 </head>
+
 <body>
   <div class="app">
     <div class="topbar">
@@ -192,12 +243,12 @@
           <div class="chip"><span class="kbd" id="sharedIdChip">Code</span></div>
         </div>
       </div>
-<div style="margin-top:10px;padding:10px 12px;border-radius:16px;border:1px solid rgba(255,120,120,.35);background:rgba(255,120,120,.10);color:#ffd1d1;font-weight:900;">
-  Lizet. Voor inloggen in apps gebruik iPhone Rob met Face ID inlog.
-</div>
 
+ <div class="alertRed">
+    Lizet. Voor inloggen in apps gebruik iPhone Rob met Face ID inlog.
+  </div>
 
- <div class="tabs">
+  <div class="tabs">
     <button type="button" class="tabBtn active" data-tab="tabHome">Start</button>
     <button type="button" class="tabBtn" data-tab="tabOverview">Overzicht</button>
     <button type="button" class="tabBtn" data-tab="tabDocs">Documenten</button>
@@ -207,6 +258,7 @@
     <button type="button" class="tabBtn" data-tab="tabWeb">Websites</button>
     <button type="button" class="tabBtn" data-tab="tabAdd">Toevoegen</button>
     <button type="button" class="tabBtn" data-tab="tabLogin">Login</button>
+    <button type="button" class="tabBtn" data-tab="tabMode">Licht</button>
     <button type="button" class="tabBtn" data-tab="tabBackup">Backup</button>
   </div>
 </div>
@@ -266,16 +318,16 @@
       </div>
 
       <div class="hintBox">
-        <div class="small">Delen met Lizet.</div>
-        <div class="small">Jij logt in en drukt Nu opslaan.</div>
-        <div class="small">Lizet vult dezelfde code in en drukt Nu laden.</div>
+        <div class="small">Sync met Lizet.</div>
+        <div class="small">Jij. Login. Code. Inloggen. Nu opslaan.</div>
+        <div class="small">Lizet. Login. Zelfde code. Nu laden.</div>
       </div>
 
       <div class="footerNote">made by Rob Borghouts 2026</div>
     </div>
   </div>
 
-  <div class="card" id="tabOverview" style="display:none">
+  <div class="card span2" id="tabOverview" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Overzicht</h2>
@@ -304,7 +356,7 @@
     </div>
   </div>
 
-  <div class="card" id="tabDocs" style="display:none">
+  <div class="card span2" id="tabDocs" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Documenten</h2>
@@ -320,7 +372,7 @@
     </div>
   </div>
 
-  <div class="card" id="tabContacts" style="display:none">
+  <div class="card span2" id="tabContacts" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Contacten</h2>
@@ -336,7 +388,7 @@
     </div>
   </div>
 
-  <div class="card" id="tabNotes" style="display:none">
+  <div class="card span2" id="tabNotes" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Notities</h2>
@@ -353,11 +405,11 @@
     </div>
   </div>
 
-  <div class="card" id="tabCrypto" style="display:none">
+  <div class="card span2" id="tabCrypto" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Crypto apps</h2>
-        <div class="sub">Apps, wallet, exchange</div>
+        <div class="sub">App, exchange, wallet, notities</div>
       </div>
     </div>
     <div class="cardBody">
@@ -369,7 +421,7 @@
     </div>
   </div>
 
-  <div class="card" id="tabWeb" style="display:none">
+  <div class="card span2" id="tabWeb" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Websites</h2>
@@ -385,7 +437,7 @@
     </div>
   </div>
 
-  <div class="card" id="tabAdd" style="display:none">
+  <div class="card span2" id="tabAdd" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Toevoegen</h2>
@@ -405,7 +457,7 @@
         </div>
         <div>
           <label>Titel</label>
-          <input id="addTitle" placeholder="Bijv. Ledger, Binance, Bank, Huisarts" />
+          <input id="addTitle" placeholder="Bijv. Ledger, Binance, Huisarts" />
         </div>
       </div>
 
@@ -431,12 +483,12 @@
       </div>
 
       <div class="hintBox">
-        <div class="small">Bewerk modus, klik bij een item op Bewerk.</div>
+        <div class="small">Bewerken. Klik bij een item op Bewerk.</div>
       </div>
     </div>
   </div>
 
-  <div class="card" id="tabLogin" style="display:none">
+  <div class="card span2" id="tabLogin" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Login en sync</h2>
@@ -476,8 +528,25 @@
       </div>
 
       <div class="hintBox">
-        <div class="small">Jij. Inloggen. Code. Nu opslaan.</div>
-        <div class="small">Lizet. Code. Nu laden.</div>
+        <div class="small">Werkt login niet. Check Firebase Authentication Email Password.</div>
+        <div class="small">Werkt sync niet. Check Firestore en rules.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card span2" id="tabMode" style="display:none">
+    <div class="cardHeader">
+      <div>
+        <h2>Weergave</h2>
+        <div class="sub">Licht of donker</div>
+      </div>
+    </div>
+    <div class="cardBody">
+      <div class="hintBox">
+        <div class="small" id="themeNow">Huidig. Donker</div>
+      </div>
+      <div class="btnBar" style="margin-top:12px">
+        <button type="button" class="btn primary" id="btnToggleTheme">Zet lichte modus aan</button>
       </div>
     </div>
   </div>
@@ -527,25 +596,19 @@
     function $(id){ return document.getElementById(id); }
     function on(id, ev, fn){ var el = $(id); if (el) el.addEventListener(ev, fn); }
 
-    var firebaseConfig = {
-      apiKey: "AIzaSyDRu2zH8nc41L2ymmSXoIlmXk4JL-g4BzM",
-      authDomain: "noodplan-rob.firebaseapp.com",
-      databaseURL: "https://noodplan-rob-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "noodplan-rob",
-      storageBucket: "noodplan-rob.firebasestorage.app",
-      messagingSenderId: "528144890958",
-      appId: "1:528144890958:web:77738ddfdc698ed440571f"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    var auth = firebase.auth();
-    var db = firebase.firestore();
-
-    var LSKEY = "noodmap_rob_fulltabs_v1";
+    var LSKEY = "noodmap_rob_full_light_v1";
+    var THEMEKEY = "noodmap_theme";
 
     var STATE = {
       user: null,
+      firebaseOk: false,
+      auth: null,
+      db: null,
       sharedId: "",
+      saveTimer: null,
+      realtimeUnsub: null,
+      toastTimer: null,
+      editId: null,
       data: {
         emergency: { text:"" },
         over: { myName:"", lizetPhone:"", text:"" },
@@ -554,12 +617,7 @@
         notes: { text:"" },
         cryptoApps: [],
         websites: []
-      },
-      saveTimer: null,
-      realtimeUnsub: null,
-      toastTimer: null,
-      editId: null,
-      editKind: null
+      }
     };
 
     function toast(msg){
@@ -581,10 +639,24 @@
       }
     }
 
-    function getSharedId(){
-      var v = ($("sharedId") && $("sharedId").value ? $("sharedId").value : "").trim();
-      if ($("sharedIdChip")) $("sharedIdChip").textContent = v ? v : "Code";
-      return v;
+    function safeUrl(u){
+      var s = (u||"").trim();
+      if (!s) return "";
+      if (s.indexOf("http://") === 0 || s.indexOf("https://") === 0) return s;
+      if (s.indexOf("www.") === 0) return "https://" + s;
+      return s;
+    }
+
+    function normalizeData(d){
+      var x = d || {};
+      if (!x.emergency) x.emergency = {text:""};
+      if (!x.over) x.over = {myName:"", lizetPhone:"", text:""};
+      if (!Array.isArray(x.docs)) x.docs = [];
+      if (!Array.isArray(x.contacts)) x.contacts = [];
+      if (!x.notes) x.notes = {text:""};
+      if (!Array.isArray(x.cryptoApps)) x.cryptoApps = [];
+      if (!Array.isArray(x.websites)) x.websites = [];
+      return x;
     }
 
     function saveLocal(){
@@ -596,88 +668,65 @@
         var raw = localStorage.getItem(LSKEY);
         if (!raw) return;
         var obj = JSON.parse(raw);
-        if (obj) STATE.data = obj;
+        if (obj) STATE.data = normalizeData(obj);
       }catch(e){}
-    }
-
-    function sharedDocRef(){
-      if (!STATE.sharedId) return null;
-      return db.collection("noodmap_shared").doc(STATE.sharedId);
-    }
-
-    async function loadFromCloud(){
-      var ref = sharedDocRef();
-      if (!ref){ toast("Vul gedeelde code in"); return; }
-      try{
-        var snap = await ref.get();
-        if (!snap.exists){ setStatus("Nog geen cloud data"); toast("Nog niks in cloud"); return; }
-        var obj = snap.data();
-        if (!obj){ setStatus("Lege cloud data"); toast("Nog niks in cloud"); return; }
-        STATE.data = normalizeData(obj);
-        saveLocal();
-        renderAllFromState();
-        setStatus("Gesynchroniseerd");
-        toast("Data geladen");
-      }catch(e){
-        setStatus("Laden mislukt");
-        toast("Laden mislukt");
-      }
-    }
-
-    async function startRealtime(){
-      if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
-      var ref = sharedDocRef();
-      if (!ref) return;
-      try{
-        STATE.realtimeUnsub = ref.onSnapshot(function(snap){
-          if (!snap.exists) return;
-          var obj = snap.data();
-          if (!obj) return;
-          STATE.data = normalizeData(obj);
-          saveLocal();
-          renderAllFromState();
-          setStatus("Gesynchroniseerd");
-        });
-      }catch(e){
-        setStatus("Realtime uit");
-      }
-    }
-
-    async function saveToCloud(){
-      var ref = sharedDocRef();
-      if (!ref) return;
-      if (!STATE.user) return;
-      try{
-        await ref.set(STATE.data, { merge:true });
-        setStatus("Gesynchroniseerd");
-      }catch(e){
-        setStatus("Opslaan mislukt");
-        toast("Opslaan mislukt");
-      }
     }
 
     function scheduleSave(){
       if (STATE.saveTimer) clearTimeout(STATE.saveTimer);
-      STATE.saveTimer = setTimeout(async function(){
+      STATE.saveTimer = setTimeout(function(){
         saveLocal();
-        if (STATE.user) await saveToCloud();
-      }, 450);
+        if (STATE.user) saveToCloud();
+      }, 350);
     }
 
-    function normalizeData(d){
-      var x = d || {};
-      if (!x.emergency) x.emergency = {text:""};
-      if (!x.over) x.over = {myName:"", lizetPhone:"", text:""};
-      if (!x.docs) x.docs = [];
-      if (!x.contacts) x.contacts = [];
-      if (!x.notes) x.notes = {text:""};
-      if (!x.cryptoApps) x.cryptoApps = [];
-      if (!x.websites) x.websites = [];
-      return x;
+    function copyToClipboard(text){
+      try{
+        if (!navigator.clipboard){
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          return;
+        }
+        navigator.clipboard.writeText(text);
+      }catch(e){}
+    }
+
+    function downloadText(filename, text){
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([text], {type:"text/plain"}));
+      a.download = filename;
+      a.click();
+    }
+
+    function exportJson(){
+      try{
+        var blob = JSON.stringify(STATE.data, null, 2);
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([blob], {type:"application/json"}));
+        a.download = "noodmap-export.json";
+        a.click();
+        toast("Export gemaakt");
+      }catch(e){
+        toast("Export mislukt");
+      }
+    }
+
+    function uid(){
+      return Math.random().toString(36).slice(2) + Date.now().toString(36);
+    }
+
+    function getSharedId(){
+      var v = ($("sharedId") && $("sharedId").value ? $("sharedId").value : "").trim();
+      if ($("sharedIdChip")) $("sharedIdChip").textContent = v ? v : "Code";
+      return v;
     }
 
     function showTab(tabId){
-      var tabs = ["tabHome","tabOverview","tabDocs","tabContacts","tabNotes","tabCrypto","tabWeb","tabAdd","tabLogin","tabBackup"];
+      var tabs = ["tabHome","tabOverview","tabDocs","tabContacts","tabNotes","tabCrypto","tabWeb","tabAdd","tabLogin","tabMode","tabBackup"];
       for (var i=0;i<tabs.length;i++){
         var el = document.getElementById(tabs[i]);
         if (el) el.style.display = (tabs[i] === tabId) ? "" : "none";
@@ -697,20 +746,11 @@
       }
     }
 
-    function uid(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
-
-    function safeUrl(u){
-      var s = (u||"").trim();
-      if (!s) return "";
-      if (s.indexOf("http://") === 0 || s.indexOf("https://") === 0) return s;
-      if (s.indexOf("www.") === 0) return "https://" + s;
-      return s;
-    }
-
     function renderList(list, targetId, kind){
       var box = $(targetId);
       if (!box) return;
       box.innerHTML = "";
+
       if (!list || !list.length){
         var empty = document.createElement("div");
         empty.className = "small";
@@ -735,17 +775,14 @@
           if (x.where) line1.push("Waar, " + x.where);
           if (x.extra) line1.push("Extra, " + x.extra);
         }
-
         if (kind === "contact"){
           if (x.phone) line1.push("Tel, " + x.phone);
           if (x.where) line1.push("Waar, " + x.where);
         }
-
         if (kind === "crypto"){
           if (x.login) line1.push("Login, " + x.login);
           if (x.where) line1.push("Waar, " + x.where);
         }
-
         if (kind === "web"){
           if (x.url) line1.push("URL, " + x.url);
           if (x.login) line1.push("Login, " + x.login);
@@ -780,7 +817,6 @@
             (x.login||"");
           if ($("addNote")) $("addNote").value = x.note || "";
           STATE.editId = x.id;
-          STATE.editKind = kind;
           showTab("tabAdd");
           toast("Bewerk modus");
         });
@@ -806,7 +842,7 @@
           open.addEventListener("click", function(){
             var u = safeUrl(x.url);
             if (!u){ toast("Geen URL"); return; }
-            window.open(u, "_blank");
+            try{ window.open(u, "_blank"); }catch(e){ window.location.href = u; }
           });
           actions.appendChild(open);
         }
@@ -821,7 +857,7 @@
           if (kind === "contact") STATE.data.contacts = (STATE.data.contacts || []).filter(function(i){ return i.id !== x.id; });
           if (kind === "crypto") STATE.data.cryptoApps = (STATE.data.cryptoApps || []).filter(function(i){ return i.id !== x.id; });
           if (kind === "web") STATE.data.websites = (STATE.data.websites || []).filter(function(i){ return i.id !== x.id; });
-          renderAllFromState();
+          renderAll();
           scheduleSave();
           toast("Verwijderd");
         });
@@ -833,67 +869,168 @@
       });
     }
 
-    function renderAllFromState(){
-      var data = normalizeData(STATE.data);
+    function renderAll(){
+      var d = normalizeData(STATE.data);
 
-      if ($("homeEmergencyText")) $("homeEmergencyText").value = data.emergency.text || "";
-      if ($("homeLizetPhone")) $("homeLizetPhone").value = data.over.lizetPhone || "";
-      if ($("homeMyName")) $("homeMyName").value = data.over.myName || "";
+      if ($("homeEmergencyText")) $("homeEmergencyText").value = d.emergency.text || "";
+      if ($("homeLizetPhone")) $("homeLizetPhone").value = d.over.lizetPhone || "";
+      if ($("homeMyName")) $("homeMyName").value = d.over.myName || "";
 
-      if ($("myName")) $("myName").value = data.over.myName || "";
-      if ($("lizetPhone")) $("lizetPhone").value = data.over.lizetPhone || "";
-      if ($("overviewText")) $("overviewText").value = data.over.text || "";
+      if ($("myName")) $("myName").value = d.over.myName || "";
+      if ($("lizetPhone")) $("lizetPhone").value = d.over.lizetPhone || "";
+      if ($("overviewText")) $("overviewText").value = d.over.text || "";
 
-      if ($("notesText")) $("notesText").value = data.notes.text || "";
+      if ($("notesText")) $("notesText").value = d.notes.text || "";
 
-      renderList(data.docs, "docsList", "doc");
-      renderList(data.contacts, "contactsList", "contact");
-      renderList(data.cryptoApps, "cryptoList", "crypto");
-      renderList(data.websites, "webList", "web");
+      renderList(d.docs, "docsList", "doc");
+      renderList(d.contacts, "contactsList", "contact");
+      renderList(d.cryptoApps, "cryptoList", "crypto");
+      renderList(d.websites, "webList", "web");
     }
 
-    function copyToClipboard(text){
+    function sharedDocRef(){
+      if (!STATE.firebaseOk) return null;
+      if (!STATE.db) return null;
+      if (!STATE.sharedId) return null;
+      return STATE.db.collection("noodmap_shared").doc(STATE.sharedId);
+    }
+
+    async function loadFromCloud(){
+      if (!STATE.firebaseOk){ toast("Firebase niet actief"); return; }
+      var ref = sharedDocRef();
+      if (!ref){ toast("Vul gedeelde code in"); return; }
       try{
-        if (!navigator.clipboard){
-          var ta = document.createElement("textarea");
-          ta.value = text;
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand("copy");
-          document.body.removeChild(ta);
-          return;
-        }
-        navigator.clipboard.writeText(text);
+        var snap = await ref.get();
+        if (!snap.exists){ setStatus("Nog geen cloud data"); toast("Nog niks in cloud"); return; }
+        var obj = snap.data();
+        if (!obj){ setStatus("Lege cloud data"); toast("Nog niks in cloud"); return; }
+        STATE.data = normalizeData(obj);
+        saveLocal();
+        renderAll();
+        setStatus("Gesynchroniseerd");
+        toast("Data geladen");
+      }catch(e){
+        setStatus("Laden mislukt");
+        toast("Laden mislukt");
+      }
+    }
+
+    async function saveToCloud(){
+      if (!STATE.firebaseOk) return;
+      if (!STATE.user) return;
+      var ref = sharedDocRef();
+      if (!ref) return;
+      try{
+        await ref.set(STATE.data, { merge:true });
+        setStatus("Gesynchroniseerd");
+      }catch(e){
+        setStatus("Opslaan mislukt");
+      }
+    }
+
+    function startRealtime(){
+      if (!STATE.firebaseOk) return;
+      if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
+      var ref = sharedDocRef();
+      if (!ref) return;
+      try{
+        STATE.realtimeUnsub = ref.onSnapshot(function(snap){
+          if (!snap.exists) return;
+          var obj = snap.data();
+          if (!obj) return;
+          STATE.data = normalizeData(obj);
+          saveLocal();
+          renderAll();
+          setStatus("Gesynchroniseerd");
+        });
       }catch(e){}
     }
 
-    function downloadText(filename, text){
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(new Blob([text], {type:"text/plain"}));
-      a.download = filename;
-      a.click();
-    }
-
-    function exportAll(){
-      try{
-        var blob = JSON.stringify(STATE.data, null, 2);
-        var a = document.createElement("a");
-        a.href = URL.createObjectURL(new Blob([blob], {type:"application/json"}));
-        a.download = "noodmap-export.json";
-        a.click();
-        toast("Export gemaakt");
-      }catch(e){ toast("Export mislukt"); }
-    }
-
     async function signIn(){
+      if (!STATE.firebaseOk){ toast("Firebase niet actief"); return; }
       var email = ($("email") && $("email").value ? $("email").value : "").trim();
       var pass = ($("password") && $("password").value ? $("password").value : "");
       if (!email || !pass){ toast("Vul e mail en wachtwoord in"); return; }
-      try{ await auth.signInWithEmailAndPassword(email, pass); }
-      catch(e){ setStatus("Login mislukt"); toast("Login mislukt"); }
+      try{
+        await STATE.auth.signInWithEmailAndPassword(email, pass);
+      }catch(e){
+        setStatus("Login mislukt");
+        toast("Login mislukt");
+      }
     }
 
-    async function signOutNow(){ try{ await auth.signOut(); }catch(e){} }
+    async function signOutNow(){
+      if (!STATE.firebaseOk) return;
+      try{ await STATE.auth.signOut(); }catch(e){}
+    }
+
+    function exportDocsText(){
+      var out = ["DOCUMENTEN"];
+      (STATE.data.docs||[]).forEach(function(x){
+        out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
+        if (x.extra) out.push("  Extra: " + x.extra);
+        if (x.note) out.push("  Notitie: " + x.note);
+      });
+      downloadText("documenten-tekst.txt", out.join("\n"));
+      toast("Documenten export");
+    }
+
+    function exportContactsText(){
+      var out = ["CONTACTEN"];
+      (STATE.data.contacts||[]).forEach(function(x){
+        out.push("- " + (x.name||"") + " | Tel: " + (x.phone||"") + " | Waar: " + (x.where||""));
+        if (x.note) out.push("  Notitie: " + x.note);
+      });
+      downloadText("contacten-tekst.txt", out.join("\n"));
+      toast("Contacten export");
+    }
+
+    function exportCryptoText(){
+      var out = ["CRYPTO APPS"];
+      (STATE.data.cryptoApps||[]).forEach(function(x){
+        out.push("- " + (x.name||"") + " | Login: " + (x.login||"") + " | Waar: " + (x.where||""));
+        if (x.note) out.push("  Notitie: " + x.note);
+      });
+      downloadText("crypto-apps-tekst.txt", out.join("\n"));
+      toast("Crypto export");
+    }
+
+    function exportWebText(){
+      var out = ["WEBSITES"];
+      (STATE.data.websites||[]).forEach(function(x){
+        out.push("- " + (x.name||"") + " | URL: " + (x.url||"") + " | Login: " + (x.login||""));
+        if (x.note) out.push("  Notitie: " + x.note);
+      });
+      downloadText("websites-tekst.txt", out.join("\n"));
+      toast("Websites export");
+    }
+
+    function applyTheme(mode){
+      mode = (mode === "light") ? "light" : "dark";
+      if (mode === "light") document.body.classList.add("light");
+      else document.body.classList.remove("light");
+
+      try{ localStorage.setItem(THEMEKEY, mode); }catch(e){}
+
+      var now = document.getElementById("themeNow");
+      var btn = document.getElementById("btnToggleTheme");
+      if (now) now.textContent = "Huidig. " + (mode === "light" ? "Licht" : "Donker");
+      if (btn) btn.textContent = (mode === "light") ? "Zet donkere modus aan" : "Zet lichte modus aan";
+    }
+
+    function initTheme(){
+      var saved = "dark";
+      try{ saved = localStorage.getItem(THEMEKEY) || "dark"; }catch(e){}
+      applyTheme(saved);
+
+      var btn = document.getElementById("btnToggleTheme");
+      if (btn){
+        btn.addEventListener("click", function(){
+          var isLight = document.body.classList.contains("light");
+          applyTheme(isLight ? "dark" : "light");
+        });
+      }
+    }
 
     function bindAll(){
       on("btnCallLizet","click",function(){
@@ -925,7 +1062,7 @@
           lizetPhone: ($("lizetPhone") ? $("lizetPhone").value : "") || "",
           text: ($("overviewText") ? $("overviewText").value : "") || ""
         };
-        renderAllFromState();
+        renderAll();
         scheduleSave();
         toast("Opgeslagen");
       });
@@ -934,7 +1071,8 @@
         var out = [];
         if ($("myName") && $("myName").value) out.push("Naam: " + $("myName").value);
         if ($("lizetPhone") && $("lizetPhone").value) out.push("Lizet: " + $("lizetPhone").value);
-        if ($("overviewText") && $("overviewText").value) out.push("", $("overviewText").value);
+        out.push("");
+        out.push(($("overviewText") ? $("overviewText").value : "") || "");
         copyToClipboard(out.join("\n"));
         toast("Gekopieerd");
       });
@@ -956,9 +1094,18 @@
         if ($("addExtra")) $("addExtra").value = "";
         if ($("addNote")) $("addNote").value = "";
         STATE.editId = null;
-        STATE.editKind = null;
         toast("Leeg");
       });
+
+      function upsert(arr, obj){
+        arr = arr || [];
+        if (STATE.editId){
+          arr = arr.map(function(i){ return (i.id === STATE.editId) ? obj : i; });
+        }else{
+          arr.unshift(obj);
+        }
+        return arr;
+      }
 
       on("addSave","click",function(){
         var type = $("addType") ? $("addType").value : "doc";
@@ -970,16 +1117,6 @@
         var note = ($("addNote") ? $("addNote").value : "").trim();
 
         if (type === "web") where = safeUrl(where);
-
-        function upsert(arr, obj){
-          arr = arr || [];
-          if (STATE.editId){
-            arr = arr.map(function(i){ return (i.id === STATE.editId) ? obj : i; });
-          }else{
-            arr.unshift(obj);
-          }
-          return arr;
-        }
 
         if (type === "doc"){
           var o1 = { id: STATE.editId || uid(), name: title, where: where, extra: extra, note: note };
@@ -1006,14 +1143,13 @@
         }
 
         STATE.editId = null;
-        STATE.editKind = null;
 
         if ($("addTitle")) $("addTitle").value = "";
         if ($("addWhere")) $("addWhere").value = "";
         if ($("addExtra")) $("addExtra").value = "";
         if ($("addNote")) $("addNote").value = "";
 
-        renderAllFromState();
+        renderAll();
         scheduleSave();
         toast("Opgeslagen");
       });
@@ -1021,88 +1157,52 @@
       on("addDoc","click",function(){
         if ($("addType")) $("addType").value = "doc";
         STATE.editId = null;
-        STATE.editKind = null;
         showTab("tabAdd");
       });
 
       on("addContact","click",function(){
         if ($("addType")) $("addType").value = "contact";
         STATE.editId = null;
-        STATE.editKind = null;
         showTab("tabAdd");
       });
 
       on("addCrypto","click",function(){
         if ($("addType")) $("addType").value = "crypto";
         STATE.editId = null;
-        STATE.editKind = null;
         showTab("tabAdd");
       });
 
       on("addWeb","click",function(){
         if ($("addType")) $("addType").value = "web";
         STATE.editId = null;
-        STATE.editKind = null;
         showTab("tabAdd");
       });
 
-      on("exportDocs","click",function(){
-        var out = ["DOCUMENTEN"];
-        (STATE.data.docs||[]).forEach(function(x){
-          out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
-          if (x.extra) out.push("  Extra: " + x.extra);
-          if (x.note) out.push("  Notitie: " + x.note);
-        });
-        downloadText("documenten-tekst.txt", out.join("\n"));
-      });
-
-      on("exportContacts","click",function(){
-        var out = ["CONTACTEN"];
-        (STATE.data.contacts||[]).forEach(function(x){
-          out.push("- " + (x.name||"") + " | Tel: " + (x.phone||"") + " | Waar: " + (x.where||""));
-          if (x.note) out.push("  Notitie: " + x.note);
-        });
-        downloadText("contacten-tekst.txt", out.join("\n"));
-      });
-
-      on("exportCrypto","click",function(){
-        var out = ["CRYPTO APPS"];
-        (STATE.data.cryptoApps||[]).forEach(function(x){
-          out.push("- " + (x.name||"") + " | Login: " + (x.login||"") + " | Waar: " + (x.where||""));
-          if (x.note) out.push("  Notitie: " + x.note);
-        });
-        downloadText("crypto-apps-tekst.txt", out.join("\n"));
-      });
-
-      on("exportWeb","click",function(){
-        var out = ["WEBSITES"];
-        (STATE.data.websites||[]).forEach(function(x){
-          out.push("- " + (x.name||"") + " | URL: " + (x.url||"") + " | Login: " + (x.login||""));
-          if (x.note) out.push("  Notitie: " + x.note);
-        });
-        downloadText("websites-tekst.txt", out.join("\n"));
-      });
+      on("exportDocs","click",exportDocsText);
+      on("exportContacts","click",exportContactsText);
+      on("exportCrypto","click",exportCryptoText);
+      on("exportWeb","click",exportWebText);
 
       on("btnLogin","click",signIn);
       on("btnLogout","click",signOutNow);
 
-      on("btnSyncNow","click",async function(){
+      on("btnSyncNow","click",function(){
         STATE.sharedId = getSharedId();
-        await loadFromCloud();
-        await startRealtime();
+        loadFromCloud();
+        startRealtime();
       });
 
-      on("btnUploadNow","click",async function(){
+      on("btnUploadNow","click",function(){
         STATE.sharedId = getSharedId();
         if (!STATE.sharedId){ toast("Vul gedeelde code in"); return; }
         if (!STATE.user){ toast("Log eerst in"); return; }
-        await saveToCloud();
+        saveToCloud();
         toast("Naar cloud gezet");
       });
 
-      on("btnExport","click",exportAll);
-      on("exportAll","click",exportAll);
-      on("exportQuick","click",exportAll);
+      on("btnExport","click",exportJson);
+      on("exportAll","click",exportJson);
+      on("exportQuick","click",exportJson);
 
       on("btnImport","click",function(){
         var f = $("importFile") && $("importFile").files ? $("importFile").files[0] : null;
@@ -1114,10 +1214,12 @@
             if (!obj){ toast("Ongeldig"); return; }
             STATE.data = normalizeData(obj);
             saveLocal();
-            renderAllFromState();
+            renderAll();
             scheduleSave();
             toast("Geïmporteerd");
-          }catch(e){ toast("Import mislukt"); }
+          }catch(e){
+            toast("Import mislukt");
+          }
         };
         reader.readAsText(f);
       });
@@ -1134,36 +1236,66 @@
           websites:[]
         });
         saveLocal();
-        renderAllFromState();
+        renderAll();
         scheduleSave();
         toast("Alles gewist");
       });
 
       on("sharedId","input",function(){
-        if ($("sharedIdChip")) $("sharedIdChip").textContent = (($("sharedId").value||"").trim() || "Code");
+        getSharedId();
       });
     }
 
+    function initFirebaseSafe(){
+      try{
+        if (!window.firebase || !firebase.initializeApp){
+          STATE.firebaseOk = false;
+          setStatus("Firebase scripts missen");
+          return;
+        }
+
+        var firebaseConfig = {
+          apiKey: "AIzaSyDRu2zH8nc41L2ymmSXoIlmXk4JL-g4BzM",
+          authDomain: "noodplan-rob.firebaseapp.com",
+          databaseURL: "https://noodplan-rob-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "noodplan-rob",
+          storageBucket: "noodplan-rob.firebasestorage.app",
+          messagingSenderId: "528144890958",
+          appId: "1:528144890958:web:77738ddfdc698ed440571f"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        STATE.auth = firebase.auth();
+        STATE.db = firebase.firestore();
+        STATE.firebaseOk = true;
+
+        STATE.auth.onAuthStateChanged(function(u){
+          STATE.user = u || null;
+          if (STATE.user){
+            setStatus("Ingelogd");
+            STATE.sharedId = getSharedId();
+            if (STATE.sharedId) startRealtime();
+          }else{
+            setStatus("Niet ingelogd");
+            if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
+          }
+        });
+      }catch(e){
+        STATE.firebaseOk = false;
+        setStatus("Firebase fout");
+      }
+    }
+
     function init(){
-      loadLocal();
-      STATE.data = normalizeData(STATE.data);
-      renderAllFromState();
+      initTheme();
       bindTabs();
       bindAll();
-
+      loadLocal();
+      STATE.data = normalizeData(STATE.data);
+      renderAll();
       STATE.sharedId = getSharedId();
-
-      auth.onAuthStateChanged(async function(u){
-        STATE.user = u || null;
-        if (STATE.user){
-          setStatus("Ingelogd");
-          if (STATE.sharedId) await startRealtime();
-        }else{
-          setStatus("Niet ingelogd");
-          if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
-        }
-      });
-
+      setStatus("Niet ingelogd");
+      initFirebaseSafe();
       showTab("tabHome");
     }
 
