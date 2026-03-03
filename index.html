@@ -1,4 +1,4 @@
-Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en plakt het in index.html. Dit blijft klikbaar, ook als Firebase even faalt.
+
 <!DOCTYPE html>
 
 <html lang="nl">
@@ -6,7 +6,7 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="mobile-mobile-web-app-capable" content="yes" />
   <title>Noodmap Rob</title>
 
  <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -71,7 +71,7 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
       text-overflow:ellipsis;
       white-space:nowrap;
     }
-    .dot{width:10px;height:10px;border-radius:99px;background:rgba(90,210,170,.95);box-shadow:0 0 0 4px rgba(90,210,170,.14)}
+    .dot{width:10px;height:10px;border-radius:99px;background:rgba(67,226,207,.9);box-shadow:0 0 0 4px rgba(67,226,207,.12)}
     .dot.off{background:rgba(255,120,120,.95);box-shadow:0 0 0 4px rgba(255,120,120,.12)}
     .kbd{
       display:inline-block;
@@ -92,8 +92,8 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
       cursor:pointer;
     }
     .tabBtn.active{
-      background: linear-gradient(135deg, rgba(90,210,170,.20), rgba(116,167,255,.18));
-      border-color: rgba(90,210,170,.30);
+      background: linear-gradient(135deg, rgba(67,226,207,.22), rgba(116,167,255,.18));
+      border-color: rgba(67,226,207,.35);
       box-shadow:0 10px 30px rgba(0,0,0,.25);
     }
     .grid{display:grid;gap:14px;grid-template-columns:1fr;margin-top:12px}
@@ -136,7 +136,7 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
       padding:11px 12px;border-radius:14px;
       font-weight:900;cursor:pointer;
     }
-    .btn.primary{background: linear-gradient(135deg, rgba(90,210,170,.20), rgba(116,167,255,.20));border-color: rgba(90,210,170,.28)}
+    .btn.primary{background: linear-gradient(135deg, rgba(67,226,207,.22), rgba(116,167,255,.22));border-color: rgba(67,226,207,.35)}
     .btn.danger{background: rgba(255,120,120,.12);border-color: rgba(255,120,120,.28)}
     .list{display:flex;flex-direction:column;gap:10px}
     .item{
@@ -192,6 +192,10 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
           <div class="chip"><span class="kbd" id="sharedIdChip">Code</span></div>
         </div>
       </div>
+<div style="margin-top:10px;padding:10px 12px;border-radius:16px;border:1px solid rgba(255,120,120,.35);background:rgba(255,120,120,.10);color:#ffd1d1;font-weight:900;">
+  Lizet. Voor inloggen in apps gebruik iPhone Rob met Face ID inlog.
+</div>
+
 
  <div class="tabs">
     <button type="button" class="tabBtn active" data-tab="tabHome">Start</button>
@@ -199,6 +203,8 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
     <button type="button" class="tabBtn" data-tab="tabDocs">Documenten</button>
     <button type="button" class="tabBtn" data-tab="tabContacts">Contacten</button>
     <button type="button" class="tabBtn" data-tab="tabNotes">Notities</button>
+    <button type="button" class="tabBtn" data-tab="tabCrypto">Crypto apps</button>
+    <button type="button" class="tabBtn" data-tab="tabWeb">Websites</button>
     <button type="button" class="tabBtn" data-tab="tabAdd">Toevoegen</button>
     <button type="button" class="tabBtn" data-tab="tabLogin">Login</button>
     <button type="button" class="tabBtn" data-tab="tabBackup">Backup</button>
@@ -241,7 +247,7 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
           </div>
         </div>
 
-        <div class="card" style="box-shadow:none;background:rgba(90,210,170,.05);border-color:rgba(255,255,255,.08)">
+        <div class="card" style="box-shadow:none;background:rgba(67,226,207,.05);border-color:rgba(255,255,255,.08)">
           <div class="cardHeader">
             <div>
               <h2>Noodtekst</h2>
@@ -347,11 +353,43 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
     </div>
   </div>
 
+  <div class="card" id="tabCrypto" style="display:none">
+    <div class="cardHeader">
+      <div>
+        <h2>Crypto apps</h2>
+        <div class="sub">Apps, wallet, exchange</div>
+      </div>
+    </div>
+    <div class="cardBody">
+      <div class="list" id="cryptoList"></div>
+      <div class="btnBar">
+        <button type="button" class="btn" id="addCrypto">Nieuwe crypto app</button>
+        <button type="button" class="btn" id="exportCrypto">Export crypto apps</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="tabWeb" style="display:none">
+    <div class="cardHeader">
+      <div>
+        <h2>Websites</h2>
+        <div class="sub">Links en accounts</div>
+      </div>
+    </div>
+    <div class="cardBody">
+      <div class="list" id="webList"></div>
+      <div class="btnBar">
+        <button type="button" class="btn" id="addWeb">Nieuwe website</button>
+        <button type="button" class="btn" id="exportWeb">Export websites</button>
+      </div>
+    </div>
+  </div>
+
   <div class="card" id="tabAdd" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Toevoegen</h2>
-        <div class="sub">Document of contact</div>
+        <div class="sub">Document, contact, crypto app, website</div>
       </div>
     </div>
     <div class="cardBody">
@@ -361,22 +399,24 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
           <select id="addType">
             <option value="doc">Document</option>
             <option value="contact">Contact</option>
+            <option value="crypto">Crypto app</option>
+            <option value="web">Website</option>
           </select>
         </div>
         <div>
           <label>Titel</label>
-          <input id="addTitle" placeholder="Bijv. Paspoort, Huisarts" />
+          <input id="addTitle" placeholder="Bijv. Ledger, Binance, Bank, Huisarts" />
         </div>
       </div>
 
       <div class="row cols2" style="margin-top:10px">
         <div>
-          <label>Waar</label>
-          <input id="addWhere" placeholder="Bijv. Kluis, lade, map" />
+          <label>Waar of URL</label>
+          <input id="addWhere" placeholder="Bijv. kluis, lade, of https://..." />
         </div>
         <div>
-          <label>Telefoon of extra</label>
-          <input id="addExtra" placeholder="Bijv. 06..., of extra tekst" />
+          <label>Login of telefoon</label>
+          <input id="addExtra" placeholder="Bijv. e mail, gebruikersnaam, 06..." />
         </div>
       </div>
 
@@ -400,7 +440,7 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
     <div class="cardHeader">
       <div>
         <h2>Login en sync</h2>
-        <div class="sub">Firebase of alleen lokaal</div>
+        <div class="sub">Zelfde gedeelde code op beide telefoons</div>
       </div>
     </div>
     <div class="cardBody">
@@ -436,7 +476,8 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
       </div>
 
       <div class="hintBox">
-        <div class="small">Als Firebase fout blijft geven, werkt alles nog lokaal.</div>
+        <div class="small">Jij. Inloggen. Code. Nu opslaan.</div>
+        <div class="small">Lizet. Code. Nu laden.</div>
       </div>
     </div>
   </div>
@@ -486,13 +527,48 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
     function $(id){ return document.getElementById(id); }
     function on(id, ev, fn){ var el = $(id); if (el) el.addEventListener(ev, fn); }
 
+    var firebaseConfig = {
+      apiKey: "AIzaSyDRu2zH8nc41L2ymmSXoIlmXk4JL-g4BzM",
+      authDomain: "noodplan-rob.firebaseapp.com",
+      databaseURL: "https://noodplan-rob-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "noodplan-rob",
+      storageBucket: "noodplan-rob.firebasestorage.app",
+      messagingSenderId: "528144890958",
+      appId: "1:528144890958:web:77738ddfdc698ed440571f"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    var auth = firebase.auth();
+    var db = firebase.firestore();
+
+    var LSKEY = "noodmap_rob_fulltabs_v1";
+
+    var STATE = {
+      user: null,
+      sharedId: "",
+      data: {
+        emergency: { text:"" },
+        over: { myName:"", lizetPhone:"", text:"" },
+        docs: [],
+        contacts: [],
+        notes: { text:"" },
+        cryptoApps: [],
+        websites: []
+      },
+      saveTimer: null,
+      realtimeUnsub: null,
+      toastTimer: null,
+      editId: null,
+      editKind: null
+    };
+
     function toast(msg){
       var t = $("toast");
       if (!t) return;
       t.textContent = msg;
       t.style.display = "block";
-      if (window.__toastTimer) clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(function(){ t.style.display="none"; }, 2200);
+      if (STATE.toastTimer) clearTimeout(STATE.toastTimer);
+      STATE.toastTimer = setTimeout(function(){ t.style.display="none"; }, 2200);
     }
 
     function setStatus(msg){
@@ -505,8 +581,103 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
       }
     }
 
+    function getSharedId(){
+      var v = ($("sharedId") && $("sharedId").value ? $("sharedId").value : "").trim();
+      if ($("sharedIdChip")) $("sharedIdChip").textContent = v ? v : "Code";
+      return v;
+    }
+
+    function saveLocal(){
+      try{ localStorage.setItem(LSKEY, JSON.stringify(STATE.data)); }catch(e){}
+    }
+
+    function loadLocal(){
+      try{
+        var raw = localStorage.getItem(LSKEY);
+        if (!raw) return;
+        var obj = JSON.parse(raw);
+        if (obj) STATE.data = obj;
+      }catch(e){}
+    }
+
+    function sharedDocRef(){
+      if (!STATE.sharedId) return null;
+      return db.collection("noodmap_shared").doc(STATE.sharedId);
+    }
+
+    async function loadFromCloud(){
+      var ref = sharedDocRef();
+      if (!ref){ toast("Vul gedeelde code in"); return; }
+      try{
+        var snap = await ref.get();
+        if (!snap.exists){ setStatus("Nog geen cloud data"); toast("Nog niks in cloud"); return; }
+        var obj = snap.data();
+        if (!obj){ setStatus("Lege cloud data"); toast("Nog niks in cloud"); return; }
+        STATE.data = normalizeData(obj);
+        saveLocal();
+        renderAllFromState();
+        setStatus("Gesynchroniseerd");
+        toast("Data geladen");
+      }catch(e){
+        setStatus("Laden mislukt");
+        toast("Laden mislukt");
+      }
+    }
+
+    async function startRealtime(){
+      if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
+      var ref = sharedDocRef();
+      if (!ref) return;
+      try{
+        STATE.realtimeUnsub = ref.onSnapshot(function(snap){
+          if (!snap.exists) return;
+          var obj = snap.data();
+          if (!obj) return;
+          STATE.data = normalizeData(obj);
+          saveLocal();
+          renderAllFromState();
+          setStatus("Gesynchroniseerd");
+        });
+      }catch(e){
+        setStatus("Realtime uit");
+      }
+    }
+
+    async function saveToCloud(){
+      var ref = sharedDocRef();
+      if (!ref) return;
+      if (!STATE.user) return;
+      try{
+        await ref.set(STATE.data, { merge:true });
+        setStatus("Gesynchroniseerd");
+      }catch(e){
+        setStatus("Opslaan mislukt");
+        toast("Opslaan mislukt");
+      }
+    }
+
+    function scheduleSave(){
+      if (STATE.saveTimer) clearTimeout(STATE.saveTimer);
+      STATE.saveTimer = setTimeout(async function(){
+        saveLocal();
+        if (STATE.user) await saveToCloud();
+      }, 450);
+    }
+
+    function normalizeData(d){
+      var x = d || {};
+      if (!x.emergency) x.emergency = {text:""};
+      if (!x.over) x.over = {myName:"", lizetPhone:"", text:""};
+      if (!x.docs) x.docs = [];
+      if (!x.contacts) x.contacts = [];
+      if (!x.notes) x.notes = {text:""};
+      if (!x.cryptoApps) x.cryptoApps = [];
+      if (!x.websites) x.websites = [];
+      return x;
+    }
+
     function showTab(tabId){
-      var tabs = ["tabHome","tabOverview","tabDocs","tabContacts","tabNotes","tabAdd","tabLogin","tabBackup"];
+      var tabs = ["tabHome","tabOverview","tabDocs","tabContacts","tabNotes","tabCrypto","tabWeb","tabAdd","tabLogin","tabBackup"];
       for (var i=0;i<tabs.length;i++){
         var el = document.getElementById(tabs[i]);
         if (el) el.style.display = (tabs[i] === tabId) ? "" : "none";
@@ -524,6 +695,161 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
           showTab(this.getAttribute("data-tab"));
         });
       }
+    }
+
+    function uid(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+
+    function safeUrl(u){
+      var s = (u||"").trim();
+      if (!s) return "";
+      if (s.indexOf("http://") === 0 || s.indexOf("https://") === 0) return s;
+      if (s.indexOf("www.") === 0) return "https://" + s;
+      return s;
+    }
+
+    function renderList(list, targetId, kind){
+      var box = $(targetId);
+      if (!box) return;
+      box.innerHTML = "";
+      if (!list || !list.length){
+        var empty = document.createElement("div");
+        empty.className = "small";
+        empty.textContent = "Nog geen items";
+        box.appendChild(empty);
+        return;
+      }
+
+      list.forEach(function(x){
+        var wrap = document.createElement("div");
+        wrap.className = "item";
+
+        var left = document.createElement("div");
+        var h = document.createElement("h3");
+        h.textContent = x.name || "";
+        left.appendChild(h);
+
+        var p = document.createElement("p");
+        var line1 = [];
+
+        if (kind === "doc"){
+          if (x.where) line1.push("Waar, " + x.where);
+          if (x.extra) line1.push("Extra, " + x.extra);
+        }
+
+        if (kind === "contact"){
+          if (x.phone) line1.push("Tel, " + x.phone);
+          if (x.where) line1.push("Waar, " + x.where);
+        }
+
+        if (kind === "crypto"){
+          if (x.login) line1.push("Login, " + x.login);
+          if (x.where) line1.push("Waar, " + x.where);
+        }
+
+        if (kind === "web"){
+          if (x.url) line1.push("URL, " + x.url);
+          if (x.login) line1.push("Login, " + x.login);
+        }
+
+        p.textContent = line1.join(" , ");
+        left.appendChild(p);
+
+        if (x.note){
+          var n = document.createElement("div");
+          n.className = "small";
+          n.style.marginTop = "6px";
+          n.textContent = x.note;
+          left.appendChild(n);
+        }
+
+        var actions = document.createElement("div");
+        actions.className = "actions";
+
+        var edit = document.createElement("button");
+        edit.type = "button";
+        edit.className = "iconBtn";
+        edit.textContent = "Bewerk";
+        edit.addEventListener("click", function(){
+          if ($("addType")) $("addType").value = kind;
+          if ($("addTitle")) $("addTitle").value = x.name || "";
+          if ($("addWhere")) $("addWhere").value = (kind === "web") ? (x.url||"") : (x.where||"");
+          if ($("addExtra")) $("addExtra").value =
+            (kind === "doc") ? (x.extra||"") :
+            (kind === "contact") ? (x.phone||"") :
+            (kind === "crypto") ? (x.login||"") :
+            (x.login||"");
+          if ($("addNote")) $("addNote").value = x.note || "";
+          STATE.editId = x.id;
+          STATE.editKind = kind;
+          showTab("tabAdd");
+          toast("Bewerk modus");
+        });
+        actions.appendChild(edit);
+
+        if (kind === "contact"){
+          var call = document.createElement("button");
+          call.type = "button";
+          call.className = "iconBtn";
+          call.textContent = "Bel";
+          call.addEventListener("click", function(){
+            if (!x.phone){ toast("Geen telefoon"); return; }
+            window.location.href = "tel:" + x.phone;
+          });
+          actions.appendChild(call);
+        }
+
+        if (kind === "web"){
+          var open = document.createElement("button");
+          open.type = "button";
+          open.className = "iconBtn";
+          open.textContent = "Open";
+          open.addEventListener("click", function(){
+            var u = safeUrl(x.url);
+            if (!u){ toast("Geen URL"); return; }
+            window.open(u, "_blank");
+          });
+          actions.appendChild(open);
+        }
+
+        var del = document.createElement("button");
+        del.type = "button";
+        del.className = "iconBtn danger";
+        del.textContent = "Verwijder";
+        del.addEventListener("click", function(){
+          if (!confirm("Verwijderen")) return;
+          if (kind === "doc") STATE.data.docs = (STATE.data.docs || []).filter(function(i){ return i.id !== x.id; });
+          if (kind === "contact") STATE.data.contacts = (STATE.data.contacts || []).filter(function(i){ return i.id !== x.id; });
+          if (kind === "crypto") STATE.data.cryptoApps = (STATE.data.cryptoApps || []).filter(function(i){ return i.id !== x.id; });
+          if (kind === "web") STATE.data.websites = (STATE.data.websites || []).filter(function(i){ return i.id !== x.id; });
+          renderAllFromState();
+          scheduleSave();
+          toast("Verwijderd");
+        });
+        actions.appendChild(del);
+
+        wrap.appendChild(left);
+        wrap.appendChild(actions);
+        box.appendChild(wrap);
+      });
+    }
+
+    function renderAllFromState(){
+      var data = normalizeData(STATE.data);
+
+      if ($("homeEmergencyText")) $("homeEmergencyText").value = data.emergency.text || "";
+      if ($("homeLizetPhone")) $("homeLizetPhone").value = data.over.lizetPhone || "";
+      if ($("homeMyName")) $("homeMyName").value = data.over.myName || "";
+
+      if ($("myName")) $("myName").value = data.over.myName || "";
+      if ($("lizetPhone")) $("lizetPhone").value = data.over.lizetPhone || "";
+      if ($("overviewText")) $("overviewText").value = data.over.text || "";
+
+      if ($("notesText")) $("notesText").value = data.notes.text || "";
+
+      renderList(data.docs, "docsList", "doc");
+      renderList(data.contacts, "contactsList", "contact");
+      renderList(data.cryptoApps, "cryptoList", "crypto");
+      renderList(data.websites, "webList", "web");
     }
 
     function copyToClipboard(text){
@@ -548,231 +874,6 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
       a.click();
     }
 
-    function uid(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
-
-    var LSKEY = "noodmap_rob_onepaste_safe_v1";
-    var STATE = {
-      user: null,
-      sharedId: "",
-      firebaseOk: false,
-      auth: null,
-      db: null,
-      saveTimer: null,
-      realtimeUnsub: null,
-      editId: null,
-      editKind: null,
-      data: {
-        emergency: { text:"" },
-        over: { myName:"", lizetPhone:"", text:"" },
-        docs: [],
-        contacts: [],
-        notes: { text:"" }
-      }
-    };
-
-    function saveLocal(){
-      try{ localStorage.setItem(LSKEY, JSON.stringify(STATE.data)); }catch(e){}
-    }
-
-    function loadLocal(){
-      try{
-        var raw = localStorage.getItem(LSKEY);
-        if (!raw) return;
-        var obj = JSON.parse(raw);
-        if (obj) STATE.data = obj;
-      }catch(e){}
-    }
-
-    function getSharedId(){
-      var v = ($("sharedId") && $("sharedId").value ? $("sharedId").value : "").trim();
-      if ($("sharedIdChip")) $("sharedIdChip").textContent = v ? v : "Code";
-      return v;
-    }
-
-    function sharedDocRef(){
-      if (!STATE.firebaseOk) return null;
-      if (!STATE.db) return null;
-      if (!STATE.sharedId) return null;
-      return STATE.db.collection("noodmap_shared").doc(STATE.sharedId);
-    }
-
-    async function loadFromCloud(){
-      if (!STATE.firebaseOk){ toast("Firebase niet actief"); return; }
-      var ref = sharedDocRef();
-      if (!ref){ toast("Vul gedeelde code in"); return; }
-      try{
-        var snap = await ref.get();
-        if (!snap.exists){ setStatus("Nog geen cloud data"); toast("Nog niks in cloud"); return; }
-        var obj = snap.data();
-        if (!obj){ setStatus("Lege cloud data"); toast("Nog niks in cloud"); return; }
-        STATE.data = obj;
-        saveLocal();
-        renderAll();
-        setStatus("Gesynchroniseerd");
-        toast("Data geladen");
-      }catch(e){
-        setStatus("Laden mislukt");
-        toast("Laden mislukt");
-      }
-    }
-
-    async function saveToCloud(){
-      if (!STATE.firebaseOk){ toast("Firebase niet actief"); return; }
-      if (!STATE.user){ toast("Log eerst in"); return; }
-      var ref = sharedDocRef();
-      if (!ref){ toast("Vul gedeelde code in"); return; }
-      try{
-        await ref.set(STATE.data, { merge:true });
-        setStatus("Gesynchroniseerd");
-      }catch(e){
-        setStatus("Opslaan mislukt");
-        toast("Opslaan mislukt");
-      }
-    }
-
-    async function startRealtime(){
-      if (!STATE.firebaseOk) return;
-      if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
-      var ref = sharedDocRef();
-      if (!ref) return;
-      try{
-        STATE.realtimeUnsub = ref.onSnapshot(function(snap){
-          if (!snap.exists) return;
-          var obj = snap.data();
-          if (!obj) return;
-          STATE.data = obj;
-          saveLocal();
-          renderAll();
-          setStatus("Gesynchroniseerd");
-        });
-      }catch(e){}
-    }
-
-    function scheduleSave(){
-      if (STATE.saveTimer) clearTimeout(STATE.saveTimer);
-      STATE.saveTimer = setTimeout(function(){
-        saveLocal();
-      }, 300);
-    }
-
-    function renderList(list, targetId, kind){
-      var box = $(targetId);
-      if (!box) return;
-      box.innerHTML = "";
-      if (!list || !list.length){
-        var empty = document.createElement("div");
-        empty.className = "small";
-        empty.textContent = "Nog geen items";
-        box.appendChild(empty);
-        return;
-      }
-
-      for (var i=0;i<list.length;i++){
-        (function(x){
-          var wrap = document.createElement("div");
-          wrap.className = "item";
-
-          var left = document.createElement("div");
-          var h = document.createElement("h3");
-          h.textContent = x.name || "";
-          left.appendChild(h);
-
-          var p = document.createElement("p");
-          var line1 = [];
-          if (kind === "doc"){
-            if (x.where) line1.push("Waar, " + x.where);
-            if (x.extra) line1.push("Extra, " + x.extra);
-          }else{
-            if (x.phone) line1.push("Tel, " + x.phone);
-            if (x.where) line1.push("Waar, " + x.where);
-          }
-          p.textContent = line1.join(" , ");
-          left.appendChild(p);
-
-          if (x.note){
-            var n = document.createElement("div");
-            n.className = "small";
-            n.style.marginTop = "6px";
-            n.textContent = x.note;
-            left.appendChild(n);
-          }
-
-          var actions = document.createElement("div");
-          actions.className = "actions";
-
-          var edit = document.createElement("button");
-          edit.type = "button";
-          edit.className = "iconBtn";
-          edit.textContent = "Bewerk";
-          edit.addEventListener("click", function(){
-            if ($("addType")) $("addType").value = (kind === "doc") ? "doc" : "contact";
-            if ($("addTitle")) $("addTitle").value = x.name || "";
-            if ($("addWhere")) $("addWhere").value = x.where || "";
-            if ($("addExtra")) $("addExtra").value = (kind === "doc") ? (x.extra||"") : (x.phone||"");
-            if ($("addNote")) $("addNote").value = x.note || "";
-            STATE.editId = x.id;
-            STATE.editKind = kind;
-            showTab("tabAdd");
-            toast("Bewerk modus");
-          });
-          actions.appendChild(edit);
-
-          if (kind === "contact"){
-            var call = document.createElement("button");
-            call.type = "button";
-            call.className = "iconBtn";
-            call.textContent = "Bel";
-            call.addEventListener("click", function(){
-              if (!x.phone){ toast("Geen telefoon"); return; }
-              window.location.href = "tel:" + x.phone;
-            });
-            actions.appendChild(call);
-          }
-
-          var del = document.createElement("button");
-          del.type = "button";
-          del.className = "iconBtn danger";
-          del.textContent = "Verwijder";
-          del.addEventListener("click", function(){
-            if (!confirm("Verwijderen")) return;
-            if (kind === "doc"){
-              var nd = [];
-              for (var k=0;k<(STATE.data.docs||[]).length;k++) if (STATE.data.docs[k].id !== x.id) nd.push(STATE.data.docs[k]);
-              STATE.data.docs = nd;
-            }else{
-              var nc = [];
-              for (var m=0;m<(STATE.data.contacts||[]).length;m++) if (STATE.data.contacts[m].id !== x.id) nc.push(STATE.data.contacts[m]);
-              STATE.data.contacts = nc;
-            }
-            renderAll();
-            scheduleSave();
-            toast("Verwijderd");
-          });
-          actions.appendChild(del);
-
-          wrap.appendChild(left);
-          wrap.appendChild(actions);
-          box.appendChild(wrap);
-        })(list[i]);
-      }
-    }
-
-    function renderAll(){
-      var d = STATE.data || {};
-      if ($("homeEmergencyText")) $("homeEmergencyText").value = (d.emergency && d.emergency.text) ? d.emergency.text : "";
-      if ($("homeLizetPhone")) $("homeLizetPhone").value = (d.over && d.over.lizetPhone) ? d.over.lizetPhone : "";
-      if ($("homeMyName")) $("homeMyName").value = (d.over && d.over.myName) ? d.over.myName : "";
-
-      if ($("myName")) $("myName").value = (d.over && d.over.myName) ? d.over.myName : "";
-      if ($("lizetPhone")) $("lizetPhone").value = (d.over && d.over.lizetPhone) ? d.over.lizetPhone : "";
-      if ($("overviewText")) $("overviewText").value = (d.over && d.over.text) ? d.over.text : "";
-
-      if ($("notesText")) $("notesText").value = (d.notes && d.notes.text) ? d.notes.text : "";
-
-      renderList(d.docs || [], "docsList", "doc");
-      renderList(d.contacts || [], "contactsList", "contact");
-    }
-
     function exportAll(){
       try{
         var blob = JSON.stringify(STATE.data, null, 2);
@@ -785,22 +886,14 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
     }
 
     async function signIn(){
-      if (!STATE.firebaseOk){ toast("Firebase niet actief"); return; }
       var email = ($("email") && $("email").value ? $("email").value : "").trim();
       var pass = ($("password") && $("password").value ? $("password").value : "");
       if (!email || !pass){ toast("Vul e mail en wachtwoord in"); return; }
-      try{
-        await STATE.auth.signInWithEmailAndPassword(email, pass);
-      }catch(e){
-        setStatus("Login mislukt");
-        toast("Login mislukt");
-      }
+      try{ await auth.signInWithEmailAndPassword(email, pass); }
+      catch(e){ setStatus("Login mislukt"); toast("Login mislukt"); }
     }
 
-    async function signOutNow(){
-      if (!STATE.firebaseOk) return;
-      try{ await STATE.auth.signOut(); }catch(e){}
-    }
+    async function signOutNow(){ try{ await auth.signOut(); }catch(e){} }
 
     function bindAll(){
       on("btnCallLizet","click",function(){
@@ -832,7 +925,7 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
           lizetPhone: ($("lizetPhone") ? $("lizetPhone").value : "") || "",
           text: ($("overviewText") ? $("overviewText").value : "") || ""
         };
-        renderAll();
+        renderAllFromState();
         scheduleSave();
         toast("Opgeslagen");
       });
@@ -871,45 +964,58 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
         var type = $("addType") ? $("addType").value : "doc";
         var title = ($("addTitle") ? $("addTitle").value : "").trim();
         if (!title){ toast("Titel is leeg"); return; }
+
         var where = ($("addWhere") ? $("addWhere").value : "").trim();
         var extra = ($("addExtra") ? $("addExtra").value : "").trim();
         var note = ($("addNote") ? $("addNote").value : "").trim();
 
-        if (STATE.editId){
-          if (STATE.editKind === "doc"){
-            for (var i=0;i<(STATE.data.docs||[]).length;i++){
-              if (STATE.data.docs[i].id === STATE.editId){
-                STATE.data.docs[i] = { id:STATE.editId, name:title, where:where, extra:extra, note:note };
-              }
-            }
+        if (type === "web") where = safeUrl(where);
+
+        function upsert(arr, obj){
+          arr = arr || [];
+          if (STATE.editId){
+            arr = arr.map(function(i){ return (i.id === STATE.editId) ? obj : i; });
           }else{
-            for (var j=0;j<(STATE.data.contacts||[]).length;j++){
-              if (STATE.data.contacts[j].id === STATE.editId){
-                STATE.data.contacts[j] = { id:STATE.editId, name:title, where:where, phone:extra, note:note };
-              }
-            }
+            arr.unshift(obj);
           }
-          STATE.editId = null;
-          STATE.editKind = null;
-          toast("Aangepast");
-        }else{
-          if (type === "doc"){
-            (STATE.data.docs = STATE.data.docs || []).unshift({ id:uid(), name:title, where:where, extra:extra, note:note });
-            toast("Toegevoegd");
-          }else{
-            (STATE.data.contacts = STATE.data.contacts || []).unshift({ id:uid(), name:title, where:where, phone:extra, note:note });
-            toast("Toegevoegd");
-          }
+          return arr;
         }
+
+        if (type === "doc"){
+          var o1 = { id: STATE.editId || uid(), name: title, where: where, extra: extra, note: note };
+          STATE.data.docs = upsert(STATE.data.docs, o1);
+          showTab("tabDocs");
+        }
+
+        if (type === "contact"){
+          var o2 = { id: STATE.editId || uid(), name: title, where: where, phone: extra, note: note };
+          STATE.data.contacts = upsert(STATE.data.contacts, o2);
+          showTab("tabContacts");
+        }
+
+        if (type === "crypto"){
+          var o3 = { id: STATE.editId || uid(), name: title, where: where, login: extra, note: note };
+          STATE.data.cryptoApps = upsert(STATE.data.cryptoApps, o3);
+          showTab("tabCrypto");
+        }
+
+        if (type === "web"){
+          var o4 = { id: STATE.editId || uid(), name: title, url: where, login: extra, note: note };
+          STATE.data.websites = upsert(STATE.data.websites, o4);
+          showTab("tabWeb");
+        }
+
+        STATE.editId = null;
+        STATE.editKind = null;
 
         if ($("addTitle")) $("addTitle").value = "";
         if ($("addWhere")) $("addWhere").value = "";
         if ($("addExtra")) $("addExtra").value = "";
         if ($("addNote")) $("addNote").value = "";
 
-        renderAll();
+        renderAllFromState();
         scheduleSave();
-        showTab(type === "doc" ? "tabDocs" : "tabContacts");
+        toast("Opgeslagen");
       });
 
       on("addDoc","click",function(){
@@ -926,25 +1032,55 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
         showTab("tabAdd");
       });
 
+      on("addCrypto","click",function(){
+        if ($("addType")) $("addType").value = "crypto";
+        STATE.editId = null;
+        STATE.editKind = null;
+        showTab("tabAdd");
+      });
+
+      on("addWeb","click",function(){
+        if ($("addType")) $("addType").value = "web";
+        STATE.editId = null;
+        STATE.editKind = null;
+        showTab("tabAdd");
+      });
+
       on("exportDocs","click",function(){
         var out = ["DOCUMENTEN"];
-        for (var i=0;i<(STATE.data.docs||[]).length;i++){
-          var x = STATE.data.docs[i];
+        (STATE.data.docs||[]).forEach(function(x){
           out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
           if (x.extra) out.push("  Extra: " + x.extra);
           if (x.note) out.push("  Notitie: " + x.note);
-        }
+        });
         downloadText("documenten-tekst.txt", out.join("\n"));
       });
 
       on("exportContacts","click",function(){
         var out = ["CONTACTEN"];
-        for (var i=0;i<(STATE.data.contacts||[]).length;i++){
-          var x = STATE.data.contacts[i];
+        (STATE.data.contacts||[]).forEach(function(x){
           out.push("- " + (x.name||"") + " | Tel: " + (x.phone||"") + " | Waar: " + (x.where||""));
           if (x.note) out.push("  Notitie: " + x.note);
-        }
+        });
         downloadText("contacten-tekst.txt", out.join("\n"));
+      });
+
+      on("exportCrypto","click",function(){
+        var out = ["CRYPTO APPS"];
+        (STATE.data.cryptoApps||[]).forEach(function(x){
+          out.push("- " + (x.name||"") + " | Login: " + (x.login||"") + " | Waar: " + (x.where||""));
+          if (x.note) out.push("  Notitie: " + x.note);
+        });
+        downloadText("crypto-apps-tekst.txt", out.join("\n"));
+      });
+
+      on("exportWeb","click",function(){
+        var out = ["WEBSITES"];
+        (STATE.data.websites||[]).forEach(function(x){
+          out.push("- " + (x.name||"") + " | URL: " + (x.url||"") + " | Login: " + (x.login||""));
+          if (x.note) out.push("  Notitie: " + x.note);
+        });
+        downloadText("websites-tekst.txt", out.join("\n"));
       });
 
       on("btnLogin","click",signIn);
@@ -958,8 +1094,10 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
 
       on("btnUploadNow","click",async function(){
         STATE.sharedId = getSharedId();
+        if (!STATE.sharedId){ toast("Vul gedeelde code in"); return; }
+        if (!STATE.user){ toast("Log eerst in"); return; }
         await saveToCloud();
-        toast("Opslaan gedaan");
+        toast("Naar cloud gezet");
       });
 
       on("btnExport","click",exportAll);
@@ -974,9 +1112,9 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
           try{
             var obj = JSON.parse(reader.result);
             if (!obj){ toast("Ongeldig"); return; }
-            STATE.data = obj;
+            STATE.data = normalizeData(obj);
             saveLocal();
-            renderAll();
+            renderAllFromState();
             scheduleSave();
             toast("Geïmporteerd");
           }catch(e){ toast("Import mislukt"); }
@@ -986,9 +1124,17 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
 
       on("btnReset","click",function(){
         if (!confirm("Alles wissen")) return;
-        STATE.data = { emergency:{text:""}, over:{myName:"",lizetPhone:"",text:""}, docs:[], contacts:[], notes:{text:""} };
+        STATE.data = normalizeData({
+          emergency:{text:""},
+          over:{myName:"",lizetPhone:"",text:""},
+          docs:[],
+          contacts:[],
+          notes:{text:""},
+          cryptoApps:[],
+          websites:[]
+        });
         saveLocal();
-        renderAll();
+        renderAllFromState();
         scheduleSave();
         toast("Alles gewist");
       });
@@ -998,53 +1144,26 @@ Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en pl
       });
     }
 
-    function initFirebaseSafe(){
-      try{
-        if (!window.firebase || !firebase.initializeApp){
-          setStatus("Firebase scripts missen");
-          return;
-        }
-
-        var firebaseConfig = {
-          apiKey: "AIzaSyDRu2zH8nc41L2ymmSXoIlmXk4JL-g4BzM",
-          authDomain: "noodplan-rob.firebaseapp.com",
-          databaseURL: "https://noodplan-rob-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId: "noodplan-rob",
-          storageBucket: "noodplan-rob.firebasestorage.app",
-          messagingSenderId: "528144890958",
-          appId: "1:528144890958:web:77738ddfdc698ed440571f"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        STATE.auth = firebase.auth();
-        STATE.db = firebase.firestore();
-        STATE.firebaseOk = true;
-
-        STATE.auth.onAuthStateChanged(function(u){
-          STATE.user = u || null;
-          if (STATE.user){
-            setStatus("Ingelogd");
-            STATE.sharedId = getSharedId();
-            if (STATE.sharedId) startRealtime();
-          }else{
-            setStatus("Niet ingelogd");
-            if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
-          }
-        });
-      }catch(e){
-        STATE.firebaseOk = false;
-        setStatus("Firebase fout");
-      }
-    }
-
     function init(){
+      loadLocal();
+      STATE.data = normalizeData(STATE.data);
+      renderAllFromState();
       bindTabs();
       bindAll();
-      loadLocal();
-      renderAll();
+
       STATE.sharedId = getSharedId();
-      setStatus("Niet ingelogd");
-      initFirebaseSafe();
+
+      auth.onAuthStateChanged(async function(u){
+        STATE.user = u || null;
+        if (STATE.user){
+          setStatus("Ingelogd");
+          if (STATE.sharedId) await startRealtime();
+        }else{
+          setStatus("Niet ingelogd");
+          if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
+        }
+      });
+
       showTab("tabHome");
     }
 
