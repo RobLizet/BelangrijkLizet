@@ -16,10 +16,7 @@
       --border:rgba(255,255,255,.10);
       --text:#eaf0ff;
       --muted:#a9b7dd;
-
       --aqua:#43e2cf;
-      --aqua2:rgba(67,226,207,.14);
-
       --blue2:rgba(116,167,255,.14);
       --shadow: 0 18px 50px rgba(0,0,0,.45);
       --r:22px;
@@ -237,8 +234,10 @@
       </div>
 
       <div class="tabs" id="tabs">
-        <button class="tab active" data-tab="overzicht">Overzicht</button>
-        <button class="tab" data-tab="crypto">Crypto</button>
+        <button class="tab active" data-tab="login">Login</button>
+        <button class="tab" data-tab="overzicht">Overzicht</button>
+        <button class="tab" data-tab="crypto">Crypto sites</button>
+        <button class="tab" data-tab="cryptoapps">Crypto apps</button>
         <button class="tab" data-tab="wallets">Wallets</button>
         <button class="tab" data-tab="banken">Banken</button>
         <button class="tab" data-tab="documenten">Documenten</button>
@@ -248,46 +247,48 @@
 
     <div class="content">
 
-      <div class="box" style="margin-bottom:12px;">
-        <div class="boxHead">
-          <h2>Sync</h2>
-          <span class="badge" id="authState">Niet ingelogd</span>
-        </div>
-
-        <div class="boxBody">
-          <div class="grid2">
-            <div class="field">
-              <label>Gedeelde code</label>
-              <input id="sharedId" type="text" placeholder="RB-LZ-2026" />
-            </div>
-
-            <div class="field" id="fieldEmail">
-              <label>E mail</label>
-              <input id="loginEmail" type="email" placeholder="jij@..." />
-            </div>
+      <section class="section active" id="sec-login">
+        <div class="box">
+          <div class="boxHead">
+            <h2>Login en sync</h2>
+            <span class="badge" id="authState">Niet ingelogd</span>
           </div>
 
-          <div class="grid2" style="margin-top:12px;">
-            <div class="field" id="fieldPass">
-              <label>Wachtwoord</label>
-              <input id="loginPass" type="password" placeholder="••••••••" />
-            </div>
+          <div class="boxBody">
+            <div class="grid2">
+              <div class="field">
+                <label>Gedeelde code</label>
+                <input id="sharedId" type="text" placeholder="RB-LZ-2026" />
+              </div>
 
-            <div class="field">
-              <label>Actie</label>
-              <div class="btnRow" style="margin-top:0;">
-                <button class="btn primary" id="btnLogin">Inloggen</button>
-                <button class="btn" id="btnLogout">Uitloggen</button>
-                <button class="btn" id="btnSyncNow">Nu laden</button>
+              <div class="field">
+                <label>E mail</label>
+                <input id="loginEmail" type="email" placeholder="jij@..." />
               </div>
             </div>
+
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field">
+                <label>Wachtwoord</label>
+                <input id="loginPass" type="password" placeholder="••••••••" />
+              </div>
+
+              <div class="field">
+                <label>Actie</label>
+                <div class="btnRow" style="margin-top:0;">
+                  <button class="btn primary" id="btnLogin">Inloggen</button>
+                  <button class="btn" id="btnLogout">Uitloggen</button>
+                  <button class="btn" id="btnSyncNow">Nu laden</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="small" style="margin-top:10px;">Gebruik dezelfde gedeelde code op beide telefoons.</div>
           </div>
-
-          <div class="small" style="margin-top:10px;">Gebruik dezelfde gedeelde code op beide telefoons.</div>
         </div>
-      </div>
+      </section>
 
-      <section class="section active" id="sec-overzicht">
+      <section class="section" id="sec-overzicht">
         <div class="box">
           <div class="boxHead">
             <h2>Belangrijk</h2>
@@ -315,7 +316,7 @@
               <button class="btn" id="exportAll">Export alles</button>
             </div>
 
-            <div class="small" style="margin-top:10px;">Sync werkt pas na inloggen en een gedeelde code.</div>
+            <div class="small" style="margin-top:10px;">Made by Rob Borghouts 2026</div>
           </div>
         </div>
       </section>
@@ -336,6 +337,7 @@
                 <input id="cryptoUrl" type="text" placeholder="https://..." />
               </div>
             </div>
+
             <div class="field" style="margin-top:12px;">
               <label>Notitie</label>
               <input id="cryptoNote" type="text" placeholder="Bijv. 2FA via Authenticator op iPhone" />
@@ -348,6 +350,61 @@
 
             <div style="height:12px"></div>
             <div class="list" id="cryptoList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-cryptoapps">
+        <div class="box">
+          <div class="boxHead">
+            <h2>Crypto apps die nodig zijn</h2>
+            <span class="badge" id="countCApps">0 apps</span>
+          </div>
+          <div class="boxBody">
+            <div class="grid2">
+              <div class="field">
+                <label>App naam</label>
+                <input id="cappName" type="text" placeholder="Bijv. Ledger Live, MetaMask, Binance" />
+              </div>
+              <div class="field">
+                <label>App Store of website link</label>
+                <input id="cappUrl" type="text" placeholder="https://... of App Store link" />
+              </div>
+            </div>
+
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field">
+                <label>Open app link</label>
+                <input id="cappDeep" type="text" placeholder="Bijv. metamask:// of ledgerlive://, leeg is ook goed" />
+              </div>
+              <div class="field">
+                <label>Login methode</label>
+                <input id="cappLogin" type="text" placeholder="Bijv. e mail, Apple ID, alleen apparaat" />
+              </div>
+            </div>
+
+            <div class="grid2" style="margin-top:12px;">
+              <div class="field">
+                <label>2FA of extra</label>
+                <input id="capp2fa" type="text" placeholder="Bijv. Authenticator op iPhone, sms, geen" />
+              </div>
+              <div class="field">
+                <label>Notitie</label>
+                <input id="cappNote" type="text" placeholder="Bijv. welke account, waar de hardware wallet ligt" />
+              </div>
+            </div>
+
+            <div class="btnRow">
+              <button class="btn primary" id="addCApp">Toevoegen</button>
+              <button class="btn" id="clearCAppForm">Leegmaken</button>
+            </div>
+
+            <div class="small" style="margin-top:10px;">
+              Tip, als Open app link leeg is, probeert hij op basis van de app naam. Lukt dat niet, dan opent hij je App Store of website link.
+            </div>
+
+            <div style="height:12px"></div>
+            <div class="list" id="cappList"></div>
           </div>
         </div>
       </section>
@@ -385,8 +442,7 @@
           </div>
         </div>
       </section>
-
-      <section class="section" id="sec-banken">
+     <section class="section" id="sec-banken">
         <div class="box">
           <div class="boxHead">
             <h2>Banken en accounts</h2>
@@ -419,7 +475,8 @@
           </div>
         </div>
       </section>
-     <section class="section" id="sec-documenten">
+
+      <section class="section" id="sec-documenten">
         <div class="box">
           <div class="boxHead">
             <h2>Documenten en locaties</h2>
@@ -471,11 +528,10 @@
               <button class="btn" id="exportNotes">Export notities</button>
               <button class="btn danger" id="wipeAll">Alles wissen</button>
             </div>
-
-            <div class="small" style="margin-top:10px;">Made by Rob Borghouts 2026</div>
           </div>
         </div>
       </section>
+
     </div>
   </div>
 
@@ -594,27 +650,45 @@
       list.forEach(function(x){
         var icon = "🔗";
         var meta = "";
+
         if (kind === "wallet"){ icon = "👛"; meta = "📍 " + (x.where||""); }
         if (kind === "doc"){ icon = "📁"; meta = "📍 " + (x.where||""); }
         if (kind === "bank"){ icon = "🏦"; meta = (x.url ? "🔗 " + x.url : ""); }
         if (kind === "crypto"){ icon = "🪙"; meta = (x.url ? "🔗 " + x.url : ""); }
+        if (kind === "capp"){ icon = "📱"; meta = (x.url ? "🔗 " + x.url : ""); }
 
         html += '<div class="row">';
         html +=   '<div class="ico">'+icon+'</div>';
         html +=   '<div class="rBody">';
         html +=     '<div class="rTitle">'+esc(x.name||"")+'</div>';
-        html +=     '<div class="rMeta">'+esc(meta)+'</div>';
+        if (meta) html += '<div class="rMeta">'+esc(meta)+'</div>';
+
+        if (kind === "capp"){
+          var extra = [];
+          if (x.login) extra.push("Login: " + x.login);
+          if (x.fa) extra.push("2FA: " + x.fa);
+          if (extra.length) html += '<div class="rMeta" style="margin-top:6px;">'+esc(extra.join(" | "))+'</div>';
+          if (x.deep) html += '<div class="rMeta" style="margin-top:6px;">Open link: '+esc(x.deep)+'</div>';
+        }
+
         if (x.note){
           html +=   '<div class="rMeta" style="margin-top:6px;">📝 '+esc(x.note)+'</div>';
         }
         html +=   '</div>';
+
         html +=   '<div class="rActions">';
+
+        if (kind === "capp"){
+          html += '<div class="mini" title="Open app" data-openapp="'+esc(x.id)+'">📲</div>';
+        }
+
         if (x.url){
-          html += '<div class="mini" title="Open" data-open="'+esc(x.url)+'">↗</div>';
+          html += '<div class="mini" title="Open link" data-open="'+esc(x.url)+'">↗</div>';
         } else {
           html += '<div class="mini" style="opacity:.35;">↗</div>';
         }
-        html +=     '<div class="mini" title="Verwijder" data-del="'+x.id+'">🗑️</div>';
+
+        html +=     '<div class="mini" title="Verwijder" data-del="'+x.id+'" data-kind="'+kind+'">🗑️</div>';
         html +=   '</div>';
         html += '</div>';
       });
@@ -627,10 +701,18 @@
         });
       });
 
+      el.querySelectorAll(".mini[data-openapp]").forEach(function(b){
+        b.addEventListener("click", function(){
+          var id = parseInt(b.getAttribute("data-openapp"),10);
+          openCryptoAppById(id);
+        });
+      });
+
       el.querySelectorAll(".mini[data-del]").forEach(function(b){
         b.addEventListener("click", function(){
           var id = parseInt(b.getAttribute("data-del"),10);
-          removeItem(kind, id);
+          var k = b.getAttribute("data-kind");
+          removeItem(k, id);
         });
       });
     }
@@ -642,6 +724,7 @@
       data: {
         over: { myName:"", lizetPhone:"", text:"" },
         crypto: [],
+        cryptoApps: [],
         wallets: [],
         banks: [],
         docs: [],
@@ -658,6 +741,7 @@
       return {
         over: d.over || { myName:"", lizetPhone:"", text:"" },
         crypto: Array.isArray(d.crypto) ? d.crypto : [],
+        cryptoApps: Array.isArray(d.cryptoApps) ? d.cryptoApps : [],
         wallets: Array.isArray(d.wallets) ? d.wallets : [],
         banks: Array.isArray(d.banks) ? d.banks : [],
         docs: Array.isArray(d.docs) ? d.docs : [],
@@ -665,18 +749,8 @@
       };
     }
 
-    function toggleLoginFields(){
-      var on = !!STATE.user;
-      var fe = document.getElementById("fieldEmail");
-      var fp = document.getElementById("fieldPass");
-      if (fe) fe.style.display = on ? "none" : "";
-      if (fp) fp.style.display = on ? "none" : "";
-      if (on && $("loginPass")) $("loginPass").value = "";
-    }
-
     function setAuthState(){
       $("authState").textContent = STATE.user ? "Ingelogd" : "Niet ingelogd";
-      toggleLoginFields();
     }
 
     async function signIn(){
@@ -776,11 +850,13 @@
       $("freeNotes").value = (data.notes && data.notes.text) ? data.notes.text : "";
 
       $("countCrypto").textContent = data.crypto.length + " links";
+      $("countCApps").textContent = data.cryptoApps.length + " apps";
       $("countWallets").textContent = data.wallets.length + " items";
       $("countBanks").textContent = data.banks.length + " items";
       $("countDocs").textContent = data.docs.length + " items";
 
       renderList(data.crypto, "cryptoList", "crypto");
+      renderList(data.cryptoApps, "cappList", "capp");
       renderList(data.wallets, "walletList", "wallet");
       renderList(data.banks, "bankList", "bank");
       renderList(data.docs, "docList", "doc");
@@ -792,6 +868,7 @@
 
     function addItemToState(kind, obj){
       if (kind === "crypto") STATE.data.crypto.push(obj);
+      if (kind === "capp") STATE.data.cryptoApps.push(obj);
       if (kind === "wallet") STATE.data.wallets.push(obj);
       if (kind === "bank") STATE.data.banks.push(obj);
       if (kind === "doc") STATE.data.docs.push(obj);
@@ -801,12 +878,67 @@
 
     function removeItem(kind, id){
       if (kind === "crypto") STATE.data.crypto = STATE.data.crypto.filter(function(x){ return x.id !== id; });
+      if (kind === "capp") STATE.data.cryptoApps = STATE.data.cryptoApps.filter(function(x){ return x.id !== id; });
       if (kind === "wallet") STATE.data.wallets = STATE.data.wallets.filter(function(x){ return x.id !== id; });
       if (kind === "bank") STATE.data.banks = STATE.data.banks.filter(function(x){ return x.id !== id; });
       if (kind === "doc") STATE.data.docs = STATE.data.docs.filter(function(x){ return x.id !== id; });
       toast("Verwijderd");
       renderAllFromState();
       scheduleSave();
+    }
+
+    function getDefaultDeepLinkByName(name){
+      var n = String(name||"").toLowerCase().trim();
+      if (!n) return "";
+      if (n.includes("metamask")) return "metamask://";
+      if (n.includes("ledger")) return "ledgerlive://";
+      if (n.includes("trust")) return "trust://";
+      if (n.includes("coinbase")) return "coinbase://";
+      if (n.includes("binance")) return "binance://";
+      if (n.includes("kraken")) return "kraken://";
+      if (n.includes("crypto.com") || n === "cryptocom") return "crypto.com://";
+      return "";
+    }
+
+    function tryOpenApp(deep, fallbackUrl){
+      deep = String(deep||"").trim();
+      fallbackUrl = String(fallbackUrl||"").trim();
+
+      if (!deep && !fallbackUrl){
+        toast("Geen open link of fallback link");
+        return;
+      }
+
+      var didFallback = false;
+      var t = setTimeout(function(){
+        if (didFallback) return;
+        didFallback = true;
+        if (fallbackUrl) openUrl(fallbackUrl);
+      }, 900);
+
+      if (deep){
+        try{
+          window.location.href = deep;
+        }catch(e){
+          clearTimeout(t);
+          if (fallbackUrl) openUrl(fallbackUrl);
+        }
+      } else {
+        clearTimeout(t);
+        if (fallbackUrl) openUrl(fallbackUrl);
+      }
+    }
+
+    function openCryptoAppById(id){
+      var item = (STATE.data.cryptoApps || []).find(function(x){ return x.id === id; });
+      if (!item){ toast("App niet gevonden"); return; }
+      var deep = item.deep || getDefaultDeepLinkByName(item.name);
+      var fallback = item.url || "";
+      if (!deep && !fallback){
+        toast("Geen links ingevuld");
+        return;
+      }
+      tryOpenApp(deep, fallback);
     }
 
     function exportAll(){
@@ -824,6 +956,17 @@
       out.push("CRYPTO WEBSITES:");
       d.crypto.forEach(function(x){
         out.push("- " + (x.name||"") + " | " + (x.url||""));
+        if (x.note) out.push("  Notitie: " + x.note);
+      });
+      out.push("");
+      out.push("CRYPTO APPS:");
+      d.cryptoApps.forEach(function(x){
+        out.push("- " + (x.name||"") + " | " + (x.url||""));
+        var extra = [];
+        if (x.deep) extra.push("Open: " + x.deep);
+        if (x.login) extra.push("Login: " + x.login);
+        if (x.fa) extra.push("2FA: " + x.fa);
+        if (extra.length) out.push("  " + extra.join(" | "));
         if (x.note) out.push("  Notitie: " + x.note);
       });
       out.push("");
@@ -896,6 +1039,24 @@
 
       $("clearCryptoForm").addEventListener("click", function(){
         $("cryptoName").value=""; $("cryptoUrl").value=""; $("cryptoNote").value="";
+      });
+
+      $("addCApp").addEventListener("click", function(){
+        var name = ($("cappName").value||"").trim();
+        var url = cleanUrl($("cappUrl").value||"");
+        var deep = ($("cappDeep").value||"").trim();
+        var login = ($("cappLogin").value||"").trim();
+        var fa = ($("capp2fa").value||"").trim();
+        var note = ($("cappNote").value||"").trim();
+        if (!name){ toast("Vul app naam in"); return; }
+        if (!deep) deep = getDefaultDeepLinkByName(name);
+        addItemToState("capp", { id: nextId(), name:name, url:url, deep:deep, login:login, fa:fa, note:note });
+        $("cappName").value=""; $("cappUrl").value=""; $("cappDeep").value=""; $("cappLogin").value=""; $("capp2fa").value=""; $("cappNote").value="";
+        toast("Toegevoegd");
+      });
+
+      $("clearCAppForm").addEventListener("click", function(){
+        $("cappName").value=""; $("cappUrl").value=""; $("cappDeep").value=""; $("cappLogin").value=""; $("capp2fa").value=""; $("cappNote").value="";
       });
 
       $("addWallet").addEventListener("click", function(){
@@ -984,7 +1145,7 @@
           return;
         }
 
-        setStatus("Ingelogd, kies gedeelde code");
+        setStatus("Ingelogd, kies gedeelde code, druk Nu laden");
         STATE.sharedId = getSharedId();
         if (STATE.sharedId){
           await startRealtime();
@@ -1015,7 +1176,7 @@
       bindButtons();
       renderAllFromState();
       initFirebase();
-      setStatus("Klaar. Log in, zet gedeelde code, dan sync je met Lizet.");
+      setStatus("Klaar. Ga naar Login, log in, zet gedeelde code, druk Nu laden.");
     }
 
     init();
