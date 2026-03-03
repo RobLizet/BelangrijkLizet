@@ -34,7 +34,7 @@
         radial-gradient(900px 650px at 60% 110%, rgba(67,226,207,.15) 0%, transparent 60%),
         var(--bg);
       -webkit-font-smoothing:antialiased;
-      padding:14px 12px 90px 12px;
+      padding:14px 12px 110px 12px;
     }
 
     .app{max-width:980px;margin:0 auto}
@@ -90,7 +90,8 @@
       background: var(--blue2);
     }
 
-    .content{padding:12px 6px 0 6px}
+    .content{padding:12px 6px 190px 6px}
+
     .section{display:none}
     .section.active{display:block}
 
@@ -129,7 +130,7 @@
     .field label{
       display:block;color:var(--muted);font-weight:900;font-size:.9rem;margin:0 0 6px 0;
     }
-    .field input, .field textarea{
+    .field input, .field textarea, .field select{
       width:100%;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
@@ -194,7 +195,7 @@
 
     .bottomBar{
       position:fixed;left:0;right:0;bottom:0;z-index:6;
-      padding:10px 12px 12px 12px;
+      padding:10px 12px calc(12px + env(safe-area-inset-bottom)) 12px;
       background: linear-gradient(180deg, rgba(7,16,35,0), rgba(7,16,35,.85) 30%, rgba(7,16,35,.95));
       backdrop-filter: blur(12px);
     }
@@ -210,7 +211,7 @@
     .small{color:var(--muted);font-weight:800;font-size:.9rem}
 
     .toast{
-      position:fixed;left:50%;bottom:90px;transform: translateX(-50%);
+      position:fixed;left:50%;bottom:100px;transform: translateX(-50%);
       border:1px solid rgba(255,255,255,.10);
       background: rgba(12,24,52,.92);
       padding:10px 12px;border-radius:16px;
@@ -222,6 +223,14 @@
       z-index:20;
     }
     .toast.show{opacity:1}
+
+    .hintBox{
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      border-radius:18px;
+      padding:12px;
+      margin-top:12px;
+    }
   </style>
 </head>
 
@@ -235,6 +244,7 @@
 
       <div class="tabs" id="tabs">
         <button class="tab active" data-tab="login">Login</button>
+        <button class="tab" data-tab="toevoegen">Toevoegen</button>
         <button class="tab" data-tab="overzicht">Overzicht</button>
         <button class="tab" data-tab="crypto">Crypto sites</button>
         <button class="tab" data-tab="cryptoapps">Crypto apps</button>
@@ -283,7 +293,41 @@
               </div>
             </div>
 
-            <div class="small" style="margin-top:10px;">Gebruik dezelfde gedeelde code op beide telefoons.</div>
+            <div class="hintBox">
+              <div class="small">Alles wordt lokaal bewaard op je telefoon.</div>
+              <div class="small">Voor sync met Lizet, log in en gebruik dezelfde gedeelde code op beide telefoons.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-toevoegen">
+        <div class="box">
+          <div class="boxHead">
+            <h2>Toevoegen</h2>
+            <span class="badge">Kies type, vul in</span>
+          </div>
+
+          <div class="boxBody">
+            <div class="field">
+              <label>Wat wil je toevoegen</label>
+              <select id="addType">
+                <option value="crypto">Crypto website</option>
+                <option value="capp">Crypto app</option>
+                <option value="wallet">Wallet</option>
+                <option value="bank">Bank</option>
+                <option value="doc">Document</option>
+              </select>
+            </div>
+
+            <div id="addFields" style="margin-top:12px;"></div>
+
+            <div class="btnRow">
+              <button class="btn primary" id="btnAddNow">Toevoegen</button>
+              <button class="btn" id="btnAddClear">Leegmaken</button>
+            </div>
+
+            <div class="small" style="margin-top:10px;">Na toevoegen zie je het meteen terug in het juiste tabblad.</div>
           </div>
         </div>
       </section>
@@ -327,29 +371,10 @@
             <span class="badge" id="countCrypto">0 links</span>
           </div>
           <div class="boxBody">
-            <div class="grid2">
-              <div class="field">
-                <label>Naam</label>
-                <input id="cryptoName" type="text" placeholder="Bijv. DevvExchange, CoinMarketCap" />
-              </div>
-              <div class="field">
-                <label>Link</label>
-                <input id="cryptoUrl" type="text" placeholder="https://..." />
-              </div>
-            </div>
-
-            <div class="field" style="margin-top:12px;">
-              <label>Notitie</label>
-              <input id="cryptoNote" type="text" placeholder="Bijv. 2FA via Authenticator op iPhone" />
-            </div>
-
-            <div class="btnRow">
-              <button class="btn primary" id="addCrypto">Toevoegen</button>
-              <button class="btn" id="clearCryptoForm">Leegmaken</button>
-            </div>
-
-            <div style="height:12px"></div>
             <div class="list" id="cryptoList"></div>
+            <div class="hintBox">
+              <div class="small">Toevoegen doe je via tab Toevoegen.</div>
+            </div>
           </div>
         </div>
       </section>
@@ -357,54 +382,15 @@
       <section class="section" id="sec-cryptoapps">
         <div class="box">
           <div class="boxHead">
-            <h2>Crypto apps die nodig zijn</h2>
+            <h2>Crypto apps</h2>
             <span class="badge" id="countCApps">0 apps</span>
           </div>
           <div class="boxBody">
-            <div class="grid2">
-              <div class="field">
-                <label>App naam</label>
-                <input id="cappName" type="text" placeholder="Bijv. Ledger Live, MetaMask, Binance" />
-              </div>
-              <div class="field">
-                <label>App Store of website link</label>
-                <input id="cappUrl" type="text" placeholder="https://... of App Store link" />
-              </div>
-            </div>
-
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field">
-                <label>Open app link</label>
-                <input id="cappDeep" type="text" placeholder="Bijv. metamask:// of ledgerlive://, leeg is ook goed" />
-              </div>
-              <div class="field">
-                <label>Login methode</label>
-                <input id="cappLogin" type="text" placeholder="Bijv. e mail, Apple ID, alleen apparaat" />
-              </div>
-            </div>
-
-            <div class="grid2" style="margin-top:12px;">
-              <div class="field">
-                <label>2FA of extra</label>
-                <input id="capp2fa" type="text" placeholder="Bijv. Authenticator op iPhone, sms, geen" />
-              </div>
-              <div class="field">
-                <label>Notitie</label>
-                <input id="cappNote" type="text" placeholder="Bijv. welke account, waar de hardware wallet ligt" />
-              </div>
-            </div>
-
-            <div class="btnRow">
-              <button class="btn primary" id="addCApp">Toevoegen</button>
-              <button class="btn" id="clearCAppForm">Leegmaken</button>
-            </div>
-
-            <div class="small" style="margin-top:10px;">
-              Tip, als Open app link leeg is, probeert hij op basis van de app naam. Lukt dat niet, dan opent hij je App Store of website link.
-            </div>
-
-            <div style="height:12px"></div>
             <div class="list" id="cappList"></div>
+            <div class="hintBox">
+              <div class="small">📲 opent eerst de app. Als dat niet lukt opent hij je App Store of website link.</div>
+              <div class="small">Toevoegen doe je via tab Toevoegen.</div>
+            </div>
           </div>
         </div>
       </section>
@@ -416,62 +402,25 @@
             <span class="badge" id="countWallets">0 items</span>
           </div>
           <div class="boxBody">
-            <div class="grid2">
-              <div class="field">
-                <label>Naam</label>
-                <input id="walletName" type="text" placeholder="Bijv. Ledger Nano X, Ledger Stax, MetaMask" />
-              </div>
-              <div class="field">
-                <label>Waar ligt het</label>
-                <input id="walletWhere" type="text" placeholder="Bijv. kluis, lade bureau" />
-              </div>
-            </div>
-
-            <div class="field" style="margin-top:12px;">
-              <label>Notitie</label>
-              <input id="walletNote" type="text" placeholder="Bijv. pincode staat in envelop" />
-            </div>
-
-            <div class="btnRow">
-              <button class="btn primary" id="addWallet">Toevoegen</button>
-              <button class="btn" id="clearWalletForm">Leegmaken</button>
-            </div>
-
-            <div style="height:12px"></div>
             <div class="list" id="walletList"></div>
+            <div class="hintBox">
+              <div class="small">Toevoegen doe je via tab Toevoegen.</div>
+            </div>
           </div>
         </div>
       </section>
-     <section class="section" id="sec-banken">
+
+      <section class="section" id="sec-banken">
         <div class="box">
           <div class="boxHead">
-            <h2>Banken en accounts</h2>
+            <h2>Banken</h2>
             <span class="badge" id="countBanks">0 items</span>
           </div>
           <div class="boxBody">
-            <div class="grid2">
-              <div class="field">
-                <label>Naam</label>
-                <input id="bankName" type="text" placeholder="Bijv. ING, Rabobank, PayPal" />
-              </div>
-              <div class="field">
-                <label>Link</label>
-                <input id="bankUrl" type="text" placeholder="https://..." />
-              </div>
-            </div>
-
-            <div class="field" style="margin-top:12px;">
-              <label>Notitie</label>
-              <input id="bankNote" type="text" placeholder="Bijv. inloggen via app, 2FA" />
-            </div>
-
-            <div class="btnRow">
-              <button class="btn primary" id="addBank">Toevoegen</button>
-              <button class="btn" id="clearBankForm">Leegmaken</button>
-            </div>
-
-            <div style="height:12px"></div>
             <div class="list" id="bankList"></div>
+            <div class="hintBox">
+              <div class="small">Toevoegen doe je via tab Toevoegen.</div>
+            </div>
           </div>
         </div>
       </section>
@@ -479,34 +428,20 @@
       <section class="section" id="sec-documenten">
         <div class="box">
           <div class="boxHead">
-            <h2>Documenten en locaties</h2>
+            <h2>Documenten</h2>
             <span class="badge" id="countDocs">0 items</span>
           </div>
           <div class="boxBody">
-            <div class="grid2">
-              <div class="field">
-                <label>Wat</label>
-                <input id="docName" type="text" placeholder="Bijv. paspoorten, verzekeringsmap, testament" />
-              </div>
-              <div class="field">
-                <label>Waar</label>
-                <input id="docWhere" type="text" placeholder="Bijv. map kast, kluis, garagebox" />
-              </div>
-            </div>
-
-            <div class="field" style="margin-top:12px;">
-              <label>Notitie</label>
-              <input id="docNote" type="text" placeholder="Bijv. sleutel ligt bij..." />
-            </div>
-
-            <div class="btnRow">
-              <button class="btn primary" id="addDoc">Toevoegen</button>
-              <button class="btn" id="clearDocForm">Leegmaken</button>
+            <div class="btnRow" style="margin-top:0;">
               <button class="btn" id="exportDocs">Export documenten</button>
             </div>
 
             <div style="height:12px"></div>
             <div class="list" id="docList"></div>
+
+            <div class="hintBox">
+              <div class="small">Toevoegen doe je via tab Toevoegen.</div>
+            </div>
           </div>
         </div>
       </section>
@@ -614,6 +549,7 @@
       var sec = $("sec-"+tab);
       if (sec) sec.classList.add("active");
       window.scrollTo({ top: 0, behavior:"smooth" });
+      if (tab === "toevoegen") refreshAddForm();
     }
 
     function bindTabs(){
@@ -672,7 +608,7 @@
         }
 
         if (x.note){
-          html +=   '<div class="rMeta" style="margin-top:6px;">📝 '+esc(x.note)+'</div>';
+          html += '<div class="rMeta" style="margin-top:6px;">📝 '+esc(x.note)+'</div>';
         }
         html +=   '</div>';
 
@@ -732,7 +668,7 @@
       }
     };
 
-    const LOCAL_KEY = "noodplan_rob_v1";
+    const LOCAL_KEY = "noodplan_rob_v2";
 
     function getSharedId(){
       return ($("sharedId").value || "").trim();
@@ -881,9 +817,7 @@
       renderList(data.docs, "docList", "doc");
     }
 
-    function nextId(){
-      return Date.now();
-    }
+    function nextId(){ return Date.now(); }
 
     function addItemToState(kind, obj){
       if (kind === "crypto") STATE.data.crypto.push(obj);
@@ -924,7 +858,7 @@
       fallbackUrl = String(fallbackUrl||"").trim();
 
       if (!deep && !fallbackUrl){
-        toast("Geen open link of fallback link");
+        toast("Geen open link of link");
         return;
       }
 
@@ -1015,6 +949,118 @@
       toast("Export gemaakt");
       setStatus("Export gemaakt");
     }
+  </script>
+ <script>
+    function addFieldsHtml(type){
+      if (type === "crypto"){
+        return ''
+        + '<div class="grid2">'
+        + '  <div class="field"><label>Naam</label><input id="add_name" type="text" placeholder="Bijv. DevvExchange, CoinMarketCap" /></div>'
+        + '  <div class="field"><label>Link</label><input id="add_url" type="text" placeholder="https://..." /></div>'
+        + '</div>'
+        + '<div class="field" style="margin-top:12px;"><label>Notitie</label><input id="add_note" type="text" placeholder="Bijv. 2FA via Authenticator op iPhone" /></div>';
+      }
+
+      if (type === "capp"){
+        return ''
+        + '<div class="grid2">'
+        + '  <div class="field"><label>App naam</label><input id="add_name" type="text" placeholder="Bijv. Ledger Live, MetaMask, Binance" /></div>'
+        + '  <div class="field"><label>App Store of website link</label><input id="add_url" type="text" placeholder="https://... of App Store link" /></div>'
+        + '</div>'
+        + '<div class="grid2" style="margin-top:12px;">'
+        + '  <div class="field"><label>Open app link</label><input id="add_deep" type="text" placeholder="Bijv. metamask:// of ledgerlive://, leeg is ook goed" /></div>'
+        + '  <div class="field"><label>Login methode</label><input id="add_login" type="text" placeholder="Bijv. e mail, Apple ID, alleen apparaat" /></div>'
+        + '</div>'
+        + '<div class="grid2" style="margin-top:12px;">'
+        + '  <div class="field"><label>2FA of extra</label><input id="add_2fa" type="text" placeholder="Bijv. Authenticator op iPhone, sms, geen" /></div>'
+        + '  <div class="field"><label>Notitie</label><input id="add_note" type="text" placeholder="Bijv. welke account, waar de hardware wallet ligt" /></div>'
+        + '</div>';
+      }
+
+      if (type === "wallet"){
+        return ''
+        + '<div class="grid2">'
+        + '  <div class="field"><label>Naam</label><input id="add_name" type="text" placeholder="Bijv. Ledger Nano X, Ledger Stax, MetaMask" /></div>'
+        + '  <div class="field"><label>Waar ligt het</label><input id="add_where" type="text" placeholder="Bijv. kluis, lade bureau" /></div>'
+        + '</div>'
+        + '<div class="field" style="margin-top:12px;"><label>Notitie</label><input id="add_note" type="text" placeholder="Bijv. pincode staat in envelop" /></div>';
+      }
+
+      if (type === "bank"){
+        return ''
+        + '<div class="grid2">'
+        + '  <div class="field"><label>Naam</label><input id="add_name" type="text" placeholder="Bijv. ING, Rabobank, PayPal" /></div>'
+        + '  <div class="field"><label>Link</label><input id="add_url" type="text" placeholder="https://..." /></div>'
+        + '</div>'
+        + '<div class="field" style="margin-top:12px;"><label>Notitie</label><input id="add_note" type="text" placeholder="Bijv. inloggen via app, 2FA" /></div>';
+      }
+
+      return ''
+      + '<div class="grid2">'
+      + '  <div class="field"><label>Wat</label><input id="add_name" type="text" placeholder="Bijv. paspoorten, verzekeringsmap, testament" /></div>'
+      + '  <div class="field"><label>Waar</label><input id="add_where" type="text" placeholder="Bijv. map kast, kluis, garagebox" /></div>'
+      + '</div>'
+      + '<div class="field" style="margin-top:12px;"><label>Notitie</label><input id="add_note" type="text" placeholder="Bijv. sleutel ligt bij..." /></div>';
+    }
+
+    function refreshAddForm(){
+      var t = $("addType").value;
+      $("addFields").innerHTML = addFieldsHtml(t);
+    }
+
+    function clearAddForm(){
+      refreshAddForm();
+    }
+
+    function addFromAddTab(){
+      var type = $("addType").value;
+
+      var name = ($("add_name") ? $("add_name").value : "").trim();
+      var url = ($("add_url") ? cleanUrl($("add_url").value||"") : "");
+      var where = ($("add_where") ? ($("add_where").value||"").trim() : "");
+      var note = ($("add_note") ? ($("add_note").value||"").trim() : "");
+
+      if (type === "crypto"){
+        if (!name || !url){ toast("Vul naam en link in"); return; }
+        addItemToState("crypto", { id: nextId(), name:name, url:url, note:note });
+        toast("Toegevoegd");
+        setActiveTab("crypto");
+        return;
+      }
+
+      if (type === "capp"){
+        var deep = ($("add_deep") ? ($("add_deep").value||"").trim() : "");
+        var login = ($("add_login") ? ($("add_login").value||"").trim() : "");
+        var fa = ($("add_2fa") ? ($("add_2fa").value||"").trim() : "");
+        if (!name){ toast("Vul app naam in"); return; }
+        if (!deep) deep = getDefaultDeepLinkByName(name);
+        addItemToState("capp", { id: nextId(), name:name, url:url, deep:deep, login:login, fa:fa, note:note });
+        toast("Toegevoegd");
+        setActiveTab("cryptoapps");
+        return;
+      }
+
+      if (type === "wallet"){
+        if (!name || !where){ toast("Vul naam en waar in"); return; }
+        addItemToState("wallet", { id: nextId(), name:name, where:where, note:note });
+        toast("Toegevoegd");
+        setActiveTab("wallets");
+        return;
+      }
+
+      if (type === "bank"){
+        if (!name || !url){ toast("Vul naam en link in"); return; }
+        addItemToState("bank", { id: nextId(), name:name, url:url, note:note });
+        toast("Toegevoegd");
+        setActiveTab("banken");
+        return;
+      }
+
+      if (!name || !where){ toast("Vul wat en waar in"); return; }
+      addItemToState("doc", { id: nextId(), name:name, where:where, note:note });
+      toast("Toegevoegd");
+      setActiveTab("documenten");
+    }
 
     function bindButtons(){
       $("btnLogin").addEventListener("click", signIn);
@@ -1045,80 +1091,6 @@
 
       $("exportAll").addEventListener("click", exportAll);
       $("exportQuick").addEventListener("click", exportAll);
-
-      $("addCrypto").addEventListener("click", function(){
-        var name = ($("cryptoName").value||"").trim();
-        var url = cleanUrl($("cryptoUrl").value||"");
-        var note = ($("cryptoNote").value||"").trim();
-        if (!name || !url){ toast("Vul naam en link in"); return; }
-        addItemToState("crypto", { id: nextId(), name:name, url:url, note:note });
-        $("cryptoName").value=""; $("cryptoUrl").value=""; $("cryptoNote").value="";
-        toast("Toegevoegd");
-      });
-
-      $("clearCryptoForm").addEventListener("click", function(){
-        $("cryptoName").value=""; $("cryptoUrl").value=""; $("cryptoNote").value="";
-      });
-
-      $("addCApp").addEventListener("click", function(){
-        var name = ($("cappName").value||"").trim();
-        var url = cleanUrl($("cappUrl").value||"");
-        var deep = ($("cappDeep").value||"").trim();
-        var login = ($("cappLogin").value||"").trim();
-        var fa = ($("capp2fa").value||"").trim();
-        var note = ($("cappNote").value||"").trim();
-        if (!name){ toast("Vul app naam in"); return; }
-        if (!deep) deep = getDefaultDeepLinkByName(name);
-        addItemToState("capp", { id: nextId(), name:name, url:url, deep:deep, login:login, fa:fa, note:note });
-        $("cappName").value=""; $("cappUrl").value=""; $("cappDeep").value=""; $("cappLogin").value=""; $("capp2fa").value=""; $("cappNote").value="";
-        toast("Toegevoegd");
-      });
-
-      $("clearCAppForm").addEventListener("click", function(){
-        $("cappName").value=""; $("cappUrl").value=""; $("cappDeep").value=""; $("cappLogin").value=""; $("capp2fa").value=""; $("cappNote").value="";
-      });
-
-      $("addWallet").addEventListener("click", function(){
-        var name = ($("walletName").value||"").trim();
-        var where = ($("walletWhere").value||"").trim();
-        var note = ($("walletNote").value||"").trim();
-        if (!name || !where){ toast("Vul naam en waar in"); return; }
-        addItemToState("wallet", { id: nextId(), name:name, where:where, note:note });
-        $("walletName").value=""; $("walletWhere").value=""; $("walletNote").value="";
-        toast("Toegevoegd");
-      });
-
-      $("clearWalletForm").addEventListener("click", function(){
-        $("walletName").value=""; $("walletWhere").value=""; $("walletNote").value="";
-      });
-
-      $("addBank").addEventListener("click", function(){
-        var name = ($("bankName").value||"").trim();
-        var url = cleanUrl($("bankUrl").value||"");
-        var note = ($("bankNote").value||"").trim();
-        if (!name || !url){ toast("Vul naam en link in"); return; }
-        addItemToState("bank", { id: nextId(), name:name, url:url, note:note });
-        $("bankName").value=""; $("bankUrl").value=""; $("bankNote").value="";
-        toast("Toegevoegd");
-      });
-
-      $("clearBankForm").addEventListener("click", function(){
-        $("bankName").value=""; $("bankUrl").value=""; $("bankNote").value="";
-      });
-
-      $("addDoc").addEventListener("click", function(){
-        var name = ($("docName").value||"").trim();
-        var where = ($("docWhere").value||"").trim();
-        var note = ($("docNote").value||"").trim();
-        if (!name || !where){ toast("Vul wat en waar in"); return; }
-        addItemToState("doc", { id: nextId(), name:name, where:where, note:note });
-        $("docName").value=""; $("docWhere").value=""; $("docNote").value="";
-        toast("Toegevoegd");
-      });
-
-      $("clearDocForm").addEventListener("click", function(){
-        $("docName").value=""; $("docWhere").value=""; $("docNote").value="";
-      });
 
       $("exportDocs").addEventListener("click", function(){
         var d = STATE.data;
@@ -1151,6 +1123,10 @@
         scheduleSave();
         toast("Alles gewist");
       });
+
+      $("addType").addEventListener("change", refreshAddForm);
+      $("btnAddNow").addEventListener("click", addFromAddTab);
+      $("btnAddClear").addEventListener("click", clearAddForm);
     }
 
     function initFirebase(){
@@ -1160,7 +1136,7 @@
 
         if (!STATE.user){
           if (unsub) { unsub(); unsub = null; }
-          setStatus("Niet ingelogd. Lokaal opslaan werkt wel. Voor sync met Lizet, log in en gebruik gedeelde code.");
+          setStatus("Niet ingelogd. Lokaal opslaan werkt. Voor sync met Lizet, log in en gebruik gedeelde code.");
           return;
         }
 
@@ -1195,8 +1171,9 @@
       bindButtons();
       loadLocal();
       renderAllFromState();
+      refreshAddForm();
       initFirebase();
-      setStatus("Klaar. Alles wordt lokaal bewaard. Voor sync met Lizet, ga naar Login.");
+      setStatus("Klaar. Voeg items toe via Toevoegen. Alles blijft lokaal bewaard.");
     }
 
     init();
