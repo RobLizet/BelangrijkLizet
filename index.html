@@ -583,7 +583,7 @@
 
     function esc(s){
       return String(s||"").replace(/[&<>"']/g,function(m){
-        return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" })[m];
+        return ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" })[m];
       });
     }
 
@@ -732,6 +732,8 @@
       }
     };
 
+    const LOCAL_KEY = "noodplan_rob_v1";
+
     function getSharedId(){
       return ($("sharedId").value || "").trim();
     }
@@ -747,6 +749,20 @@
         docs: Array.isArray(d.docs) ? d.docs : [],
         notes: d.notes || { text:"" }
       };
+    }
+
+    function saveLocal(){
+      try{
+        localStorage.setItem(LOCAL_KEY, JSON.stringify(STATE.data));
+      }catch(e){}
+    }
+
+    function loadLocal(){
+      try{
+        var raw = localStorage.getItem(LOCAL_KEY);
+        if (!raw) return;
+        STATE.data = normalizeData(JSON.parse(raw));
+      }catch(e){}
     }
 
     function setAuthState(){
@@ -794,6 +810,7 @@
       unsub = ref.onSnapshot(function(snap){
         if (!snap.exists) return;
         STATE.data = normalizeData(snap.data());
+        saveLocal();
         renderAllFromState();
         setStatus("Sync bijgewerkt");
       }, function(err){
@@ -812,6 +829,7 @@
           return;
         }
         STATE.data = normalizeData(snap.data());
+        saveLocal();
         renderAllFromState();
         toast("Geladen");
         setStatus("Geladen");
@@ -826,6 +844,7 @@
     function scheduleSave(){
       clearTimeout(saveTimer);
       saveTimer = setTimeout(saveToCloud, 450);
+      saveLocal();
     }
 
     async function saveToCloud(){
@@ -1141,11 +1160,11 @@
 
         if (!STATE.user){
           if (unsub) { unsub(); unsub = null; }
-          setStatus("Log in om te syncen");
+          setStatus("Niet ingelogd. Lokaal opslaan werkt wel. Voor sync met Lizet, log in en gebruik gedeelde code.");
           return;
         }
 
-        setStatus("Ingelogd, kies gedeelde code, druk Nu laden");
+        setStatus("Ingelogd. Zet gedeelde code en druk Nu laden.");
         STATE.sharedId = getSharedId();
         if (STATE.sharedId){
           await startRealtime();
@@ -1174,9 +1193,10 @@
       setDate();
       bindTabs();
       bindButtons();
+      loadLocal();
       renderAllFromState();
       initFirebase();
-      setStatus("Klaar. Ga naar Login, log in, zet gedeelde code, druk Nu laden.");
+      setStatus("Klaar. Alles wordt lokaal bewaard. Voor sync met Lizet, ga naar Login.");
     }
 
     init();
