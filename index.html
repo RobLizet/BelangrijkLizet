@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
@@ -6,9 +7,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <title>Noodmap Rob</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700;900&display=swap" rel="stylesheet" />
-  <style>
+
+ <style>
     :root{
       --bg:#071023;
       --panel:rgba(255,255,255,.06);
@@ -169,6 +172,7 @@
     }
     .footerNote{margin-top:14px;color:var(--muted);font-size:.82rem;text-align:center;opacity:.95}
   </style>
+
 </head>
 <body>
   <div class="app">
@@ -179,19 +183,20 @@
           <h1>Noodmap Rob</h1>
         </div>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-          <div class="chip" id="chipSync"><span class="dot off" id="dotSync"></span><span id="syncText">Niet ingelogd</span></div>
+          <div class="chip"><span class="dot off" id="dotSync"></span><span id="syncText">Niet ingelogd</span></div>
           <div class="chip"><span class="kbd" id="sharedIdChip">Code</span></div>
         </div>
       </div>
+
  <div class="tabs">
-    <button class="tabBtn active" data-tab="tabHome">Start</button>
-    <button class="tabBtn" data-tab="tabOverview">Overzicht</button>
-    <button class="tabBtn" data-tab="tabDocs">Documenten</button>
-    <button class="tabBtn" data-tab="tabContacts">Contacten</button>
-    <button class="tabBtn" data-tab="tabNotes">Notities</button>
-    <button class="tabBtn" data-tab="tabAdd">Toevoegen</button>
-    <button class="tabBtn" data-tab="tabLogin">Login</button>
-    <button class="tabBtn" data-tab="tabBackup">Backup</button>
+    <button type="button" class="tabBtn active" data-tab="tabHome">Start</button>
+    <button type="button" class="tabBtn" data-tab="tabOverview">Overzicht</button>
+    <button type="button" class="tabBtn" data-tab="tabDocs">Documenten</button>
+    <button type="button" class="tabBtn" data-tab="tabContacts">Contacten</button>
+    <button type="button" class="tabBtn" data-tab="tabNotes">Notities</button>
+    <button type="button" class="tabBtn" data-tab="tabAdd">Toevoegen</button>
+    <button type="button" class="tabBtn" data-tab="tabLogin">Login</button>
+    <button type="button" class="tabBtn" data-tab="tabBackup">Backup</button>
   </div>
 </div>
 
@@ -202,7 +207,7 @@
         <h2>Start</h2>
         <div class="sub">Snel overzicht en acties</div>
       </div>
-      <button class="btn" id="exportQuick">Export alles</button>
+      <button type="button" class="btn" id="exportQuick">Export alles</button>
     </div>
     <div class="cardBody">
       <div class="row cols2">
@@ -225,8 +230,8 @@
               </div>
             </div>
             <div class="btnBar">
-              <button class="btn primary" id="btnCallLizet">Bel Lizet</button>
-              <button class="btn" id="btnSmsLizet">SMS Lizet</button>
+              <button type="button" class="btn primary" id="btnCallLizet">Bel Lizet</button>
+              <button type="button" class="btn" id="btnSmsLizet">SMS Lizet</button>
             </div>
           </div>
         </div>
@@ -242,8 +247,8 @@
             <label>Korte noodtekst</label>
             <textarea id="homeEmergencyText" placeholder="Bijv. medicatie, allergieën, contactpersonen."></textarea>
             <div class="btnBar">
-              <button class="btn primary" id="saveEmergency">Opslaan</button>
-              <button class="btn" id="copyEmergency">Kopieer</button>
+              <button type="button" class="btn primary" id="saveEmergency">Opslaan</button>
+              <button type="button" class="btn" id="copyEmergency">Kopieer</button>
             </div>
           </div>
         </div>
@@ -282,8 +287,8 @@
         <textarea id="overviewText" placeholder="Diagnoses, medicatie, huisarts, belangrijke notities."></textarea>
       </div>
       <div class="btnBar">
-        <button class="btn primary" id="saveOverview">Opslaan</button>
-        <button class="btn" id="copyOverview">Kopieer</button>
+        <button type="button" class="btn primary" id="saveOverview">Opslaan</button>
+        <button type="button" class="btn" id="copyOverview">Kopieer</button>
       </div>
     </div>
   </div>
@@ -298,12 +303,29 @@
     <div class="cardBody">
       <div class="list" id="docsList"></div>
       <div class="btnBar">
-        <button class="btn" id="addDoc">Nieuw document</button>
-        <button class="btn" id="exportDocs">Export documenten</button>
+        <button type="button" class="btn" id="addDoc">Nieuw document</button>
+        <button type="button" class="btn" id="exportDocs">Export documenten</button>
       </div>
     </div>
   </div>
- <div class="card" id="tabNotes" style="display:none">
+
+  <div class="card" id="tabContacts" style="display:none">
+    <div class="cardHeader">
+      <div>
+        <h2>Contacten</h2>
+        <div class="sub">Belangrijk voor nood</div>
+      </div>
+    </div>
+    <div class="cardBody">
+      <div class="list" id="contactsList"></div>
+      <div class="btnBar">
+        <button type="button" class="btn" id="addContact">Nieuw contact</button>
+        <button type="button" class="btn" id="exportContacts">Export contacten</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="tabNotes" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Notities</h2>
@@ -314,8 +336,8 @@
       <label>Notities</label>
       <textarea id="notesText" placeholder="Schrijf hier alles wat handig is."></textarea>
       <div class="btnBar">
-        <button class="btn primary" id="saveNotes">Opslaan</button>
-        <button class="btn" id="copyNotes">Kopieer</button>
+        <button type="button" class="btn primary" id="saveNotes">Opslaan</button>
+        <button type="button" class="btn" id="copyNotes">Kopieer</button>
       </div>
     </div>
   </div>
@@ -359,8 +381,8 @@
       </div>
 
       <div class="btnBar">
-        <button class="btn primary" id="addSave">Opslaan</button>
-        <button class="btn danger" id="addClear">Leegmaken</button>
+        <button type="button" class="btn primary" id="addSave">Opslaan</button>
+        <button type="button" class="btn danger" id="addClear">Leegmaken</button>
       </div>
 
       <div class="hintBox">
@@ -402,10 +424,10 @@
       </div>
 
       <div class="btnBar">
-        <button class="btn primary" id="btnLogin">Inloggen</button>
-        <button class="btn" id="btnLogout">Uitloggen</button>
-        <button class="btn" id="btnUploadNow">Nu opslaan</button>
-        <button class="btn" id="btnSyncNow">Nu laden</button>
+        <button type="button" class="btn primary" id="btnLogin">Inloggen</button>
+        <button type="button" class="btn" id="btnLogout">Uitloggen</button>
+        <button type="button" class="btn" id="btnUploadNow">Nu opslaan</button>
+        <button type="button" class="btn" id="btnSyncNow">Nu laden</button>
       </div>
 
       <div class="hintBox">
@@ -415,7 +437,36 @@
       </div>
     </div>
   </div>
-     <div class="hintBox">
+
+  <div class="card span2" id="tabBackup" style="display:none">
+    <div class="cardHeader">
+      <div>
+        <h2>Backup en herstel</h2>
+        <div class="sub">Export en import</div>
+      </div>
+      <button type="button" class="btn" id="exportAll">Export alles</button>
+    </div>
+    <div class="cardBody">
+      <div class="row cols2">
+        <div>
+          <label>Import JSON</label>
+          <input id="importFile" type="file" accept="application/json" />
+          <div class="btnBar">
+            <button type="button" class="btn primary" id="btnImport">Importeren</button>
+            <button type="button" class="btn danger" id="btnReset">Alles wissen</button>
+          </div>
+          <div class="small" style="margin-top:8px">Import zet je lokale data terug.</div>
+        </div>
+        <div>
+          <label>Export</label>
+          <div class="btnBar" style="margin-top:10px">
+            <button type="button" class="btn primary" id="btnExport">Exporteren</button>
+          </div>
+          <div class="small" style="margin-top:8px">Je krijgt een .json bestand met alles erin.</div>
+        </div>
+      </div>
+
+      <div class="hintBox">
         <div class="small">Als Lizet leeg ziet na Nu laden.</div>
         <div class="small">Jij hebt nog niet op Nu opslaan gedrukt, of jullie codes zijn anders.</div>
       </div>
@@ -424,12 +475,18 @@
 
 </div>
  </div>
+
  <div class="toast" id="toast"></div>
+
  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+
  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
  <script>
     function $(id){ return document.getElementById(id); }
+    function on(id, ev, fn){ var el = $(id); if (el) el.addEventListener(ev, fn); }
 
     var firebaseConfig = {
       apiKey: "PASTE_YOUR_FIREBASE_API_KEY",
@@ -461,10 +518,11 @@
       _editKind: null
     };
 
-    var LSKEY = "noodmap_rob_v3";
+    var LSKEY = "noodmap_rob_final_v1";
 
     function toast(msg){
       var t = $("toast");
+      if (!t) return;
       t.textContent = msg;
       t.style.display = "block";
       clearTimeout(STATE._toastTimer);
@@ -484,7 +542,7 @@
     }
 
     function getSharedId(){
-      var v = ($("sharedId").value || "").trim();
+      var v = ($("sharedId") && $("sharedId").value ? $("sharedId").value : "").trim();
       if ($("sharedIdChip")) $("sharedIdChip").textContent = v ? v : "Code";
       return v;
     }
@@ -568,27 +626,30 @@
 
     function showTab(tabId){
       var tabs = ["tabHome","tabOverview","tabDocs","tabContacts","tabNotes","tabAdd","tabLogin","tabBackup"];
-      tabs.forEach(function(id){
-        var el = document.getElementById(id);
-        if (el) el.style.display = (id === tabId) ? "" : "none";
-      });
-      document.querySelectorAll(".tabBtn").forEach(function(btn){
-        btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
-      });
+      for (var i=0;i<tabs.length;i++){
+        var el = document.getElementById(tabs[i]);
+        if (el) el.style.display = (tabs[i] === tabId) ? "" : "none";
+      }
+      var btns = document.querySelectorAll(".tabBtn");
+      for (var j=0;j<btns.length;j++){
+        btns[j].classList.toggle("active", btns[j].getAttribute("data-tab") === tabId);
+      }
     }
 
     function uid(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
 
     function renderList(list, targetId, kind){
       var box = $(targetId);
+      if (!box) return;
       box.innerHTML = "";
-      if (!list.length){
+      if (!list || !list.length){
         var empty = document.createElement("div");
         empty.className = "small";
         empty.textContent = "Nog geen items";
         box.appendChild(empty);
         return;
       }
+
       list.forEach(function(x){
         var wrap = document.createElement("div");
         wrap.className = "item";
@@ -622,14 +683,15 @@
         actions.className = "actions";
 
         var edit = document.createElement("button");
+        edit.type = "button";
         edit.className = "iconBtn";
         edit.textContent = "Bewerk";
         edit.addEventListener("click", function(){
-          $("addType").value = (kind === "doc") ? "doc" : "contact";
-          $("addTitle").value = x.name || "";
-          $("addWhere").value = x.where || "";
-          $("addExtra").value = (kind === "doc") ? (x.extra||"") : (x.phone||"");
-          $("addNote").value = x.note || "";
+          if ($("addType")) $("addType").value = (kind === "doc") ? "doc" : "contact";
+          if ($("addTitle")) $("addTitle").value = x.name || "";
+          if ($("addWhere")) $("addWhere").value = x.where || "";
+          if ($("addExtra")) $("addExtra").value = (kind === "doc") ? (x.extra||"") : (x.phone||"");
+          if ($("addNote")) $("addNote").value = x.note || "";
           STATE._editId = x.id;
           STATE._editKind = kind;
           showTab("tabAdd");
@@ -639,6 +701,7 @@
 
         if (kind === "contact"){
           var call = document.createElement("button");
+          call.type = "button";
           call.className = "iconBtn";
           call.textContent = "Bel";
           call.addEventListener("click", function(){
@@ -649,6 +712,7 @@
         }
 
         var del = document.createElement("button");
+        del.type = "button";
         del.className = "iconBtn danger";
         del.textContent = "Verwijder";
         del.addEventListener("click", function(){
@@ -672,15 +736,15 @@
 
     function renderAllFromState(){
       var data = STATE.data || {};
-      $("homeEmergencyText").value = (data.emergency && data.emergency.text) ? data.emergency.text : "";
-      $("homeLizetPhone").value = (data.over && data.over.lizetPhone) ? data.over.lizetPhone : "";
-      $("homeMyName").value = (data.over && data.over.myName) ? data.over.myName : "";
+      if ($("homeEmergencyText")) $("homeEmergencyText").value = (data.emergency && data.emergency.text) ? data.emergency.text : "";
+      if ($("homeLizetPhone")) $("homeLizetPhone").value = (data.over && data.over.lizetPhone) ? data.over.lizetPhone : "";
+      if ($("homeMyName")) $("homeMyName").value = (data.over && data.over.myName) ? data.over.myName : "";
 
-      $("myName").value = (data.over && data.over.myName) ? data.over.myName : "";
-      $("lizetPhone").value = (data.over && data.over.lizetPhone) ? data.over.lizetPhone : "";
-      $("overviewText").value = (data.over && data.over.text) ? data.over.text : "";
+      if ($("myName")) $("myName").value = (data.over && data.over.myName) ? data.over.myName : "";
+      if ($("lizetPhone")) $("lizetPhone").value = (data.over && data.over.lizetPhone) ? data.over.lizetPhone : "";
+      if ($("overviewText")) $("overviewText").value = (data.over && data.over.text) ? data.over.text : "";
 
-      $("notesText").value = (data.notes && data.notes.text) ? data.notes.text : "";
+      if ($("notesText")) $("notesText").value = (data.notes && data.notes.text) ? data.notes.text : "";
 
       renderList(data.docs || [], "docsList", "doc");
       renderList(data.contacts || [], "contactsList", "contact");
@@ -718,8 +782,8 @@
     }
 
     async function signIn(){
-      var email = ($("email").value || "").trim();
-      var pass = ($("password").value || "");
+      var email = ($("email") && $("email").value ? $("email").value : "").trim();
+      var pass = ($("password") && $("password").value ? $("password").value : "");
       if (!email || !pass){ toast("Vul e mail en wachtwoord in"); return; }
       try{ await auth.signInWithEmailAndPassword(email, pass); }
       catch(e){ setStatus(e && e.message ? e.message : "Login mislukt"); toast("Login mislukt"); }
@@ -728,85 +792,86 @@
     async function signOutNow(){ try{ await auth.signOut(); }catch(e){} }
 
     function bindTabs(){
-      document.querySelectorAll(".tabBtn").forEach(function(btn){
-        btn.addEventListener("click", function(){
-          showTab(btn.getAttribute("data-tab"));
+      var btns = document.querySelectorAll(".tabBtn[data-tab]");
+      for (var i=0;i<btns.length;i++){
+        btns[i].addEventListener("click", function(){
+          showTab(this.getAttribute("data-tab"));
         });
-      });
+      }
     }
 
     function bindAll(){
-      $("btnCallLizet").addEventListener("click", function(){
-        var phone = ($("homeLizetPhone").value || "").trim();
+      on("btnCallLizet","click",function(){
+        var phone = ($("homeLizetPhone") && $("homeLizetPhone").value ? $("homeLizetPhone").value : "").trim();
         if (!phone){ toast("Geen nummer"); return; }
         window.location.href = "tel:" + phone;
       });
 
-      $("btnSmsLizet").addEventListener("click", function(){
-        var phone = ($("homeLizetPhone").value || "").trim();
+      on("btnSmsLizet","click",function(){
+        var phone = ($("homeLizetPhone") && $("homeLizetPhone").value ? $("homeLizetPhone").value : "").trim();
         if (!phone){ toast("Geen nummer"); return; }
         window.location.href = "sms:" + phone;
       });
 
-      $("saveEmergency").addEventListener("click", function(){
-        STATE.data.emergency = { text: $("homeEmergencyText").value || "" };
+      on("saveEmergency","click",function(){
+        STATE.data.emergency = { text: ($("homeEmergencyText") ? $("homeEmergencyText").value : "") || "" };
         scheduleSave();
         toast("Opgeslagen");
       });
 
-      $("copyEmergency").addEventListener("click", function(){
-        copyToClipboard($("homeEmergencyText").value || "");
+      on("copyEmergency","click",function(){
+        copyToClipboard(($("homeEmergencyText") ? $("homeEmergencyText").value : "") || "");
         toast("Gekopieerd");
       });
 
-      $("saveOverview").addEventListener("click", function(){
+      on("saveOverview","click",function(){
         STATE.data.over = {
-          myName: $("myName").value || "",
-          lizetPhone: $("lizetPhone").value || "",
-          text: $("overviewText").value || ""
+          myName: ($("myName") ? $("myName").value : "") || "",
+          lizetPhone: ($("lizetPhone") ? $("lizetPhone").value : "") || "",
+          text: ($("overviewText") ? $("overviewText").value : "") || ""
         };
         renderAllFromState();
         scheduleSave();
         toast("Opgeslagen");
       });
 
-      $("copyOverview").addEventListener("click", function(){
+      on("copyOverview","click",function(){
         var out = [];
-        if ($("myName").value) out.push("Naam: " + $("myName").value);
-        if ($("lizetPhone").value) out.push("Lizet: " + $("lizetPhone").value);
-        if ($("overviewText").value) out.push("", $("overviewText").value);
+        if ($("myName") && $("myName").value) out.push("Naam: " + $("myName").value);
+        if ($("lizetPhone") && $("lizetPhone").value) out.push("Lizet: " + $("lizetPhone").value);
+        if ($("overviewText") && $("overviewText").value) out.push("", $("overviewText").value);
         copyToClipboard(out.join("\n"));
         toast("Gekopieerd");
       });
 
-      $("saveNotes").addEventListener("click", function(){
-        STATE.data.notes = { text: $("notesText").value || "" };
+      on("saveNotes","click",function(){
+        STATE.data.notes = { text: ($("notesText") ? $("notesText").value : "") || "" };
         scheduleSave();
         toast("Opgeslagen");
       });
 
-      $("copyNotes").addEventListener("click", function(){
-        copyToClipboard($("notesText").value || "");
+      on("copyNotes","click",function(){
+        copyToClipboard(($("notesText") ? $("notesText").value : "") || "");
         toast("Gekopieerd");
       });
 
-      $("addClear").addEventListener("click", function(){
-        $("addTitle").value = "";
-        $("addWhere").value = "";
-        $("addExtra").value = "";
-        $("addNote").value = "";
+      on("addClear","click",function(){
+        if ($("addTitle")) $("addTitle").value = "";
+        if ($("addWhere")) $("addWhere").value = "";
+        if ($("addExtra")) $("addExtra").value = "";
+        if ($("addNote")) $("addNote").value = "";
         STATE._editId = null;
         STATE._editKind = null;
         toast("Leeg");
       });
 
-      $("addSave").addEventListener("click", function(){
-        var type = $("addType").value;
-        var title = ($("addTitle").value || "").trim();
+      on("addSave","click",function(){
+        var type = $("addType") ? $("addType").value : "doc";
+        var title = ($("addTitle") ? $("addTitle").value : "").trim();
         if (!title){ toast("Titel is leeg"); return; }
-        var where = ($("addWhere").value || "").trim();
-        var extra = ($("addExtra").value || "").trim();
-        var note = ($("addNote").value || "").trim();
+        var where = ($("addWhere") ? $("addWhere").value : "").trim();
+        var extra = ($("addExtra") ? $("addExtra").value : "").trim();
+        var note = ($("addNote") ? $("addNote").value : "").trim();
 
         if (STATE._editId){
           if (STATE._editKind === "doc"){
@@ -833,31 +898,31 @@
           }
         }
 
-        $("addTitle").value = "";
-        $("addWhere").value = "";
-        $("addExtra").value = "";
-        $("addNote").value = "";
+        if ($("addTitle")) $("addTitle").value = "";
+        if ($("addWhere")) $("addWhere").value = "";
+        if ($("addExtra")) $("addExtra").value = "";
+        if ($("addNote")) $("addNote").value = "";
 
         renderAllFromState();
         scheduleSave();
         showTab(type === "doc" ? "tabDocs" : "tabContacts");
       });
 
-      $("addDoc").addEventListener("click", function(){
-        $("addType").value = "doc";
+      on("addDoc","click",function(){
+        if ($("addType")) $("addType").value = "doc";
         STATE._editId = null;
         STATE._editKind = null;
         showTab("tabAdd");
       });
 
-      $("addContact").addEventListener("click", function(){
-        $("addType").value = "contact";
+      on("addContact","click",function(){
+        if ($("addType")) $("addType").value = "contact";
         STATE._editId = null;
         STATE._editKind = null;
         showTab("tabAdd");
       });
 
-      $("exportDocs").addEventListener("click", function(){
+      on("exportDocs","click",function(){
         var out = ["DOCUMENTEN"];
         (STATE.data.docs||[]).forEach(function(x){
           out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
@@ -867,7 +932,7 @@
         downloadText("documenten-tekst.txt", out.join("\n"));
       });
 
-      $("exportContacts").addEventListener("click", function(){
+      on("exportContacts","click",function(){
         var out = ["CONTACTEN"];
         (STATE.data.contacts||[]).forEach(function(x){
           out.push("- " + (x.name||"") + " | Tel: " + (x.phone||"") + " | Waar: " + (x.where||""));
@@ -876,16 +941,16 @@
         downloadText("contacten-tekst.txt", out.join("\n"));
       });
 
-      $("btnLogin").addEventListener("click", signIn);
-      $("btnLogout").addEventListener("click", signOutNow);
+      on("btnLogin","click",signIn);
+      on("btnLogout","click",signOutNow);
 
-      $("btnSyncNow").addEventListener("click", async function(){
+      on("btnSyncNow","click",async function(){
         STATE.sharedId = getSharedId();
         await loadFromCloud();
         await startRealtime();
       });
 
-      $("btnUploadNow").addEventListener("click", async function(){
+      on("btnUploadNow","click",async function(){
         STATE.sharedId = getSharedId();
         if (!STATE.sharedId){ toast("Vul gedeelde code in"); return; }
         if (!STATE.user){ toast("Log eerst in"); return; }
@@ -893,12 +958,12 @@
         toast("Naar cloud gezet");
       });
 
-      $("btnExport").addEventListener("click", exportAll);
-      $("exportAll").addEventListener("click", exportAll);
-      $("exportQuick").addEventListener("click", exportAll);
+      on("btnExport","click",exportAll);
+      on("exportAll","click",exportAll);
+      on("exportQuick","click",exportAll);
 
-      $("btnImport").addEventListener("click", function(){
-        var f = $("importFile").files && $("importFile").files[0];
+      on("btnImport","click",function(){
+        var f = $("importFile") && $("importFile").files ? $("importFile").files[0] : null;
         if (!f){ toast("Kies een bestand"); return; }
         var reader = new FileReader();
         reader.onload = function(){
@@ -915,7 +980,7 @@
         reader.readAsText(f);
       });
 
-      $("btnReset").addEventListener("click", function(){
+      on("btnReset","click",function(){
         if (!confirm("Alles wissen")) return;
         STATE.data = { emergency:{text:""}, over:{myName:"",lizetPhone:"",text:""}, docs:[], contacts:[], notes:{text:""} };
         saveLocal();
@@ -924,8 +989,8 @@
         toast("Alles gewist");
       });
 
-      $("sharedId").addEventListener("input", function(){
-        if ($("sharedIdChip")) $("sharedIdChip").textContent = ($("sharedId").value || "").trim() || "Code";
+      on("sharedId","input",function(){
+        if ($("sharedIdChip")) $("sharedIdChip").textContent = (($("sharedId").value||"").trim() || "Code");
       });
     }
 
@@ -935,7 +1000,7 @@
       bindTabs();
       bindAll();
 
-      if ($("sharedId")) STATE.sharedId = getSharedId();
+      STATE.sharedId = getSharedId();
 
       auth.onAuthStateChanged(async function(u){
         STATE.user = u || null;
@@ -951,6 +1016,8 @@
 
     window.addEventListener("load", init);
   </script>
+
 </body>
 </html>
+
 
