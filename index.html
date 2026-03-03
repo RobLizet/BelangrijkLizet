@@ -489,13 +489,15 @@
     function on(id, ev, fn){ var el = $(id); if (el) el.addEventListener(ev, fn); }
 
     var firebaseConfig = {
-      apiKey: "PASTE_YOUR_FIREBASE_API_KEY",
-      authDomain: "PASTE_YOUR_FIREBASE_AUTH_DOMAIN",
-      projectId: "PASTE_YOUR_FIREBASE_PROJECT_ID",
-      storageBucket: "PASTE_YOUR_FIREBASE_STORAGE_BUCKET",
-      messagingSenderId: "PASTE_YOUR_FIREBASE_MESSAGING_SENDER_ID",
-      appId: "PASTE_YOUR_FIREBASE_APP_ID"
-    };
+apiKey: “AIzaSyDRu2zH8nc41L2ymmSXoIlmXk4JL-g4BzM”,
+authDomain: “noodplan-rob.firebaseapp.com”,
+databaseURL: “https://noodplan-rob-default-rtdb.europe-west1.firebasedatabase.app”,
+projectId: “noodplan-rob”,
+storageBucket: “noodplan-rob.firebasestorage.app”,
+messagingSenderId: “528144890958”,
+appId: “1:528144890958:web:77738ddfdc698ed440571f”
+};
+
 
     firebase.initializeApp(firebaseConfig);
     var auth = firebase.auth();
