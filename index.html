@@ -1,3 +1,4 @@
+Hier is een compleet nieuw index.html bestand. Je kopieert alles in 1 keer en plakt het in index.html. Dit blijft klikbaar, ook als Firebase even faalt.
 <!DOCTYPE html>
 
 <html lang="nl">
@@ -19,7 +20,6 @@
       --border:rgba(255,255,255,.10);
       --text:#eaf0ff;
       --muted:#a9b7dd;
-      --aqua:#43e2cf;
       --shadow:0 18px 50px rgba(0,0,0,.45);
       --r:20px;
     }
@@ -55,6 +55,7 @@
       background: rgba(116,167,255,.10);
       color:var(--text);
       font-weight:900;font-size:.86rem;
+      user-select:none;
     }
     .brand h1{margin:0;font-size:1.15rem;font-weight:900;letter-spacing:.2px}
     .chip{
@@ -65,8 +66,12 @@
       color:var(--muted);
       font-size:.86rem;
       user-select:none;
+      max-width:92vw;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
     }
-    .dot{width:10px;height:10px;border-radius:99px;background:rgba(67,226,207,.9);box-shadow:0 0 0 4px rgba(67,226,207,.12)}
+    .dot{width:10px;height:10px;border-radius:99px;background:rgba(90,210,170,.95);box-shadow:0 0 0 4px rgba(90,210,170,.14)}
     .dot.off{background:rgba(255,120,120,.95);box-shadow:0 0 0 4px rgba(255,120,120,.12)}
     .kbd{
       display:inline-block;
@@ -87,8 +92,8 @@
       cursor:pointer;
     }
     .tabBtn.active{
-      background: linear-gradient(135deg, rgba(67,226,207,.22), rgba(116,167,255,.18));
-      border-color: rgba(67,226,207,.35);
+      background: linear-gradient(135deg, rgba(90,210,170,.20), rgba(116,167,255,.18));
+      border-color: rgba(90,210,170,.30);
       box-shadow:0 10px 30px rgba(0,0,0,.25);
     }
     .grid{display:grid;gap:14px;grid-template-columns:1fr;margin-top:12px}
@@ -131,7 +136,7 @@
       padding:11px 12px;border-radius:14px;
       font-weight:900;cursor:pointer;
     }
-    .btn.primary{background: linear-gradient(135deg, rgba(67,226,207,.22), rgba(116,167,255,.22));border-color: rgba(67,226,207,.35)}
+    .btn.primary{background: linear-gradient(135deg, rgba(90,210,170,.20), rgba(116,167,255,.20));border-color: rgba(90,210,170,.28)}
     .btn.danger{background: rgba(255,120,120,.12);border-color: rgba(255,120,120,.28)}
     .list{display:flex;flex-direction:column;gap:10px}
     .item{
@@ -236,7 +241,7 @@
           </div>
         </div>
 
-        <div class="card" style="box-shadow:none;background:rgba(67,226,207,.05);border-color:rgba(255,255,255,.08)">
+        <div class="card" style="box-shadow:none;background:rgba(90,210,170,.05);border-color:rgba(255,255,255,.08)">
           <div class="cardHeader">
             <div>
               <h2>Noodtekst</h2>
@@ -395,7 +400,7 @@
     <div class="cardHeader">
       <div>
         <h2>Login en sync</h2>
-        <div class="sub">Zelfde gedeelde code op beide telefoons</div>
+        <div class="sub">Firebase of alleen lokaal</div>
       </div>
     </div>
     <div class="cardBody">
@@ -431,9 +436,7 @@
       </div>
 
       <div class="hintBox">
-        <div class="small">Flow.</div>
-        <div class="small">Jij, log in, druk Nu opslaan.</div>
-        <div class="small">Lizet, vul code in, druk Nu laden.</div>
+        <div class="small">Als Firebase fout blijft geven, werkt alles nog lokaal.</div>
       </div>
     </div>
   </div>
@@ -462,13 +465,8 @@
           <div class="btnBar" style="margin-top:10px">
             <button type="button" class="btn primary" id="btnExport">Exporteren</button>
           </div>
-          <div class="small" style="margin-top:8px">Je krijgt een .json bestand met alles erin.</div>
+          <div class="small" style="margin-top:8px">Je krijgt een json bestand met alles erin.</div>
         </div>
-      </div>
-
-      <div class="hintBox">
-        <div class="small">Als Lizet leeg ziet na Nu laden.</div>
-        <div class="small">Jij hebt nog niet op Nu opslaan gedrukt, of jullie codes zijn anders.</div>
       </div>
     </div>
   </div>
@@ -488,67 +486,89 @@
     function $(id){ return document.getElementById(id); }
     function on(id, ev, fn){ var el = $(id); if (el) el.addEventListener(ev, fn); }
 
-    var firebaseConfig = {
-apiKey: “AIzaSyDRu2zH8nc41L2ymmSXoIlmXk4JL-g4BzM”,
-authDomain: “noodplan-rob.firebaseapp.com”,
-databaseURL: “https://noodplan-rob-default-rtdb.europe-west1.firebasedatabase.app”,
-projectId: “noodplan-rob”,
-storageBucket: “noodplan-rob.firebasestorage.app”,
-messagingSenderId: “528144890958”,
-appId: “1:528144890958:web:77738ddfdc698ed440571f”
-};
-
-
-
-    firebase.initializeApp(firebaseConfig);
-    var auth = firebase.auth();
-    var db = firebase.firestore();
-
-    var STATE = {
-      user: null,
-      sharedId: "",
-      data: {
-        emergency: { text:"" },
-        over: { myName:"", lizetPhone:"", text:"" },
-        docs: [],
-        contacts: [],
-        notes: { text:"" }
-      },
-      saveTimer: null,
-      realtimeUnsub: null,
-      _toastTimer: null,
-      _editId: null,
-      _editKind: null
-    };
-
-    var LSKEY = "noodmap_rob_final_v1";
-
     function toast(msg){
       var t = $("toast");
       if (!t) return;
       t.textContent = msg;
       t.style.display = "block";
-      clearTimeout(STATE._toastTimer);
-      STATE._toastTimer = setTimeout(function(){ t.style.display="none"; }, 2200);
+      if (window.__toastTimer) clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(function(){ t.style.display="none"; }, 2200);
     }
 
     function setStatus(msg){
       if ($("syncStatus")) $("syncStatus").value = msg;
       if ($("syncText")) $("syncText").textContent = msg;
       if ($("dotSync")){
-        if (msg && msg.toLowerCase().indexOf("gesynchron") >= 0){
-          $("dotSync").classList.remove("off");
-        }else{
-          $("dotSync").classList.add("off");
-        }
+        var ok = msg && msg.toLowerCase().indexOf("gesynchron") >= 0;
+        if (ok) $("dotSync").classList.remove("off");
+        else $("dotSync").classList.add("off");
       }
     }
 
-    function getSharedId(){
-      var v = ($("sharedId") && $("sharedId").value ? $("sharedId").value : "").trim();
-      if ($("sharedIdChip")) $("sharedIdChip").textContent = v ? v : "Code";
-      return v;
+    function showTab(tabId){
+      var tabs = ["tabHome","tabOverview","tabDocs","tabContacts","tabNotes","tabAdd","tabLogin","tabBackup"];
+      for (var i=0;i<tabs.length;i++){
+        var el = document.getElementById(tabs[i]);
+        if (el) el.style.display = (tabs[i] === tabId) ? "" : "none";
+      }
+      var btns = document.querySelectorAll(".tabBtn[data-tab]");
+      for (var j=0;j<btns.length;j++){
+        btns[j].classList.toggle("active", btns[j].getAttribute("data-tab") === tabId);
+      }
     }
+
+    function bindTabs(){
+      var btns = document.querySelectorAll(".tabBtn[data-tab]");
+      for (var i=0;i<btns.length;i++){
+        btns[i].addEventListener("click", function(){
+          showTab(this.getAttribute("data-tab"));
+        });
+      }
+    }
+
+    function copyToClipboard(text){
+      try{
+        if (!navigator.clipboard){
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          return;
+        }
+        navigator.clipboard.writeText(text);
+      }catch(e){}
+    }
+
+    function downloadText(filename, text){
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([text], {type:"text/plain"}));
+      a.download = filename;
+      a.click();
+    }
+
+    function uid(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+
+    var LSKEY = "noodmap_rob_onepaste_safe_v1";
+    var STATE = {
+      user: null,
+      sharedId: "",
+      firebaseOk: false,
+      auth: null,
+      db: null,
+      saveTimer: null,
+      realtimeUnsub: null,
+      editId: null,
+      editKind: null,
+      data: {
+        emergency: { text:"" },
+        over: { myName:"", lizetPhone:"", text:"" },
+        docs: [],
+        contacts: [],
+        notes: { text:"" }
+      }
+    };
 
     function saveLocal(){
       try{ localStorage.setItem(LSKEY, JSON.stringify(STATE.data)); }catch(e){}
@@ -563,12 +583,21 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
       }catch(e){}
     }
 
+    function getSharedId(){
+      var v = ($("sharedId") && $("sharedId").value ? $("sharedId").value : "").trim();
+      if ($("sharedIdChip")) $("sharedIdChip").textContent = v ? v : "Code";
+      return v;
+    }
+
     function sharedDocRef(){
+      if (!STATE.firebaseOk) return null;
+      if (!STATE.db) return null;
       if (!STATE.sharedId) return null;
-      return db.collection("noodmap_shared").doc(STATE.sharedId);
+      return STATE.db.collection("noodmap_shared").doc(STATE.sharedId);
     }
 
     async function loadFromCloud(){
+      if (!STATE.firebaseOk){ toast("Firebase niet actief"); return; }
       var ref = sharedDocRef();
       if (!ref){ toast("Vul gedeelde code in"); return; }
       try{
@@ -578,16 +607,31 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
         if (!obj){ setStatus("Lege cloud data"); toast("Nog niks in cloud"); return; }
         STATE.data = obj;
         saveLocal();
-        renderAllFromState();
+        renderAll();
         setStatus("Gesynchroniseerd");
         toast("Data geladen");
       }catch(e){
-        setStatus(e && e.message ? e.message : "Laden mislukt");
+        setStatus("Laden mislukt");
         toast("Laden mislukt");
       }
     }
 
+    async function saveToCloud(){
+      if (!STATE.firebaseOk){ toast("Firebase niet actief"); return; }
+      if (!STATE.user){ toast("Log eerst in"); return; }
+      var ref = sharedDocRef();
+      if (!ref){ toast("Vul gedeelde code in"); return; }
+      try{
+        await ref.set(STATE.data, { merge:true });
+        setStatus("Gesynchroniseerd");
+      }catch(e){
+        setStatus("Opslaan mislukt");
+        toast("Opslaan mislukt");
+      }
+    }
+
     async function startRealtime(){
+      if (!STATE.firebaseOk) return;
       if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
       var ref = sharedDocRef();
       if (!ref) return;
@@ -598,48 +642,18 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
           if (!obj) return;
           STATE.data = obj;
           saveLocal();
-          renderAllFromState();
+          renderAll();
           setStatus("Gesynchroniseerd");
         });
-      }catch(e){
-        setStatus("Realtime uit");
-      }
-    }
-
-    async function saveToCloud(){
-      var ref = sharedDocRef();
-      if (!ref) return;
-      if (!STATE.user) return;
-      try{
-        await ref.set(STATE.data, { merge:true });
-        setStatus("Gesynchroniseerd");
-      }catch(e){
-        setStatus(e && e.message ? e.message : "Opslaan mislukt");
-        toast("Opslaan mislukt");
-      }
+      }catch(e){}
     }
 
     function scheduleSave(){
-      clearTimeout(STATE.saveTimer);
-      STATE.saveTimer = setTimeout(async function(){
+      if (STATE.saveTimer) clearTimeout(STATE.saveTimer);
+      STATE.saveTimer = setTimeout(function(){
         saveLocal();
-        if (STATE.user) await saveToCloud();
-      }, 450);
+      }, 300);
     }
-
-    function showTab(tabId){
-      var tabs = ["tabHome","tabOverview","tabDocs","tabContacts","tabNotes","tabAdd","tabLogin","tabBackup"];
-      for (var i=0;i<tabs.length;i++){
-        var el = document.getElementById(tabs[i]);
-        if (el) el.style.display = (tabs[i] === tabId) ? "" : "none";
-      }
-      var btns = document.querySelectorAll(".tabBtn");
-      for (var j=0;j<btns.length;j++){
-        btns[j].classList.toggle("active", btns[j].getAttribute("data-tab") === tabId);
-      }
-    }
-
-    function uid(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
 
     function renderList(list, targetId, kind){
       var box = $(targetId);
@@ -653,124 +667,110 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
         return;
       }
 
-      list.forEach(function(x){
-        var wrap = document.createElement("div");
-        wrap.className = "item";
+      for (var i=0;i<list.length;i++){
+        (function(x){
+          var wrap = document.createElement("div");
+          wrap.className = "item";
 
-        var left = document.createElement("div");
-        var h = document.createElement("h3");
-        h.textContent = x.name || "";
-        left.appendChild(h);
+          var left = document.createElement("div");
+          var h = document.createElement("h3");
+          h.textContent = x.name || "";
+          left.appendChild(h);
 
-        var p = document.createElement("p");
-        var line1 = [];
-        if (kind === "doc"){
-          if (x.where) line1.push("Waar, " + x.where);
-          if (x.extra) line1.push("Extra, " + x.extra);
-        }else{
-          if (x.phone) line1.push("Tel, " + x.phone);
-          if (x.where) line1.push("Waar, " + x.where);
-        }
-        p.textContent = line1.join(" , ");
-        left.appendChild(p);
-
-        if (x.note){
-          var n = document.createElement("div");
-          n.className = "small";
-          n.style.marginTop = "6px";
-          n.textContent = x.note;
-          left.appendChild(n);
-        }
-
-        var actions = document.createElement("div");
-        actions.className = "actions";
-
-        var edit = document.createElement("button");
-        edit.type = "button";
-        edit.className = "iconBtn";
-        edit.textContent = "Bewerk";
-        edit.addEventListener("click", function(){
-          if ($("addType")) $("addType").value = (kind === "doc") ? "doc" : "contact";
-          if ($("addTitle")) $("addTitle").value = x.name || "";
-          if ($("addWhere")) $("addWhere").value = x.where || "";
-          if ($("addExtra")) $("addExtra").value = (kind === "doc") ? (x.extra||"") : (x.phone||"");
-          if ($("addNote")) $("addNote").value = x.note || "";
-          STATE._editId = x.id;
-          STATE._editKind = kind;
-          showTab("tabAdd");
-          toast("Bewerk modus");
-        });
-        actions.appendChild(edit);
-
-        if (kind === "contact"){
-          var call = document.createElement("button");
-          call.type = "button";
-          call.className = "iconBtn";
-          call.textContent = "Bel";
-          call.addEventListener("click", function(){
-            if (!x.phone){ toast("Geen telefoon"); return; }
-            window.location.href = "tel:" + x.phone;
-          });
-          actions.appendChild(call);
-        }
-
-        var del = document.createElement("button");
-        del.type = "button";
-        del.className = "iconBtn danger";
-        del.textContent = "Verwijder";
-        del.addEventListener("click", function(){
-          if (!confirm("Verwijderen")) return;
+          var p = document.createElement("p");
+          var line1 = [];
           if (kind === "doc"){
-            STATE.data.docs = (STATE.data.docs || []).filter(function(i){ return i.id !== x.id; });
+            if (x.where) line1.push("Waar, " + x.where);
+            if (x.extra) line1.push("Extra, " + x.extra);
           }else{
-            STATE.data.contacts = (STATE.data.contacts || []).filter(function(i){ return i.id !== x.id; });
+            if (x.phone) line1.push("Tel, " + x.phone);
+            if (x.where) line1.push("Waar, " + x.where);
           }
-          renderAllFromState();
-          scheduleSave();
-          toast("Verwijderd");
-        });
-        actions.appendChild(del);
+          p.textContent = line1.join(" , ");
+          left.appendChild(p);
 
-        wrap.appendChild(left);
-        wrap.appendChild(actions);
-        box.appendChild(wrap);
-      });
-    }
+          if (x.note){
+            var n = document.createElement("div");
+            n.className = "small";
+            n.style.marginTop = "6px";
+            n.textContent = x.note;
+            left.appendChild(n);
+          }
 
-    function renderAllFromState(){
-      var data = STATE.data || {};
-      if ($("homeEmergencyText")) $("homeEmergencyText").value = (data.emergency && data.emergency.text) ? data.emergency.text : "";
-      if ($("homeLizetPhone")) $("homeLizetPhone").value = (data.over && data.over.lizetPhone) ? data.over.lizetPhone : "";
-      if ($("homeMyName")) $("homeMyName").value = (data.over && data.over.myName) ? data.over.myName : "";
+          var actions = document.createElement("div");
+          actions.className = "actions";
 
-      if ($("myName")) $("myName").value = (data.over && data.over.myName) ? data.over.myName : "";
-      if ($("lizetPhone")) $("lizetPhone").value = (data.over && data.over.lizetPhone) ? data.over.lizetPhone : "";
-      if ($("overviewText")) $("overviewText").value = (data.over && data.over.text) ? data.over.text : "";
+          var edit = document.createElement("button");
+          edit.type = "button";
+          edit.className = "iconBtn";
+          edit.textContent = "Bewerk";
+          edit.addEventListener("click", function(){
+            if ($("addType")) $("addType").value = (kind === "doc") ? "doc" : "contact";
+            if ($("addTitle")) $("addTitle").value = x.name || "";
+            if ($("addWhere")) $("addWhere").value = x.where || "";
+            if ($("addExtra")) $("addExtra").value = (kind === "doc") ? (x.extra||"") : (x.phone||"");
+            if ($("addNote")) $("addNote").value = x.note || "";
+            STATE.editId = x.id;
+            STATE.editKind = kind;
+            showTab("tabAdd");
+            toast("Bewerk modus");
+          });
+          actions.appendChild(edit);
 
-      if ($("notesText")) $("notesText").value = (data.notes && data.notes.text) ? data.notes.text : "";
+          if (kind === "contact"){
+            var call = document.createElement("button");
+            call.type = "button";
+            call.className = "iconBtn";
+            call.textContent = "Bel";
+            call.addEventListener("click", function(){
+              if (!x.phone){ toast("Geen telefoon"); return; }
+              window.location.href = "tel:" + x.phone;
+            });
+            actions.appendChild(call);
+          }
 
-      renderList(data.docs || [], "docsList", "doc");
-      renderList(data.contacts || [], "contactsList", "contact");
-    }
+          var del = document.createElement("button");
+          del.type = "button";
+          del.className = "iconBtn danger";
+          del.textContent = "Verwijder";
+          del.addEventListener("click", function(){
+            if (!confirm("Verwijderen")) return;
+            if (kind === "doc"){
+              var nd = [];
+              for (var k=0;k<(STATE.data.docs||[]).length;k++) if (STATE.data.docs[k].id !== x.id) nd.push(STATE.data.docs[k]);
+              STATE.data.docs = nd;
+            }else{
+              var nc = [];
+              for (var m=0;m<(STATE.data.contacts||[]).length;m++) if (STATE.data.contacts[m].id !== x.id) nc.push(STATE.data.contacts[m]);
+              STATE.data.contacts = nc;
+            }
+            renderAll();
+            scheduleSave();
+            toast("Verwijderd");
+          });
+          actions.appendChild(del);
 
-    function copyToClipboard(text){
-      if (!navigator.clipboard){
-        var ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-        return;
+          wrap.appendChild(left);
+          wrap.appendChild(actions);
+          box.appendChild(wrap);
+        })(list[i]);
       }
-      navigator.clipboard.writeText(text);
     }
 
-    function downloadText(filename, text){
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(new Blob([text], {type:"text/plain"}));
-      a.download = filename;
-      a.click();
+    function renderAll(){
+      var d = STATE.data || {};
+      if ($("homeEmergencyText")) $("homeEmergencyText").value = (d.emergency && d.emergency.text) ? d.emergency.text : "";
+      if ($("homeLizetPhone")) $("homeLizetPhone").value = (d.over && d.over.lizetPhone) ? d.over.lizetPhone : "";
+      if ($("homeMyName")) $("homeMyName").value = (d.over && d.over.myName) ? d.over.myName : "";
+
+      if ($("myName")) $("myName").value = (d.over && d.over.myName) ? d.over.myName : "";
+      if ($("lizetPhone")) $("lizetPhone").value = (d.over && d.over.lizetPhone) ? d.over.lizetPhone : "";
+      if ($("overviewText")) $("overviewText").value = (d.over && d.over.text) ? d.over.text : "";
+
+      if ($("notesText")) $("notesText").value = (d.notes && d.notes.text) ? d.notes.text : "";
+
+      renderList(d.docs || [], "docsList", "doc");
+      renderList(d.contacts || [], "contactsList", "contact");
     }
 
     function exportAll(){
@@ -785,22 +785,21 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
     }
 
     async function signIn(){
+      if (!STATE.firebaseOk){ toast("Firebase niet actief"); return; }
       var email = ($("email") && $("email").value ? $("email").value : "").trim();
       var pass = ($("password") && $("password").value ? $("password").value : "");
       if (!email || !pass){ toast("Vul e mail en wachtwoord in"); return; }
-      try{ await auth.signInWithEmailAndPassword(email, pass); }
-      catch(e){ setStatus(e && e.message ? e.message : "Login mislukt"); toast("Login mislukt"); }
+      try{
+        await STATE.auth.signInWithEmailAndPassword(email, pass);
+      }catch(e){
+        setStatus("Login mislukt");
+        toast("Login mislukt");
+      }
     }
 
-    async function signOutNow(){ try{ await auth.signOut(); }catch(e){} }
-
-    function bindTabs(){
-      var btns = document.querySelectorAll(".tabBtn[data-tab]");
-      for (var i=0;i<btns.length;i++){
-        btns[i].addEventListener("click", function(){
-          showTab(this.getAttribute("data-tab"));
-        });
-      }
+    async function signOutNow(){
+      if (!STATE.firebaseOk) return;
+      try{ await STATE.auth.signOut(); }catch(e){}
     }
 
     function bindAll(){
@@ -833,7 +832,7 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
           lizetPhone: ($("lizetPhone") ? $("lizetPhone").value : "") || "",
           text: ($("overviewText") ? $("overviewText").value : "") || ""
         };
-        renderAllFromState();
+        renderAll();
         scheduleSave();
         toast("Opgeslagen");
       });
@@ -863,8 +862,8 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
         if ($("addWhere")) $("addWhere").value = "";
         if ($("addExtra")) $("addExtra").value = "";
         if ($("addNote")) $("addNote").value = "";
-        STATE._editId = null;
-        STATE._editKind = null;
+        STATE.editId = null;
+        STATE.editKind = null;
         toast("Leeg");
       });
 
@@ -876,20 +875,22 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
         var extra = ($("addExtra") ? $("addExtra").value : "").trim();
         var note = ($("addNote") ? $("addNote").value : "").trim();
 
-        if (STATE._editId){
-          if (STATE._editKind === "doc"){
-            STATE.data.docs = (STATE.data.docs||[]).map(function(i){
-              if (i.id !== STATE._editId) return i;
-              return { id:i.id, name:title, where:where, extra:extra, note:note };
-            });
+        if (STATE.editId){
+          if (STATE.editKind === "doc"){
+            for (var i=0;i<(STATE.data.docs||[]).length;i++){
+              if (STATE.data.docs[i].id === STATE.editId){
+                STATE.data.docs[i] = { id:STATE.editId, name:title, where:where, extra:extra, note:note };
+              }
+            }
           }else{
-            STATE.data.contacts = (STATE.data.contacts||[]).map(function(i){
-              if (i.id !== STATE._editId) return i;
-              return { id:i.id, name:title, where:where, phone:extra, note:note };
-            });
+            for (var j=0;j<(STATE.data.contacts||[]).length;j++){
+              if (STATE.data.contacts[j].id === STATE.editId){
+                STATE.data.contacts[j] = { id:STATE.editId, name:title, where:where, phone:extra, note:note };
+              }
+            }
           }
-          STATE._editId = null;
-          STATE._editKind = null;
+          STATE.editId = null;
+          STATE.editKind = null;
           toast("Aangepast");
         }else{
           if (type === "doc"){
@@ -906,41 +907,43 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
         if ($("addExtra")) $("addExtra").value = "";
         if ($("addNote")) $("addNote").value = "";
 
-        renderAllFromState();
+        renderAll();
         scheduleSave();
         showTab(type === "doc" ? "tabDocs" : "tabContacts");
       });
 
       on("addDoc","click",function(){
         if ($("addType")) $("addType").value = "doc";
-        STATE._editId = null;
-        STATE._editKind = null;
+        STATE.editId = null;
+        STATE.editKind = null;
         showTab("tabAdd");
       });
 
       on("addContact","click",function(){
         if ($("addType")) $("addType").value = "contact";
-        STATE._editId = null;
-        STATE._editKind = null;
+        STATE.editId = null;
+        STATE.editKind = null;
         showTab("tabAdd");
       });
 
       on("exportDocs","click",function(){
         var out = ["DOCUMENTEN"];
-        (STATE.data.docs||[]).forEach(function(x){
+        for (var i=0;i<(STATE.data.docs||[]).length;i++){
+          var x = STATE.data.docs[i];
           out.push("- " + (x.name||"") + " | Waar: " + (x.where||""));
           if (x.extra) out.push("  Extra: " + x.extra);
           if (x.note) out.push("  Notitie: " + x.note);
-        });
+        }
         downloadText("documenten-tekst.txt", out.join("\n"));
       });
 
       on("exportContacts","click",function(){
         var out = ["CONTACTEN"];
-        (STATE.data.contacts||[]).forEach(function(x){
+        for (var i=0;i<(STATE.data.contacts||[]).length;i++){
+          var x = STATE.data.contacts[i];
           out.push("- " + (x.name||"") + " | Tel: " + (x.phone||"") + " | Waar: " + (x.where||""));
           if (x.note) out.push("  Notitie: " + x.note);
-        });
+        }
         downloadText("contacten-tekst.txt", out.join("\n"));
       });
 
@@ -955,10 +958,8 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
 
       on("btnUploadNow","click",async function(){
         STATE.sharedId = getSharedId();
-        if (!STATE.sharedId){ toast("Vul gedeelde code in"); return; }
-        if (!STATE.user){ toast("Log eerst in"); return; }
         await saveToCloud();
-        toast("Naar cloud gezet");
+        toast("Opslaan gedaan");
       });
 
       on("btnExport","click",exportAll);
@@ -975,7 +976,7 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
             if (!obj){ toast("Ongeldig"); return; }
             STATE.data = obj;
             saveLocal();
-            renderAllFromState();
+            renderAll();
             scheduleSave();
             toast("Geïmporteerd");
           }catch(e){ toast("Import mislukt"); }
@@ -987,7 +988,7 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
         if (!confirm("Alles wissen")) return;
         STATE.data = { emergency:{text:""}, over:{myName:"",lizetPhone:"",text:""}, docs:[], contacts:[], notes:{text:""} };
         saveLocal();
-        renderAllFromState();
+        renderAll();
         scheduleSave();
         toast("Alles gewist");
       });
@@ -997,24 +998,54 @@ appId: “1:528144890958:web:77738ddfdc698ed440571f”
       });
     }
 
+    function initFirebaseSafe(){
+      try{
+        if (!window.firebase || !firebase.initializeApp){
+          setStatus("Firebase scripts missen");
+          return;
+        }
+
+        var firebaseConfig = {
+          apiKey: "AIzaSyDRu2zH8nc41L2ymmSXoIlmXk4JL-g4BzM",
+          authDomain: "noodplan-rob.firebaseapp.com",
+          databaseURL: "https://noodplan-rob-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "noodplan-rob",
+          storageBucket: "noodplan-rob.firebasestorage.app",
+          messagingSenderId: "528144890958",
+          appId: "1:528144890958:web:77738ddfdc698ed440571f"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        STATE.auth = firebase.auth();
+        STATE.db = firebase.firestore();
+        STATE.firebaseOk = true;
+
+        STATE.auth.onAuthStateChanged(function(u){
+          STATE.user = u || null;
+          if (STATE.user){
+            setStatus("Ingelogd");
+            STATE.sharedId = getSharedId();
+            if (STATE.sharedId) startRealtime();
+          }else{
+            setStatus("Niet ingelogd");
+            if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
+          }
+        });
+      }catch(e){
+        STATE.firebaseOk = false;
+        setStatus("Firebase fout");
+      }
+    }
+
     function init(){
-      loadLocal();
-      renderAllFromState();
       bindTabs();
       bindAll();
-
+      loadLocal();
+      renderAll();
       STATE.sharedId = getSharedId();
-
-      auth.onAuthStateChanged(async function(u){
-        STATE.user = u || null;
-        if (STATE.user){
-          setStatus("Ingelogd");
-          if (STATE.sharedId) await startRealtime();
-        }else{
-          setStatus("Niet ingelogd");
-          if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
-        }
-      });
+      setStatus("Niet ingelogd");
+      initFirebaseSafe();
+      showTab("tabHome");
     }
 
     window.addEventListener("load", init);
