@@ -9,10 +9,10 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <title>Noodmap Rob</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700;900&display=swap" rel="stylesheet" />
 
-<style>
+ <style>
     :root{
       --bg:#071023;
       --panel:rgba(255,255,255,.06);
@@ -195,8 +195,7 @@
     .item h3{margin:0;font-size:1rem;font-weight:900}
     .item p{margin:4px 0 0 0;color:var(--muted);font-size:.92rem;line-height:1.25rem;overflow-wrap:anywhere;word-break:break-word;}
     .small{font-size:.86rem;color:var(--muted)}
-    .actions{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap}
-    .actions{justify-content:flex-end}
+    .actions{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;justify-content:flex-end}
     @media(max-width:520px){ .item{grid-template-columns:1fr} .actions{justify-content:flex-start} }
 
     .iconBtn{
@@ -227,7 +226,6 @@
       display:none;z-index:99;
     }
     body.light .toast{background: rgba(10,18,37,.85)}
-
     .footerNote{margin-top:14px;color:var(--muted);font-size:.82rem;text-align:center;opacity:.95}
   </style>
 
@@ -247,11 +245,11 @@
         </div>
       </div>
 
-<div class="alertRed">
+ <div class="alertRed">
     Lizet. Voor inloggen in apps gebruik iPhone Rob met Face ID inlog.
   </div>
 
- <div class="tabs">
+  <div class="tabs">
     <button type="button" class="tabBtn active" data-tab="tabHome">Start</button>
     <button type="button" class="tabBtn" data-tab="tabOverview">Overzicht</button>
     <button type="button" class="tabBtn" data-tab="tabDocs">Documenten</button>
@@ -302,35 +300,35 @@
           </div>
         </div>
 
-   <div class="card" style="box-shadow:none;background:rgba(67,226,207,.05);border-color:rgba(255,255,255,.08)">
-      <div class="cardHeader">
-        <div>
-          <h2>Noodtekst</h2>
-          <div class="sub">Opslaan en kopiëren</div>
+        <div class="card" style="box-shadow:none;background:rgba(67,226,207,.05);border-color:rgba(255,255,255,.08)">
+          <div class="cardHeader">
+            <div>
+              <h2>Noodtekst</h2>
+              <div class="sub">Opslaan en kopiëren</div>
+            </div>
+          </div>
+          <div class="cardBody">
+            <label>Korte noodtekst</label>
+            <textarea id="homeEmergencyText" placeholder="Bijv. medicatie, allergieën, contactpersonen."></textarea>
+            <div class="btnBar">
+              <button type="button" class="btn primary" id="saveEmergency">Opslaan</button>
+              <button type="button" class="btn" id="copyEmergency">Kopieer</button>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="cardBody">
-        <label>Korte noodtekst</label>
-        <textarea id="homeEmergencyText" placeholder="Bijv. medicatie, allergieën, contactpersonen."></textarea>
-        <div class="btnBar">
-          <button type="button" class="btn primary" id="saveEmergency">Opslaan</button>
-          <button type="button" class="btn" id="copyEmergency">Kopieer</button>
-        </div>
+
+      <div class="hintBox">
+        <div class="small">Realtime Database sync.</div>
+        <div class="small">Jij. Login. Code. Inloggen. Nu opslaan.</div>
+        <div class="small">Lizet. Login. Zelfde code. Nu laden.</div>
       </div>
+
+      <div class="footerNote">made by Rob Borghouts 2026</div>
     </div>
   </div>
 
-  <div class="hintBox">
-    <div class="small">Sync met Lizet.</div>
-    <div class="small">Jij. Login. Code. Inloggen. Nu opslaan.</div>
-    <div class="small">Lizet. Login. Zelfde code. Nu laden.</div>
-  </div>
-
-  <div class="footerNote">made by Rob Borghouts 2026</div>
-</div>
- </div>
-
- <div class="card span2" id="tabOverview" style="display:none">
+  <div class="card span2" id="tabOverview" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Overzicht</h2>
@@ -359,7 +357,7 @@
     </div>
   </div>
 
- <div class="card span2" id="tabDocs" style="display:none">
+  <div class="card span2" id="tabDocs" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Documenten</h2>
@@ -375,7 +373,7 @@
     </div>
   </div>
 
- <div class="card span2" id="tabContacts" style="display:none">
+  <div class="card span2" id="tabContacts" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Contacten</h2>
@@ -391,7 +389,7 @@
     </div>
   </div>
 
- <div class="card span2" id="tabNotes" style="display:none">
+  <div class="card span2" id="tabNotes" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Notities</h2>
@@ -408,7 +406,7 @@
     </div>
   </div>
 
- <div class="card span2" id="tabCrypto" style="display:none">
+  <div class="card span2" id="tabCrypto" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Crypto apps</h2>
@@ -421,10 +419,13 @@
         <button type="button" class="btn" id="addCrypto">Nieuwe crypto app</button>
         <button type="button" class="btn" id="exportCrypto">Export crypto apps</button>
       </div>
+      <div class="hintBox">
+        <div class="small">Tip. Zet je App Store link in Waar. Dan werkt Open direct.</div>
+      </div>
     </div>
   </div>
 
- <div class="card span2" id="tabWeb" style="display:none">
+  <div class="card span2" id="tabWeb" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Websites</h2>
@@ -440,7 +441,7 @@
     </div>
   </div>
 
- <div class="card span2" id="tabAdd" style="display:none">
+  <div class="card span2" id="tabAdd" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Toevoegen</h2>
@@ -464,34 +465,34 @@
         </div>
       </div>
 
- <div class="row cols2" style="margin-top:10px">
-    <div>
-      <label>Waar of URL</label>
-      <input id="addWhere" placeholder="Bijv. kluis, lade, of https://..." />
+      <div class="row cols2" style="margin-top:10px">
+        <div>
+          <label>Waar of URL</label>
+          <input id="addWhere" placeholder="Bijv. kluis, lade, of https://..." />
+        </div>
+        <div>
+          <label>Login of telefoon</label>
+          <input id="addExtra" placeholder="Bijv. e mail, gebruikersnaam, 06..." />
+        </div>
+      </div>
+
+      <div style="margin-top:10px">
+        <label>Notitie</label>
+        <textarea id="addNote" placeholder="Extra info"></textarea>
+      </div>
+
+      <div class="btnBar">
+        <button type="button" class="btn primary" id="addSave">Opslaan</button>
+        <button type="button" class="btn danger" id="addClear">Leegmaken</button>
+      </div>
+
+      <div class="hintBox">
+        <div class="small">Bewerken. Klik bij een item op Bewerk.</div>
+      </div>
     </div>
-    <div>
-      <label>Login of telefoon</label>
-      <input id="addExtra" placeholder="Bijv. e mail, gebruikersnaam, 06..." />
-    </div>
   </div>
 
-  <div style="margin-top:10px">
-    <label>Notitie</label>
-    <textarea id="addNote" placeholder="Extra info"></textarea>
-  </div>
-
-  <div class="btnBar">
-    <button type="button" class="btn primary" id="addSave">Opslaan</button>
-    <button type="button" class="btn danger" id="addClear">Leegmaken</button>
-  </div>
-
-  <div class="hintBox">
-    <div class="small">Bewerken. Klik bij een item op Bewerk.</div>
-  </div>
-</div>
- </div>
-
- <div class="card span2" id="tabLogin" style="display:none">
+  <div class="card span2" id="tabLogin" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Login en sync</h2>
@@ -502,7 +503,7 @@
       <div class="row cols2">
         <div>
           <label>Gedeelde code</label>
-          <input id="sharedId" placeholder="Bijv. rob-lizet-2026" />
+          <input id="sharedId" placeholder="Bijv. RB-LZ-2026" />
           <div class="small" style="margin-top:6px">Gebruik exact dezelfde code op beide telefoons.</div>
         </div>
         <div>
@@ -512,32 +513,32 @@
         </div>
       </div>
 
- <div class="row cols2" style="margin-top:10px">
-    <div>
-      <label>E mail</label>
-      <input id="email" placeholder="jij@..." autocomplete="username" />
+      <div class="row cols2" style="margin-top:10px">
+        <div>
+          <label>E mail</label>
+          <input id="email" placeholder="jij@..." autocomplete="username" />
+        </div>
+        <div>
+          <label>Wachtwoord</label>
+          <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
+        </div>
+      </div>
+
+      <div class="btnBar">
+        <button type="button" class="btn primary" id="btnLogin">Inloggen</button>
+        <button type="button" class="btn" id="btnLogout">Uitloggen</button>
+        <button type="button" class="btn" id="btnUploadNow">Nu opslaan</button>
+        <button type="button" class="btn" id="btnSyncNow">Nu laden</button>
+      </div>
+
+      <div class="hintBox">
+        <div class="small">Je rules staan nu op auth!=null. Dus altijd eerst inloggen.</div>
+        <div class="small">Als code vreemde tekens heeft, vervangt de app ze automatisch voor sync.</div>
+      </div>
     </div>
-    <div>
-      <label>Wachtwoord</label>
-      <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
-    </div>
   </div>
 
-  <div class="btnBar">
-    <button type="button" class="btn primary" id="btnLogin">Inloggen</button>
-    <button type="button" class="btn" id="btnLogout">Uitloggen</button>
-    <button type="button" class="btn" id="btnUploadNow">Nu opslaan</button>
-    <button type="button" class="btn" id="btnSyncNow">Nu laden</button>
-  </div>
-
-  <div class="hintBox">
-    <div class="small">Werkt login niet. Check Firebase Authentication Email Password.</div>
-    <div class="small">Werkt sync niet. Check Firestore en rules.</div>
-  </div>
-</div>
- </div>
-
- <div class="card span2" id="tabMode" style="display:none">
+  <div class="card span2" id="tabMode" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Weergave</h2>
@@ -554,7 +555,7 @@
     </div>
   </div>
 
- <div class="card span2" id="tabBackup" style="display:none">
+  <div class="card span2" id="tabBackup" style="display:none">
     <div class="cardHeader">
       <div>
         <h2>Backup en herstel</h2>
@@ -587,26 +588,26 @@
 </div>
  </div>
 
-<div class="toast" id="toast"></div>
+ <div class="toast" id="toast"></div>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
-<script>
+ <script>
     function $(id){ return document.getElementById(id); }
     function on(id, ev, fn){ var el = $(id); if (el) el.addEventListener(ev, fn); }
 
-    var LSKEY = "noodmap_rob_full_light_v1";
+    var LSKEY = "noodmap_rob_rtdb_v1";
     var THEMEKEY = "noodmap_theme";
 
     var STATE = {
       user: null,
       firebaseOk: false,
       auth: null,
-      db: null,
+      rtdb: null,
       sharedId: "",
       saveTimer: null,
       realtimeUnsub: null,
@@ -648,6 +649,10 @@
       if (s.indexOf("http://") === 0 || s.indexOf("https://") === 0) return s;
       if (s.indexOf("www.") === 0) return "https://" + s;
       return s;
+    }
+
+    function rtdbKey(id){
+      return (id||"").trim().replace(/[.#$[\]\/]/g, "_");
     }
 
     function normalizeData(d){
@@ -930,22 +935,49 @@
       renderList(d.websites, "webList", "web");
     }
 
-    function sharedDocRef(){
+    function sharedRtdbRef(){
       if (!STATE.firebaseOk) return null;
-      if (!STATE.db) return null;
+      if (!STATE.rtdb) return null;
       if (!STATE.sharedId) return null;
-      return STATE.db.collection("noodmap_shared").doc(STATE.sharedId);
+      var key = rtdbKey(STATE.sharedId);
+      if (!key) return null;
+      return STATE.rtdb.ref("noodmap_shared/" + key);
+    }
+
+    function detachRealtime(){
+      if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} }
+      STATE.realtimeUnsub = null;
+    }
+
+    function startRealtime(){
+      if (!STATE.firebaseOk) return;
+      detachRealtime();
+      var ref = sharedRtdbRef();
+      if (!ref) return;
+
+      var cb = function(snap){
+        if (!snap.exists()) return;
+        var obj = snap.val();
+        if (!obj) return;
+        STATE.data = normalizeData(obj);
+        saveLocal();
+        renderAll();
+        setStatus("Gesynchroniseerd");
+      };
+
+      ref.on("value", cb);
+      STATE.realtimeUnsub = function(){ ref.off("value", cb); };
     }
 
     async function loadFromCloud(){
       if (!STATE.firebaseOk){ toast("Firebase niet actief"); return; }
-      var ref = sharedDocRef();
+      if (!STATE.user){ toast("Log eerst in"); return; }
+      var ref = sharedRtdbRef();
       if (!ref){ toast("Vul gedeelde code in"); return; }
       try{
-        var snap = await ref.get();
-        if (!snap.exists){ setStatus("Nog geen cloud data"); toast("Nog niks in cloud"); return; }
-        var obj = snap.data();
-        if (!obj){ setStatus("Lege cloud data"); toast("Nog niks in cloud"); return; }
+        var snap = await ref.once("value");
+        if (!snap.exists()){ setStatus("Nog geen cloud data"); toast("Nog niks in cloud"); return; }
+        var obj = snap.val();
         STATE.data = normalizeData(obj);
         saveLocal();
         renderAll();
@@ -960,32 +992,14 @@
     async function saveToCloud(){
       if (!STATE.firebaseOk) return;
       if (!STATE.user) return;
-      var ref = sharedDocRef();
+      var ref = sharedRtdbRef();
       if (!ref) return;
       try{
-        await ref.set(STATE.data, { merge:true });
+        await ref.set(STATE.data);
         setStatus("Gesynchroniseerd");
       }catch(e){
         setStatus("Opslaan mislukt");
       }
-    }
-
-    function startRealtime(){
-      if (!STATE.firebaseOk) return;
-      if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
-      var ref = sharedDocRef();
-      if (!ref) return;
-      try{
-        STATE.realtimeUnsub = ref.onSnapshot(function(snap){
-          if (!snap.exists) return;
-          var obj = snap.data();
-          if (!obj) return;
-          STATE.data = normalizeData(obj);
-          saveLocal();
-          renderAll();
-          setStatus("Gesynchroniseerd");
-        });
-      }catch(e){}
     }
 
     async function signIn(){
@@ -1196,29 +1210,10 @@
         toast("Opgeslagen");
       });
 
-      on("addDoc","click",function(){
-        if ($("addType")) $("addType").value = "doc";
-        STATE.editId = null;
-        showTab("tabAdd");
-      });
-
-      on("addContact","click",function(){
-        if ($("addType")) $("addType").value = "contact";
-        STATE.editId = null;
-        showTab("tabAdd");
-      });
-
-      on("addCrypto","click",function(){
-        if ($("addType")) $("addType").value = "crypto";
-        STATE.editId = null;
-        showTab("tabAdd");
-      });
-
-      on("addWeb","click",function(){
-        if ($("addType")) $("addType").value = "web";
-        STATE.editId = null;
-        showTab("tabAdd");
-      });
+      on("addDoc","click",function(){ if ($("addType")) $("addType").value = "doc"; STATE.editId=null; showTab("tabAdd"); });
+      on("addContact","click",function(){ if ($("addType")) $("addType").value = "contact"; STATE.editId=null; showTab("tabAdd"); });
+      on("addCrypto","click",function(){ if ($("addType")) $("addType").value = "crypto"; STATE.editId=null; showTab("tabAdd"); });
+      on("addWeb","click",function(){ if ($("addType")) $("addType").value = "web"; STATE.editId=null; showTab("tabAdd"); });
 
       on("exportDocs","click",exportDocsText);
       on("exportContacts","click",exportContactsText);
@@ -1230,8 +1225,9 @@
 
       on("btnSyncNow","click",function(){
         STATE.sharedId = getSharedId();
-        loadFromCloud();
+        if (!STATE.sharedId){ toast("Vul gedeelde code in"); return; }
         startRealtime();
+        loadFromCloud();
       });
 
       on("btnUploadNow","click",function(){
@@ -1308,7 +1304,7 @@
 
         firebase.initializeApp(firebaseConfig);
         STATE.auth = firebase.auth();
-        STATE.db = firebase.firestore();
+        STATE.rtdb = firebase.database();
         STATE.firebaseOk = true;
 
         STATE.auth.onAuthStateChanged(function(u){
@@ -1319,7 +1315,7 @@
             if (STATE.sharedId) startRealtime();
           }else{
             setStatus("Niet ingelogd");
-            if (STATE.realtimeUnsub){ try{ STATE.realtimeUnsub(); }catch(e){} STATE.realtimeUnsub = null; }
+            detachRealtime();
           }
         });
       }catch(e){
@@ -1346,5 +1342,4 @@
 
 </body>
 </html>
-
 
